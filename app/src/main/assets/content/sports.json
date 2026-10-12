@@ -1,0 +1,34 @@
+[
+  {
+    "id": "boxing",
+    "name": "Boks",
+    "emoji": "🥊",
+    "colorHex": "#D32F2F",
+    "tagline": "Yumruk teknikleri, ayak oyunu ve savunma",
+    "description": "Boks; duruş, ayak oyunu, dört temel yumruk (jab, cross, kroşe, aparkat) ve kafa hareketiyle savunma üzerine kuruludur. 8 haftalık program sonunda temel kombinasyonları akıcı şekilde uygulayabilir ve 3 dakikalık rauntlarda gölge boksu yapabilir hale gelirsin."
+  },
+  {
+    "id": "kickboxing",
+    "name": "Kick Boks",
+    "emoji": "🦵",
+    "colorHex": "#1565C0",
+    "tagline": "Yumruk + tekme + diz kombinasyonları",
+    "description": "Kick boks, boks yumruklarını tekme ve diz teknikleriyle birleştirir. Program; duruş, low kick, middle kick, ön tekme (teep), diz ve tekme bloğu (check) tekniklerini kombinasyonlarla öğretir."
+  },
+  {
+    "id": "wrestling",
+    "name": "Güreş",
+    "emoji": "🤼",
+    "colorHex": "#2E7D32",
+    "tagline": "Duruş, dalış, sprawl ve yer kontrolü",
+    "description": "Güreşin temeli doğru duruş, seviye değiştirme ve penetrasyon adımıdır. Program; tek/çift bacak dalışları, sprawl savunması, köprü, el mücadelesi ve yerden kalkış tekniklerini partnersiz drillerle öğretir."
+  },
+  {
+    "id": "taekwondo",
+    "name": "Tekvando",
+    "emoji": "🥋",
+    "colorHex": "#6A1B9A",
+    "tagline": "Duruşlar, bloklar ve tekme teknikleri",
+    "description": "Tekvando; temel duruşlar (seogi), bloklar (makgi), yumruk (jireugi) ve hızlı, yüksek tekmelerle (chagi) öne çıkar. Program sonunda Taegeuk 1 (Il Jang) formunun parçalarını ve beş temel tekmeyi uygulayabilirsin."
+  }
+]

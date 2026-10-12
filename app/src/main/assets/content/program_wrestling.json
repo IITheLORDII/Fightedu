@@ -1,0 +1,159 @@
+{
+  "sport": "wrestling",
+  "warmup": [
+    {"move": "gen_jog", "sets": 1, "sec": 90, "rest": 15},
+    {"move": "gen_arm_circles", "sets": 1, "sec": 40, "rest": 15},
+    {"move": "gen_squat", "sets": 2, "reps": 12, "rest": 30}
+  ],
+  "cooldown": [
+    {"move": "gen_stretch_hamstring", "sets": 1, "sec": 45, "rest": 10},
+    {"move": "gen_stretch_quad", "sets": 1, "sec": 45, "rest": 10},
+    {"move": "gen_stretch_shoulder", "sets": 1, "sec": 30, "rest": 10}
+  ],
+  "phases": [
+    {
+      "title": "Temeller",
+      "weeks": [1, 2],
+      "goal": "Güreş duruşu, seviye değiştirme, sprawl ve köprüyü öğrenmek.",
+      "sessions": [
+        {"code": "A", "title": "Duruş ve Hareket", "main": [
+          {"move": "wr_stance", "sets": 3, "sec": 45, "rest": 20},
+          {"move": "wr_level_change", "sets": 4, "reps": 15, "rest": 30},
+          {"move": "wr_hand_fight", "sets": 3, "sec": 45, "rest": 30},
+          {"move": "gen_pushup", "sets": 3, "reps": 8, "rest": 45}
+        ]},
+        {"code": "B", "title": "Sprawl", "main": [
+          {"move": "wr_stance", "sets": 2, "sec": 45, "rest": 20},
+          {"move": "wr_sprawl", "sets": 4, "reps": 8, "rest": 40},
+          {"move": "wr_level_change", "sets": 3, "reps": 15, "rest": 30},
+          {"move": "gen_plank", "sets": 3, "sec": 30, "rest": 30}
+        ]},
+        {"code": "C", "title": "Köprü ve Yer", "main": [
+          {"move": "wr_bridge", "sets": 3, "reps": 8, "rest": 40},
+          {"move": "wr_sit_out", "sets": 3, "reps": 8, "rest": 40},
+          {"move": "wr_shadow", "sets": 2, "sec": 90, "rest": 60},
+          {"move": "gen_situp", "sets": 3, "reps": 15, "rest": 40}
+        ]},
+        {"code": "D", "title": "Teknik Tekrar", "main": [
+          {"move": "wr_level_change", "sets": 3, "reps": 20, "rest": 30},
+          {"move": "wr_sprawl", "sets": 3, "reps": 10, "rest": 40},
+          {"move": "wr_hand_fight", "sets": 3, "sec": 60, "rest": 30},
+          {"move": "gen_squat", "sets": 3, "reps": 15, "rest": 45}
+        ]},
+        {"code": "E", "title": "Kondisyon", "main": [
+          {"move": "gen_jump_rope", "sets": 3, "sec": 120, "rest": 60},
+          {"move": "gen_burpee", "sets": 3, "reps": 8, "rest": 60},
+          {"move": "gen_pushup", "sets": 3, "reps": 10, "rest": 45},
+          {"move": "wr_shadow", "sets": 2, "sec": 90, "rest": 60}
+        ]}
+      ]
+    },
+    {
+      "title": "Penetrasyon ve Dalışlar",
+      "weeks": [3, 4],
+      "goal": "Penetrasyon adımını ve çift/tek bacak dalışlarının mekaniğini öğrenmek.",
+      "sessions": [
+        {"code": "A", "title": "Penetrasyon Adımı", "main": [
+          {"move": "wr_level_change", "sets": 2, "reps": 15, "rest": 30},
+          {"move": "wr_penetration", "sets": 4, "reps": 10, "rest": 40},
+          {"move": "wr_sprawl", "sets": 3, "reps": 8, "rest": 40},
+          {"move": "gen_plank", "sets": 3, "sec": 40, "rest": 30}
+        ]},
+        {"code": "B", "title": "Çift Bacak Dalışı", "main": [
+          {"move": "wr_penetration", "sets": 2, "reps": 10, "rest": 30},
+          {"move": "wr_double_leg", "sets": 4, "reps": 8, "rest": 45},
+          {"move": "wr_hand_fight", "sets": 3, "sec": 60, "rest": 30},
+          {"move": "wr_shadow", "sets": 2, "sec": 120, "rest": 60}
+        ]},
+        {"code": "C", "title": "Yer Güreşi", "main": [
+          {"move": "wr_bridge", "sets": 3, "reps": 10, "rest": 40},
+          {"move": "wr_sit_out", "sets": 4, "reps": 10, "rest": 40},
+          {"move": "wr_stand_up", "sets": 3, "reps": 8, "rest": 40},
+          {"move": "gen_situp", "sets": 3, "reps": 15, "rest": 40}
+        ]},
+        {"code": "D", "title": "Dalış + Savunma", "main": [
+          {"move": "wr_double_leg", "sets": 3, "reps": 8, "rest": 45},
+          {"move": "wr_sprawl", "sets": 4, "reps": 10, "rest": 40},
+          {"move": "wr_level_change", "sets": 3, "reps": 20, "rest": 30},
+          {"move": "gen_squat", "sets": 3, "reps": 20, "rest": 45}
+        ]},
+        {"code": "E", "title": "Kondisyon", "main": [
+          {"move": "gen_jump_rope", "sets": 3, "sec": 150, "rest": 60},
+          {"move": "gen_burpee", "sets": 3, "reps": 10, "rest": 60},
+          {"move": "wr_sprawl", "sets": 3, "reps": 10, "rest": 45},
+          {"move": "wr_shadow", "sets": 2, "sec": 120, "rest": 60}
+        ]}
+      ]
+    },
+    {
+      "title": "Bağlantılar ve Akış",
+      "weeks": [5, 6],
+      "goal": "Tek bacak ve snap down'u eklemek; tekniklerin zincirleme akışını kurmak.",
+      "sessions": [
+        {"code": "A", "title": "Tek Bacak Dalışı", "main": [
+          {"move": "wr_penetration", "sets": 2, "reps": 10, "rest": 30},
+          {"move": "wr_single_leg", "sets": 4, "reps": 8, "rest": 45},
+          {"move": "wr_double_leg", "sets": 3, "reps": 8, "rest": 45},
+          {"move": "wr_shadow", "sets": 3, "sec": 150, "rest": 60}
+        ]},
+        {"code": "B", "title": "El Mücadelesi ve Snap Down", "main": [
+          {"move": "wr_hand_fight", "sets": 3, "sec": 60, "rest": 30},
+          {"move": "wr_snap_down", "sets": 4, "reps": 10, "rest": 40},
+          {"move": "wr_sprawl", "sets": 3, "reps": 10, "rest": 40},
+          {"move": "wr_shadow", "sets": 2, "sec": 150, "rest": 60}
+        ]},
+        {"code": "C", "title": "Yerden Kurtuluş", "main": [
+          {"move": "wr_sit_out", "sets": 3, "reps": 12, "rest": 40},
+          {"move": "wr_stand_up", "sets": 4, "reps": 10, "rest": 40},
+          {"move": "wr_bridge", "sets": 3, "reps": 10, "rest": 40},
+          {"move": "gen_plank", "sets": 3, "sec": 45, "rest": 30}
+        ]},
+        {"code": "D", "title": "Zincir Drill Rauntları", "main": [
+          {"move": "wr_shadow", "sets": 4, "sec": 150, "rest": 60},
+          {"move": "gen_situp", "sets": 3, "reps": 20, "rest": 40}
+        ]},
+        {"code": "E", "title": "Kondisyon", "main": [
+          {"move": "gen_jump_rope", "sets": 4, "sec": 150, "rest": 60},
+          {"move": "gen_burpee", "sets": 3, "reps": 10, "rest": 60},
+          {"move": "wr_level_change", "sets": 3, "reps": 25, "rest": 40},
+          {"move": "gen_squat", "sets": 3, "reps": 20, "rest": 45}
+        ]}
+      ]
+    },
+    {
+      "title": "Pekiştirme ve Değerlendirme",
+      "weeks": [7, 8],
+      "goal": "Tüm teknikleri tekrar etmek ve 2,5 dakikalık zincir drill rauntlarıyla temel seviyeyi göstermek.",
+      "sessions": [
+        {"code": "A", "title": "Ayakta Teknikler", "main": [
+          {"move": "wr_double_leg", "sets": 3, "reps": 10, "rest": 45},
+          {"move": "wr_single_leg", "sets": 3, "reps": 10, "rest": 45},
+          {"move": "wr_snap_down", "sets": 3, "reps": 10, "rest": 40},
+          {"move": "wr_sprawl", "sets": 3, "reps": 10, "rest": 40}
+        ]},
+        {"code": "B", "title": "Yer Teknikleri", "main": [
+          {"move": "wr_bridge", "sets": 3, "reps": 12, "rest": 40},
+          {"move": "wr_sit_out", "sets": 3, "reps": 12, "rest": 40},
+          {"move": "wr_stand_up", "sets": 3, "reps": 10, "rest": 40},
+          {"move": "wr_shadow", "sets": 2, "sec": 150, "rest": 60}
+        ]},
+        {"code": "C", "title": "Değerlendirme: Zincir Rauntları", "main": [
+          {"move": "wr_shadow", "sets": 4, "sec": 150, "rest": 60},
+          {"move": "wr_sprawl", "sets": 2, "reps": 15, "rest": 45}
+        ]},
+        {"code": "D", "title": "Akış Pekiştirme", "main": [
+          {"move": "wr_hand_fight", "sets": 3, "sec": 60, "rest": 30},
+          {"move": "wr_penetration", "sets": 3, "reps": 12, "rest": 30},
+          {"move": "wr_double_leg", "sets": 3, "reps": 10, "rest": 45},
+          {"move": "wr_shadow", "sets": 3, "sec": 150, "rest": 60}
+        ]},
+        {"code": "E", "title": "Kondisyon", "main": [
+          {"move": "gen_jump_rope", "sets": 4, "sec": 180, "rest": 60},
+          {"move": "gen_burpee", "sets": 3, "reps": 12, "rest": 60},
+          {"move": "gen_pushup", "sets": 3, "reps": 15, "rest": 45},
+          {"move": "gen_plank", "sets": 3, "sec": 60, "rest": 30}
+        ]}
+      ]
+    }
+  ]
+}

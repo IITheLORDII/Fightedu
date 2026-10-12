@@ -1,0 +1,164 @@
+{
+  "sport": "taekwondo",
+  "warmup": [
+    {"move": "gen_jog", "sets": 1, "sec": 90, "rest": 15},
+    {"move": "gen_arm_circles", "sets": 1, "sec": 40, "rest": 15},
+    {"move": "gen_stretch_hamstring", "sets": 1, "sec": 30, "rest": 10}
+  ],
+  "cooldown": [
+    {"move": "gen_stretch_hamstring", "sets": 1, "sec": 45, "rest": 10},
+    {"move": "gen_stretch_quad", "sets": 1, "sec": 45, "rest": 10},
+    {"move": "gen_stretch_shoulder", "sets": 1, "sec": 30, "rest": 10}
+  ],
+  "phases": [
+    {
+      "title": "Temeller",
+      "weeks": [1, 2],
+      "goal": "Temel duruşlar, düz yumruk, alt blok ve ön tekmeyi öğrenmek.",
+      "sessions": [
+        {"code": "A", "title": "Duruşlar ve Jireugi", "main": [
+          {"move": "tkd_ap_seogi", "sets": 3, "sec": 40, "rest": 20},
+          {"move": "tkd_ap_kubi", "sets": 3, "sec": 40, "rest": 20},
+          {"move": "tkd_jireugi", "sets": 4, "reps": 15, "rest": 30},
+          {"move": "gen_pushup", "sets": 3, "reps": 8, "rest": 45}
+        ]},
+        {"code": "B", "title": "Ap Chagi", "main": [
+          {"move": "tkd_footwork", "sets": 2, "sec": 60, "rest": 30},
+          {"move": "tkd_ap_chagi", "sets": 4, "reps": 12, "rest": 30},
+          {"move": "tkd_ap_kubi", "sets": 2, "sec": 40, "rest": 20},
+          {"move": "gen_plank", "sets": 3, "sec": 30, "rest": 30}
+        ]},
+        {"code": "C", "title": "Alt Blok", "main": [
+          {"move": "tkd_arae_makgi", "sets": 4, "reps": 15, "rest": 30},
+          {"move": "tkd_jireugi", "sets": 3, "reps": 15, "rest": 30},
+          {"move": "tkd_ap_seogi", "sets": 2, "sec": 40, "rest": 20},
+          {"move": "gen_squat", "sets": 3, "reps": 15, "rest": 45}
+        ]},
+        {"code": "D", "title": "Teknik Tekrar", "main": [
+          {"move": "tkd_ap_chagi", "sets": 3, "reps": 15, "rest": 30},
+          {"move": "tkd_arae_makgi", "sets": 3, "reps": 15, "rest": 30},
+          {"move": "tkd_footwork", "sets": 3, "sec": 60, "rest": 30},
+          {"move": "gen_situp", "sets": 3, "reps": 15, "rest": 40}
+        ]},
+        {"code": "E", "title": "Kondisyon ve Esneklik", "main": [
+          {"move": "gen_jump_rope", "sets": 3, "sec": 120, "rest": 60},
+          {"move": "gen_squat", "sets": 3, "reps": 20, "rest": 45},
+          {"move": "gen_stretch_hamstring", "sets": 3, "sec": 40, "rest": 15},
+          {"move": "gen_stretch_quad", "sets": 2, "sec": 40, "rest": 15}
+        ]}
+      ]
+    },
+    {
+      "title": "Bloklar ve Yuvarlak Tekme",
+      "weeks": [3, 4],
+      "goal": "Orta ve üst blokları, arka duruşu ve dollyo chagi'yi öğrenmek.",
+      "sessions": [
+        {"code": "A", "title": "Orta ve Üst Blok", "main": [
+          {"move": "tkd_momtong_makgi", "sets": 4, "reps": 15, "rest": 30},
+          {"move": "tkd_olgul_makgi", "sets": 4, "reps": 15, "rest": 30},
+          {"move": "tkd_jireugi", "sets": 3, "reps": 20, "rest": 30},
+          {"move": "gen_pushup", "sets": 3, "reps": 10, "rest": 45}
+        ]},
+        {"code": "B", "title": "Dollyo Chagi", "main": [
+          {"move": "tkd_footwork", "sets": 2, "sec": 60, "rest": 30},
+          {"move": "tkd_dollyo_chagi", "sets": 4, "reps": 12, "rest": 40},
+          {"move": "tkd_ap_chagi", "sets": 3, "reps": 12, "rest": 30},
+          {"move": "gen_plank", "sets": 3, "sec": 40, "rest": 30}
+        ]},
+        {"code": "C", "title": "Dwit Kubi ve Taegeuk 1 Başlangıç", "main": [
+          {"move": "tkd_dwit_kubi", "sets": 3, "sec": 40, "rest": 20},
+          {"move": "tkd_taegeuk1", "sets": 3, "sec": 90, "rest": 45},
+          {"move": "tkd_arae_makgi", "sets": 3, "reps": 15, "rest": 30},
+          {"move": "gen_situp", "sets": 3, "reps": 15, "rest": 40}
+        ]},
+        {"code": "D", "title": "Tekme Tekrarı", "main": [
+          {"move": "tkd_ap_chagi", "sets": 3, "reps": 15, "rest": 30},
+          {"move": "tkd_dollyo_chagi", "sets": 3, "reps": 15, "rest": 40},
+          {"move": "tkd_footwork", "sets": 3, "sec": 60, "rest": 30},
+          {"move": "gen_squat", "sets": 3, "reps": 20, "rest": 45}
+        ]},
+        {"code": "E", "title": "Kondisyon ve Esneklik", "main": [
+          {"move": "gen_jump_rope", "sets": 3, "sec": 150, "rest": 60},
+          {"move": "gen_burpee", "sets": 3, "reps": 8, "rest": 60},
+          {"move": "gen_stretch_hamstring", "sets": 3, "sec": 45, "rest": 15},
+          {"move": "gen_stretch_quad", "sets": 2, "sec": 45, "rest": 15}
+        ]}
+      ]
+    },
+    {
+      "title": "Yan Tekme ve Form",
+      "weeks": [5, 6],
+      "goal": "Yeop chagi'yi öğrenmek, Taegeuk 1'i tamamlamak ve tekme kombinasyonları kurmak.",
+      "sessions": [
+        {"code": "A", "title": "Yeop Chagi", "main": [
+          {"move": "tkd_footwork", "sets": 2, "sec": 60, "rest": 30},
+          {"move": "tkd_yeop_chagi", "sets": 4, "reps": 10, "rest": 40},
+          {"move": "tkd_dollyo_chagi", "sets": 3, "reps": 15, "rest": 40},
+          {"move": "gen_plank", "sets": 3, "sec": 45, "rest": 30}
+        ]},
+        {"code": "B", "title": "Taegeuk 1 Tam Form", "main": [
+          {"move": "tkd_ap_seogi", "sets": 2, "sec": 30, "rest": 15},
+          {"move": "tkd_ap_kubi", "sets": 2, "sec": 30, "rest": 15},
+          {"move": "tkd_taegeuk1", "sets": 5, "sec": 90, "rest": 45},
+          {"move": "gen_situp", "sets": 3, "reps": 20, "rest": 40}
+        ]},
+        {"code": "C", "title": "Tekme Kombinasyonları", "main": [
+          {"move": "tkd_ap_chagi", "sets": 3, "reps": 15, "rest": 30},
+          {"move": "tkd_dollyo_chagi", "sets": 3, "reps": 15, "rest": 40},
+          {"move": "tkd_yeop_chagi", "sets": 3, "reps": 10, "rest": 40},
+          {"move": "tkd_footwork", "sets": 3, "sec": 90, "rest": 30}
+        ]},
+        {"code": "D", "title": "Bloklar + Yumruk", "main": [
+          {"move": "tkd_arae_makgi", "sets": 3, "reps": 15, "rest": 30},
+          {"move": "tkd_momtong_makgi", "sets": 3, "reps": 15, "rest": 30},
+          {"move": "tkd_olgul_makgi", "sets": 3, "reps": 15, "rest": 30},
+          {"move": "tkd_jireugi", "sets": 3, "reps": 20, "rest": 30}
+        ]},
+        {"code": "E", "title": "Kondisyon ve Esneklik", "main": [
+          {"move": "gen_jump_rope", "sets": 4, "sec": 150, "rest": 60},
+          {"move": "gen_burpee", "sets": 3, "reps": 10, "rest": 60},
+          {"move": "gen_squat", "sets": 3, "reps": 20, "rest": 45},
+          {"move": "gen_stretch_hamstring", "sets": 3, "sec": 45, "rest": 15}
+        ]}
+      ]
+    },
+    {
+      "title": "İleri Tekmeler ve Değerlendirme",
+      "weeks": [7, 8],
+      "goal": "Dwi chagi ve naeryo chagi'ye giriş; Taegeuk 1 ve beş temel tekmeyle temel seviyeyi göstermek.",
+      "sessions": [
+        {"code": "A", "title": "Dwi Chagi", "main": [
+          {"move": "tkd_footwork", "sets": 2, "sec": 60, "rest": 30},
+          {"move": "tkd_dwi_chagi", "sets": 4, "reps": 8, "rest": 45},
+          {"move": "tkd_yeop_chagi", "sets": 3, "reps": 10, "rest": 40},
+          {"move": "gen_plank", "sets": 3, "sec": 60, "rest": 30}
+        ]},
+        {"code": "B", "title": "Naeryo Chagi", "main": [
+          {"move": "gen_stretch_hamstring", "sets": 2, "sec": 45, "rest": 10},
+          {"move": "tkd_naeryo_chagi", "sets": 4, "reps": 8, "rest": 45},
+          {"move": "tkd_dollyo_chagi", "sets": 3, "reps": 15, "rest": 40},
+          {"move": "gen_situp", "sets": 3, "reps": 20, "rest": 40}
+        ]},
+        {"code": "C", "title": "Değerlendirme: Form + 5 Tekme", "main": [
+          {"move": "tkd_taegeuk1", "sets": 3, "sec": 90, "rest": 45},
+          {"move": "tkd_ap_chagi", "sets": 1, "reps": 10, "rest": 20},
+          {"move": "tkd_dollyo_chagi", "sets": 1, "reps": 10, "rest": 20},
+          {"move": "tkd_yeop_chagi", "sets": 1, "reps": 10, "rest": 20},
+          {"move": "tkd_dwi_chagi", "sets": 1, "reps": 6, "rest": 20},
+          {"move": "tkd_naeryo_chagi", "sets": 1, "reps": 6, "rest": 20}
+        ]},
+        {"code": "D", "title": "Form Pekiştirme", "main": [
+          {"move": "tkd_taegeuk1", "sets": 4, "sec": 90, "rest": 45},
+          {"move": "tkd_dwit_kubi", "sets": 2, "sec": 40, "rest": 20},
+          {"move": "tkd_momtong_makgi", "sets": 3, "reps": 15, "rest": 30}
+        ]},
+        {"code": "E", "title": "Kondisyon ve Esneklik", "main": [
+          {"move": "gen_jump_rope", "sets": 4, "sec": 180, "rest": 60},
+          {"move": "gen_burpee", "sets": 3, "reps": 12, "rest": 60},
+          {"move": "gen_stretch_hamstring", "sets": 3, "sec": 60, "rest": 15},
+          {"move": "gen_stretch_quad", "sets": 2, "sec": 60, "rest": 15}
+        ]}
+      ]
+    }
+  ]
+}

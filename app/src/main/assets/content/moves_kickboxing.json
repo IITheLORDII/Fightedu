@@ -1,0 +1,206 @@
+[
+  {
+    "id": "kb_stance",
+    "sport": "kickboxing",
+    "name": "Kick Boks Duruşu",
+    "category": "stance",
+    "level": 1,
+    "description": "Boks duruşuna göre biraz daha dik ve ayaklar daha dar; tekme atmaya ve tekme bloklamaya hazır.",
+    "steps": [
+      "Sol ayak önde, ayaklar omuz genişliğinde veya biraz daha dar.",
+      "Ağırlık ön ve arka ayağa yaklaşık eşit; ön ayak hafif, tekme/check için hazır.",
+      "Eller yüksek: ön el göz hizasında, arka el çenede.",
+      "Dizler hafif bükülü, vücut gevşek."
+    ],
+    "mistakes": ["Fazla geniş duruş (tekme kaldırmak zorlaşır)", "Ağırlığı tamamen ön ayağa vermek", "Elleri düşürmek"],
+    "tip": "Ön ayağını yerden hafifçe kaldırabiliyorsan ağırlık dağılımın doğrudur.",
+    "sec": 45
+  },
+  {
+    "id": "kb_footwork",
+    "sport": "kickboxing",
+    "name": "Ayak Oyunu ve Açı Değiştirme",
+    "category": "footwork",
+    "level": 1,
+    "description": "İleri–geri adım ve yana çıkışla tekme mesafesini kontrol etme.",
+    "steps": [
+      "İleri/geri adımları boks kuralıyla yap: yöne yakın ayak önce.",
+      "Yana çıkış: Ön ayağın ucunda dönerek (pivot) açı değiştir.",
+      "Her adımdan sonra duruşu yeniden kur.",
+      "Ayaklar asla birleşmez."
+    ],
+    "mistakes": ["Ayakları çaprazlamak", "Dönerken gardı açmak"],
+    "tip": "Adım – adım – pivot ritmiyle çalış.",
+    "sec": 60
+  },
+  {
+    "id": "kb_jab_cross",
+    "sport": "kickboxing",
+    "name": "Jab – Cross",
+    "category": "strike",
+    "level": 1,
+    "description": "Kick boksun temel yumruk ikilisi; tekmelere zemin hazırlar.",
+    "steps": [
+      "Jab'ı düz hatta at ve geri çek.",
+      "Arka ayağı döndürerek cross at.",
+      "Ön el ve arka el sürekli çeneyi korur.",
+      "Garda dön."
+    ],
+    "mistakes": ["Yumruktan sonra ellerin düşmesi", "Arka ayağı döndürmemek"],
+    "tip": "Cross'un bitişinde ağırlık ön ayakta olur: bu, arka bacak tekmesi için yük oluşturur.",
+    "reps": 20
+  },
+  {
+    "id": "kb_teep",
+    "sport": "kickboxing",
+    "name": "Ön Tekme (Teep)",
+    "category": "kick",
+    "level": 1,
+    "description": "Rakibi itmek ve mesafe kontrol etmek için ayak tabanıyla atılan düz tekme.",
+    "steps": [
+      "Ön dizini göğsüne doğru kaldır.",
+      "Kalçayı ileri iterek ayak tabanıyla düz bir hatta tekme at.",
+      "Hedef: karın bölgesi. Ellerin yüksek kalsın.",
+      "Ayağı hızla geri çekip duruşa dön."
+    ],
+    "mistakes": ["Diz kaldırmadan sallamak", "Geriye yaslanıp dengeyi kaybetmek", "Ellerin düşmesi"],
+    "tip": "Teep bir 'it' hareketidir; kalça ileri gitmezse güç olmaz.",
+    "reps": 12
+  },
+  {
+    "id": "kb_low_kick",
+    "sport": "kickboxing",
+    "name": "Low Kick",
+    "category": "kick",
+    "level": 2,
+    "description": "Arka bacakla rakibin uyluk dış yüzüne kaval kemiğiyle atılan tekme.",
+    "steps": [
+      "Ön ayakla hafifçe dışa açılarak adım al (ayak ucu dışa).",
+      "Kalçayı döndürerek arka bacağı yarım daire çizerek savur.",
+      "Kaval kemiği (shin) ile diz üstü uyluk bölgesine vur.",
+      "Aynı yoldan geri dön, gardı koru."
+    ],
+    "mistakes": ["Ayak üstüyle vurmak", "Kalçayı döndürmemek", "Tekme sırasında elleri açmak"],
+    "tip": "Destek ayağının topuğu hedefe doğru dönmeli.",
+    "reps": 12
+  },
+  {
+    "id": "kb_middle_kick",
+    "sport": "kickboxing",
+    "name": "Middle Kick (Orta Tekme)",
+    "category": "kick",
+    "level": 2,
+    "description": "Gövde seviyesine (kaburga) kaval kemiğiyle atılan yuvarlak tekme.",
+    "steps": [
+      "Ön ayakla açı alarak adım at, destek ayağın ucunda dön.",
+      "Kalçayı tamamen döndürerek arka bacağı kaburga hizasına savur.",
+      "Tekme atan taraftaki kol dengeleme için aşağı/arkaya gidebilir, diğer el çenede.",
+      "Bacağı geri getirip duruşa dön."
+    ],
+    "mistakes": ["Destek ayağını döndürmemek", "Dizi bükük vurmak", "Geriye fazla yatmak"],
+    "tip": "Önce torbada ya da hayali hedefte yavaş ve kontrollü çalış.",
+    "reps": 10
+  },
+  {
+    "id": "kb_high_kick",
+    "sport": "kickboxing",
+    "name": "High Kick (Yüksek Tekme)",
+    "category": "kick",
+    "level": 3,
+    "description": "Baş seviyesine atılan yuvarlak tekme. Esneklik ve denge ister.",
+    "steps": [
+      "Middle kick tekniğiyle başla.",
+      "Kalçayı daha fazla açarak bacağı baş hizasına kaldır.",
+      "Destek ayağında tam dön; gövde hafif geriye/yana açılır.",
+      "Kontrollü şekilde duruşa dön."
+    ],
+    "mistakes": ["Esneklik yokken zorlamak", "Destek ayağını yerde sabitlemek", "Dengeyi kaybetmek"],
+    "tip": "Yükseklik zamanla gelir; önce middle kick'i oturt.",
+    "reps": 8
+  },
+  {
+    "id": "kb_knee",
+    "sport": "kickboxing",
+    "name": "Düz Diz",
+    "category": "strike",
+    "level": 1,
+    "description": "Arka bacağın dizini kalçayı öne iterek yukarı-ileri sürme.",
+    "steps": [
+      "Ellerini önde, rakibin ensesini tutar gibi konumla.",
+      "Arka dizi yukarı ve ileri sür, kalçayı öne it.",
+      "Destek ayağının ucunda yüksel.",
+      "Geri basıp duruşa dön."
+    ],
+    "mistakes": ["Kalçayı geride bırakmak", "Öne kamburlaşmak"],
+    "tip": "Ellerini aşağı çekerken dizi yukarı it: zıt kuvvet gücü artırır.",
+    "reps": 16
+  },
+  {
+    "id": "kb_check",
+    "sport": "kickboxing",
+    "name": "Check (Tekme Bloğu)",
+    "category": "defense",
+    "level": 2,
+    "description": "Low kick'e karşı ön bacağı kaldırarak kaval kemiğiyle karşılama.",
+    "steps": [
+      "Ön dizi yukarı ve hafif dışa kaldır.",
+      "Kaval kemiği tekmeye dönük, ayak ucu aşağıda.",
+      "Aynı taraftaki dirsek dize yaklaşarak boşluğu kapatır.",
+      "Hemen yere basıp karşı atak yap."
+    ],
+    "mistakes": ["Bacağı düz kaldırmak (diz zarar görebilir)", "Geriye yaslanmak", "Gardı açmak"],
+    "tip": "Check'ten sonra en doğal cevap: aynı tarafla jab veya teep.",
+    "reps": 16
+  },
+  {
+    "id": "kb_combo_jcl",
+    "sport": "kickboxing",
+    "name": "Kombinasyon: Jab – Cross – Low Kick",
+    "category": "combination",
+    "level": 2,
+    "description": "Yumruklarla yukarıyı meşgul edip aşağıya tekme bitirmek.",
+    "steps": [
+      "Jab – cross at.",
+      "Cross ile ağırlık ön ayağa geçer.",
+      "Ön ayakla dışa açılıp arka bacakla low kick'i bitir.",
+      "Garda dön."
+    ],
+    "mistakes": ["Cross'tan sonra duraksamak", "Low kick sırasında elleri düşürmek"],
+    "tip": "Üç teknik tek akış: ta-tam-BAM.",
+    "reps": 12
+  },
+  {
+    "id": "kb_combo_jcm",
+    "sport": "kickboxing",
+    "name": "Kombinasyon: Jab – Cross – Sol Kroşe – Middle Kick",
+    "category": "combination",
+    "level": 3,
+    "description": "Dört teknikli klasik kick boks kombinasyonu.",
+    "steps": [
+      "Jab – cross – sol kroşe at.",
+      "Kroşe ile gövde arka bacak tekmesi için yüklenir.",
+      "Arka bacakla middle kick at.",
+      "Garda dön ve açıdan çık."
+    ],
+    "mistakes": ["Teknikler arasında kopukluk", "Son tekmede dengeyi kaybetmek"],
+    "tip": "Önce iki teknik, sonra üç, sonra dört; parçalara bölerek öğren.",
+    "reps": 10
+  },
+  {
+    "id": "kb_shadow",
+    "sport": "kickboxing",
+    "name": "Gölge Kick Boks",
+    "category": "combination",
+    "level": 1,
+    "description": "Ayak oyunu, yumruk, tekme ve savunmayı serbestçe birleştirme.",
+    "steps": [
+      "Duruşunu al ve sürekli hareket et.",
+      "Yumruk kombinasyonlarını tekmeyle bitir.",
+      "Arada check ve geri adım savunmaları ekle.",
+      "Raunt boyunca gardını koru."
+    ],
+    "mistakes": ["Sadece tekme atmak", "Tekmeden sonra dengesiz kalmak"],
+    "tip": "Her kombinasyonun son tekniğinden sonra savunmaya geç.",
+    "sec": 120
+  }
+]

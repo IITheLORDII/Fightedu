@@ -1,0 +1,206 @@
+[
+  {
+    "id": "wr_stance",
+    "sport": "wrestling",
+    "name": "Güreş Duruşu",
+    "category": "stance",
+    "level": 1,
+    "description": "Alçak, dengeli ve her yöne hareket etmeye hazır temel pozisyon.",
+    "steps": [
+      "Ayaklar omuz genişliğinden biraz açık, bir ayak yarım adım önde (kademeli duruş).",
+      "Dizler bükülü, kalça geride, sırt düz ve hafif öne eğik.",
+      "Baş yukarıda, gözler rakibin göğüs hizasında.",
+      "Dirsekler gövdeye yakın, eller önde ve aktif."
+    ],
+    "mistakes": ["Dizleri düz tutmak (dik durmak)", "Başı öne düşürmek", "Dirsekleri açmak"],
+    "tip": "Duruşta sırtın düz, kalçan bir sandalyeye oturuyormuş gibi olmalı.",
+    "sec": 45
+  },
+  {
+    "id": "wr_level_change",
+    "sport": "wrestling",
+    "name": "Seviye Değiştirme",
+    "category": "footwork",
+    "level": 1,
+    "description": "Dalıştan önce kalçayı bacaklarla alçaltma; tüm dalışların ilk aşaması.",
+    "steps": [
+      "Duruştan başla.",
+      "Belden eğilmeden, dizleri bükerek kalçayı aşağı indir.",
+      "Sırt düz, baş yukarıda kalsın.",
+      "Patlayıcı şekilde duruşa geri yüksel."
+    ],
+    "mistakes": ["Belden öne eğilmek", "Başı aşağı düşürmek", "Ellerin düşmesi"],
+    "tip": "Asansör gibi düşün: sadece yukarı-aşağı hareket et.",
+    "reps": 20
+  },
+  {
+    "id": "wr_penetration",
+    "sport": "wrestling",
+    "name": "Penetrasyon Adımı",
+    "category": "footwork",
+    "level": 2,
+    "description": "Ön diz yere değerek rakibin içine doğru atılan derin adım.",
+    "steps": [
+      "Seviye değiştir.",
+      "Ön ayakla uzun bir adım at ve ön dizini yere indir.",
+      "Arka ayakla iterek kalçayı ileri taşı.",
+      "Arka bacağı öne getirip duruşa kalk."
+    ],
+    "mistakes": ["Dizi yere sert vurmak", "Kalçayı geride bırakmak", "Başı öne düşürmek"],
+    "tip": "Yumuşak bir zeminde veya dizlik ile çalış.",
+    "reps": 12
+  },
+  {
+    "id": "wr_double_leg",
+    "sport": "wrestling",
+    "name": "Çift Bacak Dalışı",
+    "category": "takedown",
+    "level": 2,
+    "description": "Rakibin iki bacağını birden tutarak yere indirme. (Partnersiz drill olarak uygulanır.)",
+    "steps": [
+      "Seviye değiştir ve penetrasyon adımıyla gir.",
+      "Omzunu rakibin karın hizasına koy, başın dışarıda kalsın.",
+      "Kollarınla iki dizin arkasını sar.",
+      "Arka ayağı öne getirip yanlamasına sürerek bitir."
+    ],
+    "mistakes": ["Uzaktan dalmak", "Başı aşağı bakarak girmek", "Kollarla çekip bacakla itmemek"],
+    "tip": "Gücü kollarından değil, bacaklarının itişinden al.",
+    "reps": 10
+  },
+  {
+    "id": "wr_single_leg",
+    "sport": "wrestling",
+    "name": "Tek Bacak Dalışı",
+    "category": "takedown",
+    "level": 2,
+    "description": "Rakibin ön bacağını yakalayıp kontrol ederek yere indirme.",
+    "steps": [
+      "Seviye değiştir ve rakibin ön bacağına doğru penetrasyon adımı at.",
+      "Başını bacağın iç tarafında tut, kollarınla dizin arkasını kavra.",
+      "Ayağa kalkarken bacağı göğsüne yapıştır.",
+      "Arka ayağınla dönerek dengesini boz ve bitir."
+    ],
+    "mistakes": ["Başı dışarıda bırakmak", "Bacağı göğse yapıştırmamak", "Ayağa kalkarken dik durmak"],
+    "tip": "Bacağı yakaladıktan sonra hemen kendi kalçanı altına getir.",
+    "reps": 10
+  },
+  {
+    "id": "wr_sprawl",
+    "sport": "wrestling",
+    "name": "Sprawl (Dalış Savunması)",
+    "category": "defense",
+    "level": 1,
+    "description": "Rakip bacaklarına daldığında bacakları geriye fırlatıp kalçayla ağırlık vermek.",
+    "steps": [
+      "Duruştan, iki bacağı birden hızla geriye fırlat.",
+      "Kalçanı yere doğru bastır, göğsün rakibin sırtına ağırlık verir.",
+      "Ellerinle rakibin başını/omuzlarını aşağı it.",
+      "Hızla duruşa geri dön."
+    ],
+    "mistakes": ["Dizlerin üzerine düşmek", "Kalçayı yukarıda bırakmak", "Yavaş dönmek"],
+    "tip": "Sprawl ne kadar hızlıysa o kadar etkilidir; tepki süresi çalış.",
+    "reps": 10
+  },
+  {
+    "id": "wr_bridge",
+    "sport": "wrestling",
+    "name": "Köprü",
+    "category": "ground",
+    "level": 1,
+    "description": "Sırtüstü pozisyondan kalça ve baş üzerinde kemer yaparak tuştan kurtulma temeli.",
+    "steps": [
+      "Sırt üstü uzan, dizleri bük, ayakları kalçaya yakın koy.",
+      "Kalçayı yukarı iterek başın tepesine doğru yuvarlan.",
+      "Ağırlık ayaklar ve başın üzerinde, eller göğüste.",
+      "Kontrollü şekilde başlangıca dön."
+    ],
+    "mistakes": ["Boynu ısınmadan zorlamak", "Kalçayı yeterince kaldırmamak"],
+    "tip": "Başlangıçta ellerinden destek alarak (güreş köprüsü yerine yarım köprü) başla.",
+    "reps": 10
+  },
+  {
+    "id": "wr_hand_fight",
+    "sport": "wrestling",
+    "name": "El Mücadelesi (Hand Fight)",
+    "category": "footwork",
+    "level": 1,
+    "description": "Rakibin ellerini kontrol ederek dalış için açıklık yaratma.",
+    "steps": [
+      "Duruşta, ellerini önde aktif tut.",
+      "Rakibin bileğini kavra ve aşağı/yana çek.",
+      "Diğer elinle ensesine veya dirseğine kontrol al.",
+      "Açıklık oluşunca seviye değiştir."
+    ],
+    "mistakes": ["Pasif beklemek", "Dik durarak mücadele etmek"],
+    "tip": "Ellerini sürekli hareket ettir; rakip seni değil sen onu kontrol et.",
+    "sec": 60
+  },
+  {
+    "id": "wr_snap_down",
+    "sport": "wrestling",
+    "name": "Snap Down (Baş Çekme)",
+    "category": "takedown",
+    "level": 2,
+    "description": "Rakibin başını ve kolunu aşağı çekerek dengesini öne bozmak.",
+    "steps": [
+      "Bir elinle enseyi, diğeriyle dirseği tut.",
+      "Bir adım geri atarken iki elle sert ve kısa çek.",
+      "Rakip öne düşerken arkaya geçmeye hazırlan.",
+      "Duruşunu koru."
+    ],
+    "mistakes": ["Kollarla uzun çekmek", "Adım atmadan çekmek"],
+    "tip": "Çekiş kısa ve patlayıcı olmalı.",
+    "reps": 12
+  },
+  {
+    "id": "wr_sit_out",
+    "sport": "wrestling",
+    "name": "Sit-Out (Yerden Çıkış)",
+    "category": "ground",
+    "level": 2,
+    "description": "Dört ayak (alt) pozisyonundan bacakları öne kaydırarak üstteki rakipten kurtulma.",
+    "steps": [
+      "Eller ve dizler üzerinde başla (alt pozisyon).",
+      "Bir bacağını diğerinin altından öne fırlat.",
+      "Kalçayı döndürerek oturur pozisyona geç, ellerin yerde destek.",
+      "Hızla dönüp tekrar dört ayağa veya ayağa kalk."
+    ],
+    "mistakes": ["Sırtı yere vermek", "Yavaş yapmak"],
+    "tip": "Her tekrarda yön değiştir.",
+    "reps": 12
+  },
+  {
+    "id": "wr_stand_up",
+    "sport": "wrestling",
+    "name": "Yerden Kalkış (Stand-Up)",
+    "category": "ground",
+    "level": 2,
+    "description": "Alt pozisyondan sırtı dik tutarak ayağa kalkma.",
+    "steps": [
+      "Alt pozisyondan bir ayağını öne koy.",
+      "Göğsünü kaldırıp sırtını dikleştir, ellerini beline götür (rakip ellerini kontrol).",
+      "Bacaklarla iterek ayağa kalk.",
+      "Dönerek rakibe yüzünü çevir ve duruş al."
+    ],
+    "mistakes": ["Öne eğik kalkmak", "Elleri kontrol etmemek"],
+    "tip": "Önce sırt, sonra kalkış: dik pozisyon kurtuluşun anahtarıdır.",
+    "reps": 10
+  },
+  {
+    "id": "wr_shadow",
+    "sport": "wrestling",
+    "name": "Gölge Güreş (Zincir Drill)",
+    "category": "combination",
+    "level": 1,
+    "description": "Duruş, el mücadelesi, seviye değiştirme, dalış ve sprawl'ı akış halinde çalışma.",
+    "steps": [
+      "Duruşta hareket et, el mücadelesi taklidi yap.",
+      "Seviye değiştir → penetrasyon adımı → duruşa dön.",
+      "Hayali dalışa karşı sprawl yap ve kalk.",
+      "Raunt boyunca tekrar et."
+    ],
+    "mistakes": ["Dik durmak", "Tempoyu düşürmek"],
+    "tip": "Her hareket sonrası hızla duruşa dönmek en önemli alışkanlıktır.",
+    "sec": 120
+  }
+]

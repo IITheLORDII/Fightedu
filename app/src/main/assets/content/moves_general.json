@@ -1,0 +1,180 @@
+[
+  {
+    "id": "gen_jog",
+    "sport": "general",
+    "name": "Yerinde Koşu (Yüksek Diz)",
+    "category": "warmup",
+    "level": 1,
+    "description": "Vücut ısısını ve nabzı yükselten temel ısınma hareketi.",
+    "steps": [
+      "Ayakların kalça genişliğinde, dik dur.",
+      "Dizlerini sırayla kalça hizasına kadar kaldır.",
+      "Kollarını koşar gibi dirseklerden 90° bükülü sallayarak ritmi koru.",
+      "Ayak uçlarına yumuşak bas, topuklarını yere vurma."
+    ],
+    "mistakes": ["Gövdeyi geriye yatırmak", "Dizleri yeterince kaldırmamak", "Nefesi tutmak"],
+    "tip": "Hızı ilk 20 saniyede yavaş tut, sonra kademeli arttır.",
+    "sec": 60
+  },
+  {
+    "id": "gen_arm_circles",
+    "sport": "general",
+    "name": "Kol Çevirme",
+    "category": "warmup",
+    "level": 1,
+    "description": "Omuz eklemini yumruk ve kavrama hareketlerine hazırlar.",
+    "steps": [
+      "Kollarını yanlara aç, omuzlarını gevşet.",
+      "Önce küçük, sonra büyüyen daireler çiz.",
+      "Yarı sürede yönü değiştir (ileri → geri)."
+    ],
+    "mistakes": ["Omuzları kulaklara doğru kaldırmak", "Çok hızlı ve kontrolsüz çevirmek"],
+    "tip": "Hareket boyunca karın kaslarını hafif sıkılı tut.",
+    "sec": 40
+  },
+  {
+    "id": "gen_squat",
+    "sport": "general",
+    "name": "Squat (Çömelme)",
+    "category": "conditioning",
+    "level": 1,
+    "description": "Bacak gücü ve duruş dengesi için temel kuvvet hareketi.",
+    "steps": [
+      "Ayaklar omuz genişliğinde, parmak uçları hafif dışa dönük.",
+      "Kalçanı geriye iterek sandalyeye oturur gibi çömel.",
+      "Uyluklar yere paralel olana kadar in.",
+      "Topuklardan iterek başlangıca dön."
+    ],
+    "mistakes": ["Dizlerin içe kapanması", "Topukların yerden kalkması", "Sırtın kamburlaşması"],
+    "tip": "Göğsünü dik, bakışını ileri tut.",
+    "reps": 15
+  },
+  {
+    "id": "gen_jump_rope",
+    "sport": "general",
+    "name": "İp Atlama",
+    "category": "conditioning",
+    "level": 1,
+    "description": "Dövüşçülerin klasik kondisyon ve ayak çabukluğu çalışması. İpin yoksa ipsiz taklit edebilirsin.",
+    "steps": [
+      "Dirsekler gövdeye yakın, ipi bileklerle çevir.",
+      "Ayak uçlarında, yerden 2-3 cm sıçra.",
+      "Dizleri hafif bükülü tutarak yumuşak in."
+    ],
+    "mistakes": ["Kollarla büyük daireler çizmek", "Çok yükseğe zıplamak", "Topukla yere inmek"],
+    "tip": "Ritim oturunca tek ayak ve boksör adımı (sağ-sol aktarma) dene.",
+    "sec": 120
+  },
+  {
+    "id": "gen_pushup",
+    "sport": "general",
+    "name": "Şınav",
+    "category": "conditioning",
+    "level": 1,
+    "description": "Göğüs, omuz ve kol kuvveti – yumruk gücünün temeli.",
+    "steps": [
+      "Eller omuz genişliğinden biraz açık, vücut baştan topuğa düz bir çizgi.",
+      "Dirsekleri yaklaşık 45° açıyla bükerek göğsünü yere yaklaştır.",
+      "Avuçlarla yeri iterek yukarı çık."
+    ],
+    "mistakes": ["Kalçanın düşmesi veya havaya kalkması", "Yarım hareket yapmak", "Başı öne sarkıtmak"],
+    "tip": "Zorlanırsan dizler yerde başla, form her zaman tekrardan önemlidir.",
+    "reps": 10
+  },
+  {
+    "id": "gen_plank",
+    "sport": "general",
+    "name": "Plank",
+    "category": "conditioning",
+    "level": 1,
+    "description": "Gövde (core) dayanıklılığı; darbe almak ve güç aktarmak için kritik.",
+    "steps": [
+      "Ön kollar yerde, dirsekler omuzların altında.",
+      "Vücudunu baştan topuğa düz bir hatta tut.",
+      "Karın ve kalça kaslarını sık, normal nefes al."
+    ],
+    "mistakes": ["Belin çökmesi", "Kalçanın yukarı kalkması", "Nefes tutmak"],
+    "tip": "Süre değil düz hat önemlidir; form bozulunca dinlen.",
+    "sec": 30
+  },
+  {
+    "id": "gen_situp",
+    "sport": "general",
+    "name": "Mekik",
+    "category": "conditioning",
+    "level": 1,
+    "description": "Karın kası dayanıklılığı.",
+    "steps": [
+      "Sırt üstü uzan, dizler bükülü, ayaklar yerde.",
+      "Elleri göğüste çaprazla.",
+      "Karın kaslarıyla gövdeyi dizlere doğru kaldır, kontrollü in."
+    ],
+    "mistakes": ["Elleri enseye koyup başı çekmek", "Hızlı düşerek inmek"],
+    "tip": "Yukarı çıkarken nefes ver.",
+    "reps": 15
+  },
+  {
+    "id": "gen_stretch_hamstring",
+    "sport": "general",
+    "name": "Arka Bacak Esnetme",
+    "category": "stretch",
+    "level": 1,
+    "description": "Tekme yüksekliği ve sakatlık önleme için arka uyluk esnekliği.",
+    "steps": [
+      "Dizlerin düz, ayaklar kalça genişliğinde dur.",
+      "Kalçadan katlanarak ellerini ayak bileklerine doğru uzat.",
+      "Esnemeyi hissettiğin noktada kal, derin nefes al."
+    ],
+    "mistakes": ["Yaylanmak (sektirme)", "Sırtı kamburlaştırmak"],
+    "tip": "Her nefes verişte biraz daha aşağı in.",
+    "sec": 30
+  },
+  {
+    "id": "gen_stretch_quad",
+    "sport": "general",
+    "name": "Ön Bacak Esnetme",
+    "category": "stretch",
+    "level": 1,
+    "description": "Ön uyluk (quadriceps) esnetmesi.",
+    "steps": [
+      "Tek ayak üzerinde dur, gerekirse duvardan destek al.",
+      "Diğer ayağın bileğini tutup topuğu kalçaya çek.",
+      "Dizler yan yana, kalça hafif önde. Süre bitince bacak değiştir."
+    ],
+    "mistakes": ["Dizi yana açmak", "Beli aşırı çukurlaştırmak"],
+    "tip": "Destek bacağının dizini kilitleme.",
+    "sec": 30
+  },
+  {
+    "id": "gen_stretch_shoulder",
+    "sport": "general",
+    "name": "Omuz Esnetme",
+    "category": "stretch",
+    "level": 1,
+    "description": "Omuz ve sırt üst bölgesini gevşetir.",
+    "steps": [
+      "Bir kolu göğsün önünden karşı tarafa uzat.",
+      "Diğer kolunla dirseğin üstünden hafifçe kendine çek.",
+      "15 saniye sonra kol değiştir."
+    ],
+    "mistakes": ["Omzu kulağa kaldırmak", "Gövdeyi döndürmek"],
+    "tip": "Boyun ve omuzları gevşek bırak.",
+    "sec": 30
+  },
+  {
+    "id": "gen_burpee",
+    "sport": "general",
+    "name": "Burpee",
+    "category": "conditioning",
+    "level": 2,
+    "description": "Tüm vücut patlayıcı kondisyon hareketi.",
+    "steps": [
+      "Ayakta başla, çömelip ellerini yere koy.",
+      "Ayaklarını geriye atarak şınav pozisyonuna geç.",
+      "Ayaklarını ellerine geri çek ve yukarı sıçra."
+    ],
+    "mistakes": ["Belin çökmesi", "Sert iniş"],
+    "tip": "Hız yerine akıcılığa odaklan.",
+    "reps": 8
+  }
+]

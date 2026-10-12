@@ -1,0 +1,240 @@
+[
+  {
+    "id": "box_stance",
+    "sport": "boxing",
+    "name": "Boks Duruşu (Gard)",
+    "category": "stance",
+    "level": 1,
+    "description": "Tüm tekniklerin başladığı ve bittiği temel pozisyon. Sağ elini kullanıyorsan sol ayak önde (ortodoks).",
+    "steps": [
+      "Ayaklar omuz genişliğinde, sol ayak önde, sağ ayak bir adım geride ve 45° dışa dönük.",
+      "Dizler hafif bükülü, ağırlık iki ayağa eşit dağılmış, arka topuk hafif kalkık.",
+      "Sol el göz hizasında önde, sağ el çenenin yanında.",
+      "Dirsekler kaburgaları korur, çene göğse hafif gömülü, bakış ileri."
+    ],
+    "mistakes": ["Ayakların aynı çizgide olması (dengesizlik)", "Ellerin düşmesi", "Çenenin havada kalması", "Dizlerin kilitli olması"],
+    "tip": "Aynanın karşısında gardını kontrol et; omuzlar gevşek olmalı.",
+    "sec": 45
+  },
+  {
+    "id": "box_footwork",
+    "sport": "boxing",
+    "name": "Ayak Oyunu: İleri–Geri Adım",
+    "category": "footwork",
+    "level": 1,
+    "description": "Gardı bozmadan mesafe ayarlama. Kural: Gideceğin yöne en yakın ayak önce hareket eder.",
+    "steps": [
+      "İleri: Arka ayakla it, ön ayakla küçük bir adım at, arka ayağı aynı mesafeye çek.",
+      "Geri: Ön ayakla it, arka ayakla geri adım at, ön ayağı çek.",
+      "Ayaklar asla birbirine çarpmamalı veya çaprazlanmamalı.",
+      "Adımlar kısa ve kaygan; ayak uçlarında hareket et."
+    ],
+    "mistakes": ["Zıplayarak hareket etmek", "Ayakları birleştirmek", "Adımla birlikte gardı düşürmek"],
+    "tip": "Yere bir çizgi çek ve ayaklarının çizginin iki yanında kaldığını kontrol et.",
+    "sec": 60
+  },
+  {
+    "id": "box_jab",
+    "sport": "boxing",
+    "name": "Jab (1)",
+    "category": "strike",
+    "level": 1,
+    "description": "Ön elle atılan hızlı, düz yumruk. Mesafe ölçer, kombinasyon açar.",
+    "steps": [
+      "Gard pozisyonundan ön eli düz bir hatla ileri fırlat.",
+      "Vuruş anında yumruğu çevir: avuç içi yere baksın.",
+      "Ön omuz çeneyi korusun, arka el çenede kalsın.",
+      "Yumruğu aynı hattan hızla gard pozisyonuna geri çek."
+    ],
+    "mistakes": ["Atmadan önce eli geri çekmek (telgraf)", "Dirseği yana açmak", "Arka eli düşürmek", "Geri çekmeyi unutmak"],
+    "tip": "Jab bir kırbaç gibidir: gidişi kadar dönüşü de hızlı olmalı.",
+    "reps": 20
+  },
+  {
+    "id": "box_cross",
+    "sport": "boxing",
+    "name": "Cross / Düz (2)",
+    "category": "strike",
+    "level": 1,
+    "description": "Arka elle atılan güçlü düz yumruk. Güç kalça ve arka ayağın dönüşünden gelir.",
+    "steps": [
+      "Arka ayağın ucunda dönerek topuğu dışa çevir.",
+      "Kalça ve omuzları ileri döndürerek arka eli düz uzat.",
+      "Yumruk çevrilir, ön el çeneyi korur.",
+      "Aynı hattan hızla gard pozisyonuna dön."
+    ],
+    "mistakes": ["Arka ayağı döndürmemek (güç kaybı)", "Öne fazla eğilip dengeyi kaybetmek", "Ön eli düşürmek"],
+    "tip": "Ayaktan başlayan dönüşü bir kapı menteşesi gibi düşün.",
+    "reps": 20
+  },
+  {
+    "id": "box_lead_hook",
+    "sport": "boxing",
+    "name": "Sol Kroşe (3)",
+    "category": "strike",
+    "level": 2,
+    "description": "Ön elle yandan atılan kavisli yumruk. Kısa mesafede çok etkilidir.",
+    "steps": [
+      "Ön kolu dirsekten yaklaşık 90° bükerek yere paralel kaldır.",
+      "Ön ayağın ucunda dönerken kalça ve gövdeyi içe doğru döndür.",
+      "Yumruk, dirsek ve omuz aynı yatay hatta hareket eder.",
+      "Arka el çenede; vuruştan sonra gard pozisyonuna dön."
+    ],
+    "mistakes": ["Kolu açıp geniş savurmak", "Sadece koldan vurmak, gövdeyi döndürmemek", "Dirseği düşürmek"],
+    "tip": "Kolun bir kanca gibi sabit kalır; dönüşü gövde yapar.",
+    "reps": 15
+  },
+  {
+    "id": "box_rear_hook",
+    "sport": "boxing",
+    "name": "Sağ Kroşe (4)",
+    "category": "strike",
+    "level": 2,
+    "description": "Arka elle yandan atılan güçlü kavisli yumruk.",
+    "steps": [
+      "Arka ayağın ucunda dönerek kalçayı ileri döndür.",
+      "Arka kol dirsekten bükülü, yere paralel hatla yandan gelir.",
+      "Ön el çeneyi korur.",
+      "Vuruştan sonra gövdeyi geri döndürerek garda dön."
+    ],
+    "mistakes": ["Çok geniş savurmak", "Ön eli düşürmek", "Dengeyi öne kaybetmek"],
+    "tip": "Genellikle jab veya sol kroşenin ardından kullanılır.",
+    "reps": 15
+  },
+  {
+    "id": "box_lead_uppercut",
+    "sport": "boxing",
+    "name": "Sol Aparkat (5)",
+    "category": "strike",
+    "level": 2,
+    "description": "Ön elle aşağıdan yukarıya atılan yumruk; yakın mesafede gardın arasından girer.",
+    "steps": [
+      "Ön dizini hafif bük, ağırlığı biraz ön ayağa al.",
+      "Bacakları iterek ve kalçayı döndürerek ön eli aşağıdan yukarı çıkar.",
+      "Avuç içi sana bakar, yumruk çene hizasında biter.",
+      "Garda geri dön."
+    ],
+    "mistakes": ["Eli çok aşağı indirip telgraf vermek", "Sadece koldan kaldırmak", "Kolu fazla uzatmak"],
+    "tip": "Güç bacaklardan gelir: hafif çömel ve yukarı it.",
+    "reps": 15
+  },
+  {
+    "id": "box_rear_uppercut",
+    "sport": "boxing",
+    "name": "Sağ Aparkat (6)",
+    "category": "strike",
+    "level": 2,
+    "description": "Arka elle aşağıdan yukarıya atılan güçlü yumruk.",
+    "steps": [
+      "Arka ayağın ucunda dönerek kalçayı ileri döndür.",
+      "Arka el hafifçe alçalır ve aşağıdan yukarı doğru çıkar.",
+      "Ön el çeneyi korur; yumruk çene hizasında biter.",
+      "Garda dön."
+    ],
+    "mistakes": ["Öne fazla eğilmek", "Ön eli düşürmek"],
+    "tip": "Sol kroşenin ardından çok doğal bir geçiştir (3-6).",
+    "reps": 15
+  },
+  {
+    "id": "box_slip",
+    "sport": "boxing",
+    "name": "Slip (Kafa Kaçırma)",
+    "category": "defense",
+    "level": 2,
+    "description": "Düz yumruklardan, başı yumruğun hattı dışına çıkararak kaçınma.",
+    "steps": [
+      "Gard pozisyonunda dur.",
+      "Dizleri hafif bükerek ve gövdeyi döndürerek başı 10-15 cm sağa veya sola kaydır.",
+      "Gözlerin rakipte kalsın, ellerini düşürme.",
+      "Hemen merkeze dön veya karşı yumrukla cevap ver."
+    ],
+    "mistakes": ["Sadece boyundan eğilmek", "Gözleri kapatmak", "Hareketi aşırı büyük yapmak"],
+    "tip": "Küçük hareket = hızlı karşı atak.",
+    "reps": 20
+  },
+  {
+    "id": "box_roll",
+    "sport": "boxing",
+    "name": "Roll / Bob & Weave",
+    "category": "defense",
+    "level": 2,
+    "description": "Kroşelerin altından U şeklinde eğilerek geçme.",
+    "steps": [
+      "Dizlerini bükerek çömel (beli değil dizleri kullan).",
+      "Başını U harfi çizerek bir yandan diğer yana geçir.",
+      "Gard sıkı, gözler ileri.",
+      "Karşı tarafta yüksel ve garda dön."
+    ],
+    "mistakes": ["Belden öne eğilmek", "Yere bakmak", "Elleri açmak"],
+    "tip": "Bir ip ger ve altından gidip gelerek çalış.",
+    "reps": 16
+  },
+  {
+    "id": "box_parry_block",
+    "sport": "boxing",
+    "name": "Parry ve Blok",
+    "category": "defense",
+    "level": 1,
+    "description": "Gelen yumruğu elle sektirme (parry) veya kol/eldivenle karşılama (blok).",
+    "steps": [
+      "Parry: Gelen jabı arka elin avucuyla kısa bir hareketle içe doğru sektir.",
+      "Blok: Kroşelere karşı eldiveni şakağa yapıştır, dirseği kaburgaya indir.",
+      "Hareketler kısa olmalı, el gard hattından fazla çıkmamalı.",
+      "Savunmadan hemen sonra karşı yumruk at."
+    ],
+    "mistakes": ["Parry için eli fazla uzatmak", "Blokta gözleri kapatmak", "Savunmadan sonra donup kalmak"],
+    "tip": "Savunma + karşı atak her zaman bir paket olarak çalışılmalı.",
+    "reps": 20
+  },
+  {
+    "id": "box_combo_12",
+    "sport": "boxing",
+    "name": "Kombinasyon 1-2 (Jab–Cross)",
+    "category": "combination",
+    "level": 1,
+    "description": "Boksun en temel ve en etkili kombinasyonu.",
+    "steps": [
+      "Jab at; jab geri dönerken cross başlasın.",
+      "Cross ile kalça ve arka ayağı döndür.",
+      "İki yumruk tek ritimde: 'ta-tam'.",
+      "Garda dön ve hafif bir adımla açıdan çık."
+    ],
+    "mistakes": ["İki yumruk arasında duraksamak", "Cross sırasında ön eli düşürmek"],
+    "tip": "Önce yavaş ve doğru, sonra hızlı.",
+    "reps": 20
+  },
+  {
+    "id": "box_combo_123",
+    "sport": "boxing",
+    "name": "Kombinasyon 1-2-3",
+    "category": "combination",
+    "level": 2,
+    "description": "Jab – cross – sol kroşe. Cross'un dönüşü kroşe için yay gibi gerilim oluşturur.",
+    "steps": [
+      "Jab ve cross'u at.",
+      "Cross'tan dönen gövde ile ağırlığı ön ayağa al.",
+      "Ön ayak ucunda dönerek sol kroşeyi at.",
+      "Garda dön."
+    ],
+    "mistakes": ["Kroşeyi açık savurmak", "Kombinasyon sonunda çeneyi açık bırakmak"],
+    "tip": "Bitişte başını hareket ettir (slip veya geri adım).",
+    "reps": 15
+  },
+  {
+    "id": "box_shadow",
+    "sport": "boxing",
+    "name": "Gölge Boksu",
+    "category": "combination",
+    "level": 1,
+    "description": "Hayali bir rakibe karşı ayak oyunu, yumruk ve savunmayı birleştirme.",
+    "steps": [
+      "Gard al ve sürekli hareket et.",
+      "Öğrendiğin yumruk ve kombinasyonları karışık uygula.",
+      "Her kombinasyondan sonra bir savunma hareketi (slip/roll) ekle.",
+      "Raunt boyunca nefesini kontrol et."
+    ],
+    "mistakes": ["Yerinde durmak", "Sadece yumruk atıp savunmayı unutmak", "Gardı düşürmek"],
+    "tip": "Rakibini gözünde canlandır: o da sana yumruk atıyor.",
+    "sec": 120
+  }
+]
