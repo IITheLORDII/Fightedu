@@ -14,9 +14,10 @@ temel seviyeye getiren, tamamen çevrimdışı çalışan bir Android uygulamas�
   4. Hafta 7-8 – Pekiştirme ve **değerlendirme seansı**
 - **Gün sayısına göre seanslar:** 3 gün → A, B, C · 4 gün → + D (teknik tekrar) · 5 gün → + E (kondisyon).
   Her evrenin 2. haftasında tekrar/süreler %15 artar (kademeli yüklenme).
-- **Animasyonlu hareketler:** 63 hareketin her biri, spora uygun kıyafetli hacimli bir figürle Lottie
-  animasyonu olarak gösterilir; vuruşlar kum torbasına veya partnere, savunmalar gelen saldırıya karşı
-  yapılır (yavaş çekim seçeneği).
+- **Animasyonlu hareketler:** 63 hareketin her biri, 3B iskelet üzerinden üretilmiş gerçekçi oranlı,
+  spora uygun kıyafetli bir insan figürüyle Lottie animasyonu olarak gösterilir. Kalça/omuz dönüşü,
+  ayak pivotu ve ağırlık aktarımı görünür; vuruşlar kum torbasına veya partnere yapılır, savunmalar
+  gelen saldırıya karşı gösterilir, vuruşun yolu iz olarak çizilir (yavaş çekim seçeneği).
   Her hareketin adım adım anlatımı, sık yapılan hataları ve ipucu vardır.
 - **Antrenman oynatıcısı:** Isınma → ana bölüm → soğuma; set/tekrar takibi, geri sayım, dinlenme
   zamanlayıcısı, sesli uyarı, ekranın açık kalması.
@@ -65,23 +66,30 @@ debug APK'yı **fightedu-debug-apk** artifact'ı olarak yükler.
 
 ## Animasyonlar
 
-Animasyonlar `tools/lottie_gen/` altındaki Python betikleriyle kodla üretilir (harici araç gerekmez):
+Animasyonlar `tools/lottie_gen/` altındaki Python betikleriyle **3B iskelet** üzerinden üretilir
+(harici araç gerekmez):
 
 | Dosya | İçerik |
 |---|---|
-| `moves.py` | Her hareketin eklem açılarıyla tanımlı anahtar pozları, hedefi (`TARGETS`) ve darbe kareleri (`HITS`) |
-| `rig.py` | İskelet kinematiği, zemine oturtma, easing ve Lottie yardımcıları |
-| `body.py` | Hacimli figür (konik uzuvlar, gövde, yüz, eldiven/ayak) ve spora göre kıyafetler (`OUTFITS`) |
-| `props.py` | Zemin/minder, gölge, kum torbası, darbe efekti |
+| `moves.py` | 63 hareketin 3B anahtar pozları, kamera açısı, hedefi (kum torbası / partner), darbe kareleri |
+| `skeleton.py` | Vücut ölçüleri, poz parametreleri, kol/bacak için ters kinematik (IK), poz döndürme/kaydırma |
+| `figure.py` | 3B gövdeyi kamera açısından çizen figür: kas hatlı uzuvlar, gövde, yüz, saç, spora göre kıyafet |
+| `camera.py` | Ortografik kamera ve 2B bezier yol yardımcıları |
+| `mathx.py` | Vektör/eksen takımı matematiği ve döngüsel (periyodik) PCHIP interpolasyonu |
+| `scene.py` | Sahne: kum torbası, partner, zemin, gölgeler, vuruş izi ve darbe efekti; Lottie'ye dönüştürme |
 | `generate.py` | Komut satırı aracı |
 
-- **Kıyafetler:** boks (kırmızı eldiven, şort, boks ayakkabısı), kick boks (mavi eldiven, kaval
-  koruyucu), güreş (mayo, güreş ayakkabısı, minder), tekvando (dobok + kuşak, minder), ısınma/kondisyon (tişört, spor ayakkabı).
-- **Hedefler:** boks/kick boks vuruşları kum torbasına yapılır (torba darbede sallanır, temas
-  noktasında darbe efekti çıkar). Savunmalarda rakip saldırır (jab, kroşe, low kick, ön tekme...),
-  tekvando tekmeleri göğüs koruyuculu partnere, güreş teknikleri partnerle gösterilir.
-  Torba/rakip konumu, `HITS` içindeki darbe karesinde vuran noktanın (eldiven, kaval, diz, topuk)
-  konumundan otomatik hesaplanır.
+Nasıl çalışır:
+
+- Bir poz; kalçanın konumu/yönü, göğsün kalçaya göre dönüşü (omuz dönüşü), başın bakışı, ellerin
+  ve ayakların hedef konumlarıyla tanımlanır. Dirsek ve dizler IK ile hesaplanır, yere basan ayaklar
+  için kalça yüksekliği otomatik ayarlanır. Böylece pivot, kalça dönüşü, ağırlık aktarımı gibi
+  tekniğin özü görünür.
+- Her hareket kendine en uygun kamera açısından gösterilir (ör. slip ve roll için önden, tekmeler
+  için yandan). Gövde parçaları her karede derinliğe göre sıralanır.
+- Vuruşlarda yumruğun/tekmenin izlediği yol yarı saydam bir izle, temas anı darbe efektiyle gösterilir.
+  Savunmalarda partner saldırır; güreşte partner tepki verir (itilir, mindere düşer, bacağı tutulur).
+- Partner otomatik olarak aynalanır (solak), böylece iki figürün de göğsü kameraya döner.
 
 ```bash
 python3 tools/lottie_gen/generate.py --check-content   # tümünü üret + içerik kapsamını kontrol et
@@ -90,8 +98,7 @@ python3 tools/lottie_gen/generate.py --only box_jab    # tek bir hareket
 
 Profesyonel bir tasarımcıdan alınan Lottie dosyası aynı isimle
 (`app/src/main/assets/lottie/<hareket_id>.json`) konursa uygulama kodu değişmeden onu kullanır.
-Bu durumda o hareketi `moves.py`'den kaldırın (aksi halde CI'daki "animasyonlar güncel mi" adımı
-dosyayı yeniden üretilmiş haliyle karşılaştırıp başarısız olur).
+Bu durumda o hareketi `moves.py`'den kaldırın ki yeniden üretim dosyanın üzerine yazmasın.
 
 ## Güvenlik notu
 
