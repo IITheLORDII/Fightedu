@@ -192,7 +192,7 @@ private fun WorkContent(step: WorkoutStep.Work, remaining: Int, paused: Boolean,
     Spacer(Modifier.padding(top = 8.dp))
     MoveAnimation(
         move = ex.move,
-        playing = !paused,
+        paused = paused,
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(1.25f),
@@ -247,7 +247,7 @@ private fun RestContent(step: WorkoutStep.Rest, remaining: Int) {
     Spacer(Modifier.padding(top = 24.dp))
     Card(Modifier.fillMaxWidth()) {
         Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-            MoveAnimation(step.next.move, Modifier.size(96.dp), corner = 12.dp)
+            MoveAnimation(step.next.move, Modifier.size(96.dp), playing = false, corner = 12.dp)
             Spacer(Modifier.width(12.dp))
             Column {
                 Text("Sıradaki", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)

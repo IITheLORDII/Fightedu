@@ -339,6 +339,9 @@ class Skeleton:
             return madd(self.c0, (self.chest[1], 14.0), (self.chest[0], 10.0))
         if name == "pelvis":
             return self.origin
+        if name.endswith("shin"):
+            # tekmede vuran yüzey: kaval kemiğinin alt yarısı
+            return lerp(self.j[name[0] + "knee"], self.j[name[0] + "ankle"], 0.6)
         return self.j[name]
 
 

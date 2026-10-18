@@ -45,8 +45,11 @@ data class Move(
     val reps: Int? = null,
     val sec: Int? = null,
 ) {
-    /** Animasyon dosyasının assets içindeki yolu. */
-    val lottieAsset: String get() = "lottie/$id.json"
+    /** Hareket videosunun (döngüsel MP4) assets içindeki yolu. */
+    val videoAsset: String get() = "video/$id.mp4"
+
+    /** Liste küçük resimleri ve video yüklenirken gösterilen kapak resmi. */
+    val posterAsset: String get() = "poster/$id.webp"
 
     val levelLabel: String
         get() = when (level) {

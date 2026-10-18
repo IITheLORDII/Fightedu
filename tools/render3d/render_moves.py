@@ -1,0 +1,365 @@
+#!/usr/bin/env python3
+"""FightEdu gerçekçi hareket videoları: MakeHuman gövdesi + Blender Cycles.
+
+Hareketlerin kendisi (anahtar pozlar, hedefler, partner, darbe kareleri) tools/lottie_gen/moves.py'den
+gelir; bu betik aynı iskelet çözümünü gerçekçi 3B sporcuya aktarır, stüdyo ışığında render eder ve
+her hareket için döngüsel bir MP4 ile küçük bir kapak resmi (WebP) üretir.
+
+Kullanım (bpy kurulu Python 3.13 ile):
+  python render_moves.py --out ../../app/src/main/assets/video [--only box_jab ...] [--preview 0,12]
+"""
+import argparse
+import math
+import os
+import shutil
+import subprocess
+import sys
+import time
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+sys.path.insert(0, os.path.join(HERE, "..", "lottie_gen"))
+
+import bpy  # noqa: E402
+import numpy as np  # noqa: E402
+from mathutils import Quaternion, Vector  # noqa: E402
+
+import outfits  # noqa: E402
+import retarget  # noqa: E402
+import studio  # noqa: E402
+from character import ATHLETE, Character  # noqa: E402
+from shading import srgb  # noqa: E402
+
+WIDTH, HEIGHT = 640, 512
+ROPE_POINTS = 13
+
+FIGHTER_SHAPE = ATHLETE
+PARTNER_SHAPE = dict(ATHLETE, muscle=0.92, weight=0.40, height=0.52,
+                     race=dict(african=0.55, asian=0.05, caucasian=0.40))
+
+STYLE = {
+    "boxing": dict(floor="#CFCBC4", wall="#ECEDEF",
+                   fighter=dict(shorts_color="#1F4FC8", trim="#F4F4F4", gloves="#C8102E", boots="#111111"),
+                   partner=dict(shorts_color="#A3161B", trim="#151515", gloves="#151515", boots="#F0F0F0",
+                                socks="#151515")),
+    "kickboxing": dict(floor="#C6CBD2", wall="#ECEDEF",
+                       fighter=dict(shorts_color="#151515", trim="#D9A21B", gloves="#1F4FC8"),
+                       partner=dict(shorts_color="#A3161B", trim="#F2F2F2", gloves="#A3161B")),
+    "wrestling": dict(floor="#D9BE55", wall="#ECEDEF",
+                      fighter=dict(singlet="#1F3FA8", trim="#F2F2F2", shoes="#151515"),
+                      partner=dict(singlet="#B3191F", trim="#F2F2F2", shoes="#B3191F")),
+    "taekwondo": dict(floor="#9FB6D8", wall="#ECEDEF",
+                      fighter=dict(belt="#111111"),
+                      partner=dict(belt="#111111", hogu="#C62828")),
+    "general": dict(floor="#CFCBC4", wall="#ECEDEF", fighter=dict(), partner=dict()),
+}
+HANDS = {  # parmak bükülmesi (derece): (01, 02, 03), başparmak
+    "boxing": ((70, 95, 65), (15, 35, 40)),
+    "kickboxing": ((70, 95, 65), (15, 35, 40)),
+    "taekwondo": ((78, 100, 70), (25, 45, 55)),
+    "wrestling": ((25, 35, 25), (10, 15, 15)),
+    "general": ((12, 18, 12), (5, 8, 8)),
+}
+
+
+def our_dir(v):
+    return retarget.Bv(v)
+
+
+class MoveRenderer:
+    def __init__(self, move_id, mv, samples=10):
+        self.id = move_id
+        self.mv = mv
+        self.samples = samples
+
+    # -- sahne --------------------------------------------------------------------
+    def build(self):
+        import scene as lscene
+        mv = self.mv
+        style = STYLE[mv.sport]
+        studio.reset_scene()
+        studio.setup_render(WIDTH, HEIGHT, samples=self.samples)
+        studio.world(strength=0.16)
+        fist, thumb = HANDS[mv.sport]
+        self.fig = Character("fig", shape=FIGHTER_SHAPE)
+        bm = outfits.BodyMap(self.fig)
+        outfits.KITS[mv.sport](self.fig, bm, **style["fighter"])
+        self.fig.dims = retarget.body_dims(self.fig)
+        retarget.configure_skeleton(self.fig.dims)
+        self.fposer = retarget.Poser(self.fig, fist=fist, thumb=thumb)
+
+        sb = lscene.SceneBuilder(self.id, mv)
+        sb.solve()
+        self.sb = sb
+        self.opp = None
+        if sb.psk:
+            self.opp = Character("opp", shape=PARTNER_SHAPE, skin="#7B4B33", hair="#0E0A08", iris="#24160E")
+            obm = outfits.BodyMap(self.opp)
+            outfits.KITS[mv.sport](self.opp, obm, **style["partner"])
+            self.opp.dims = retarget.body_dims(self.opp)
+            self.oposer = retarget.Poser(self.opp, fist=fist, thumb=thumb)
+        self.bag = self._bag() if sb.bag else None
+        self.rope = self._rope() if mv.rope is not None else None
+        self._camera_and_lights(style)
+
+    def _bag(self):
+        b = self.sb.bag
+        long_bag = b["long"]
+        r = b["r"] / 100.0
+        chain = (26.0 if long_bag else 36.0) / 100.0
+        length = (188.0 if long_bag else 118.0) / 100.0
+        pivot = retarget.B((b["x"], 236.0, b["z"]))
+        root = bpy.data.objects.new("bag_pivot", None)
+        bpy.context.scene.collection.objects.link(root)
+        root.location = Vector(pivot.tolist())
+        bpy.ops.mesh.primitive_cylinder_add(vertices=48, radius=r, depth=length,
+                                            location=(0.0, 0.0, -chain - length / 2))
+        body = bpy.context.active_object
+        body.name = "bag"
+        bev = body.modifiers.new("Bevel", "BEVEL")
+        bev.width = 0.025
+        bev.segments = 4
+        for p in body.data.polygons:
+            p.use_smooth = True
+        body.modifiers.new("WN", "WEIGHTED_NORMAL")
+        leather = outfits.leather("bag_leather", "#2B1C18" if not long_bag else "#1B1B1F", roughness=0.42,
+                                  coat=0.25)
+        body.data.materials.append(leather)
+        band = outfits.leather("bag_band", "#B71C1C", roughness=0.5, coat=0.1)
+        body.data.materials.append(band)
+        for p in body.data.polygons:
+            z = p.center.z + chain + length / 2
+            if abs(z - length * 0.12) < 0.03 or abs(z - length * 0.88) < 0.03:
+                p.material_index = 1
+        body.parent = root
+        # askı kayışları ve zincir
+        metal = outfits.leather("bag_chain", "#8E9AA3", roughness=0.25, coat=0.0)
+        metal.node_tree.nodes["Principled BSDF"].inputs["Metallic"].default_value = 1.0
+        for k in range(4):
+            a = math.radians(45 + 90 * k)
+            p0 = Vector((math.cos(a) * r * 0.85, math.sin(a) * r * 0.85, -chain))
+            p1 = Vector((0.0, 0.0, -chain * 0.45))
+            self._rod(f"strap{k}", p0, p1, 0.005, metal, root)
+        self._rod("chain", Vector((0, 0, -chain * 0.45)), Vector((0, 0, 0.6)), 0.006, metal, root)
+        return root
+
+    def _rod(self, name, p0, p1, radius, mat, parent):
+        d = p1 - p0
+        bpy.ops.mesh.primitive_cylinder_add(vertices=10, radius=radius, depth=d.length, location=(p0 + p1) / 2)
+        ob = bpy.context.active_object
+        ob.name = name
+        ob.rotation_euler = d.to_track_quat("Z", "Y").to_euler()
+        ob.data.materials.append(mat)
+        ob.parent = parent
+        return ob
+
+    def _rope(self):
+        cu = bpy.data.curves.new("rope", "CURVE")
+        cu.dimensions = "3D"
+        cu.bevel_depth = 0.0042
+        cu.bevel_resolution = 3
+        sp = cu.splines.new("NURBS")
+        sp.points.add(ROPE_POINTS - 1)
+        sp.use_endpoint_u = True
+        sp.order_u = 4
+        ob = bpy.data.objects.new("rope", cu)
+        bpy.context.scene.collection.objects.link(ob)
+        cu.materials.append(outfits.leather("rope_mat", "#263238", roughness=0.5, coat=0.0))
+        handle = outfits.leather("rope_handle", "#C62828", roughness=0.45, coat=0.2)
+        self.handles = []
+        for s in "lr":
+            bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.014, depth=0.13)
+            h = bpy.context.active_object
+            h.name = f"rope_handle_{s}"
+            h.data.materials.append(handle)
+            self.handles.append(h)
+        return ob
+
+    def _update_rope(self, t):
+        """İp, iki el arasındaki eksen etrafında dönen bir yay: rope karesinde ayakların altında."""
+        sk = self.sb.fsk[t]
+        lh, rh = retarget.B(sk.j["lhand"]), retarget.B(sk.j["rhand"])
+        axis = unit(rh - lh)
+        down = np.array([0.0, 0.0, -1.0])
+        down = unit(down - axis * (down @ axis))
+        fwd = np.cross(axis, down)
+        fwd *= 1.0 if fwd @ retarget.Bv(sk.pelvis[0]) > 0 else -1.0
+        ph = 2 * math.pi * (t - self.mv.rope) / self.mv.dur
+        mid = (lh + rh) / 2
+        R = mid[2] - 0.01  # en altta zeminin ~1 cm üstünden, havadaki ayakların altından geçsin
+        # ileri atlama: ip ayak altından geçtikten sonra arkadan yukarı çıkar, baş üstünden öne iner
+        radial = down * math.cos(ph) - fwd * math.sin(ph) * 0.85
+        pts = []
+        for k in range(ROPE_POINTS):
+            u = k / (ROPE_POINTS - 1)
+            bulge = math.sin(math.pi * u) ** 0.7
+            p = lh + (rh - lh) * u + radial * R * bulge
+            pts.append(p)
+        sp = self.rope.data.splines[0]
+        for p, q in zip(sp.points, pts):
+            p.co = (q[0], q[1], q[2], 1.0)
+        # sapları el içinde, ipin çıkış yönünde tut
+        for h, hand in zip(self.handles, (lh, rh)):
+            h.location = Vector(hand.tolist())
+            h.rotation_euler = Vector((radial + down * 0.3).tolist()).to_track_quat("Z", "Y").to_euler()
+
+    def _camera_and_lights(self, style):
+        mv = self.mv
+        az, el = math.radians(mv.cam["az"]), math.radians(mv.cam["el"] + 4.0)
+        v = unit(retarget.Bv((math.sin(az) * math.cos(el), math.sin(el), math.cos(az) * math.cos(el))))
+        pts, pads = [], []
+        for sks in (self.sb.fsk, self.sb.psk):
+            for sk in sks:
+                for name, q in sk.j.items():
+                    if isinstance(q, tuple) and len(q) == 3 and isinstance(q[0], float):
+                        pts.append(retarget.B(q))
+                        pads.append(0.07)  # eklem merkezi -> vücut/eldiven yüzeyi
+                        if name.endswith("hand") and q[1] < 10.0:
+                            # yere dayanan elin parmakları ileri uzanır
+                            fwd_h = retarget.Bv(sk.chest[0]) * np.array([1.0, 1.0, 0.0])
+                            pts.append(retarget.B(q) + unit(fwd_h) * 0.15)
+                            pads.append(0.04)
+                c = retarget.B(sk.point("head"))
+                pts.append(c)
+                pads.append(0.14)  # kafa (saç dahil)
+        if self.sb.bag:
+            b = self.sb.bag
+            for y in (40.0 if not b["long"] else 22.0, 200.0):
+                for dz in (-b["r"], b["r"]):
+                    pts.append(retarget.B((b["x"] + b["r"], y, b["z"] + dz)))
+                    pads.append(0.02)
+        pts = np.array(pts)
+        pads = np.array(pads)
+        # zemin: en alçak noktanın altı da kadrajda kalsın
+        floor_pts = pts.copy()
+        floor_pts[:, 2] = 0.0
+        pts = np.vstack([pts, floor_pts])
+        pads = np.concatenate([pads, np.full(len(floor_pts), 0.02)])
+        lens = 55.0
+        aspect = WIDTH / HEIGHT
+        tx = math.tan(math.atan(18.0 / lens)) * 0.88
+        ty = tx / aspect * 0.92 / 0.88
+        up_w = np.array([0.0, 0.0, 1.0])
+        fwd = -v
+        right = unit(np.cross(fwd, up_w))
+        up = np.cross(right, fwd)
+        center = (pts.min(axis=0) + pts.max(axis=0)) / 2
+        for _ in range(3):
+            q = pts - center
+            x, y, z = q @ right, q @ up, q @ v
+            D = max(np.max(z + (np.abs(x) + pads) / tx), np.max(z + (np.abs(y) + pads) / ty))
+            # yatay/dikey ortalama düzeltmesi (perspektifte)
+            dz_ = D - z
+            cx_ = (np.max((x + pads) / dz_) + np.min((x - pads) / dz_)) / 2
+            cy_ = (np.max((y + pads) / dz_) + np.min((y - pads) / dz_)) / 2
+            center = center + right * cx_ * D * 0.9 + up * cy_ * D * 0.9
+        cam_loc = center + v * D
+        studio.camera(tuple(cam_loc), tuple(center), lens=lens)
+        # ışıklar kameraya göre: sağ-önden ana ışık, soldan dolgu, arkadan kenar
+        c = center
+        key = unit(right * 0.75 + v * 0.65 + up_w * 0.7)
+        fill = unit(-right * 0.95 + v * 0.45 + up_w * 0.15)
+        rim = unit(-v * 0.9 + up_w * 0.55 - right * 0.35)
+        studio.area_light("key", tuple(c + key * 4.2), tuple(c), 1150.0, 1.8, (1.0, 0.96, 0.92))
+        studio.area_light("fill", tuple(c + fill * 4.5), tuple(c), 170.0, 3.0, (0.92, 0.96, 1.0))
+        studio.area_light("rim", tuple(c + rim * 3.6), tuple(c + np.array([0, 0, 0.3])), 700.0, 1.4)
+        # fon: kameranın tersine dönük sonsuz fon
+        bd = studio.backdrop(floor_color=style["floor"], wall_color=style["wall"])
+        h = -v.copy()
+        h[2] = 0.0
+        h = unit(h)
+        bd.rotation_euler = (0.0, 0.0, math.atan2(-h[0], h[1]))
+        bd.location = (center[0], center[1], 0.0)
+
+    # -- kareler ------------------------------------------------------------------
+    def pose(self, t):
+        sb = self.sb
+        self.fposer.pose(sb.fsk[t])
+        if self.opp is not None:
+            self.oposer.pose(sb.psk[t])
+        if self.bag is not None:
+            ang, push = sb.bag_swing(t)
+            # alt uç itme yönüne gitsin: eksen = itme x yukarı
+            axis = np.cross(retarget.Bv(push), np.array([0.0, 0.0, 1.0]))
+            self.bag.rotation_mode = "QUATERNION"
+            self.bag.rotation_quaternion = Quaternion(Vector(axis.tolist()), math.radians(ang))
+        if self.rope is not None:
+            self._update_rope(t)
+
+    def render(self, frame_dir, frames=None):
+        os.makedirs(frame_dir, exist_ok=True)
+        sc = bpy.context.scene
+        frames = range(self.mv.dur) if frames is None else frames
+        for t in frames:
+            path = os.path.join(frame_dir, f"{t:04d}.png")
+            if os.path.exists(path):
+                continue
+            self.pose(t)
+            sc.render.filepath = path + ".tmp.png"
+            bpy.ops.render.render(write_still=True)
+            os.replace(path + ".tmp.png", path)
+
+    def poster_frame(self):
+        if self.mv.hits:
+            return min(self.mv.dur - 1, self.mv.hits[0][0])
+        return int(self.mv.dur * 0.3)
+
+
+def unit(v):
+    n = np.linalg.norm(v)
+    return v / n if n > 1e-9 else v
+
+
+def encode(frame_dir, mp4, poster_src, poster, fps=30):
+    os.makedirs(os.path.dirname(mp4), exist_ok=True)
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-framerate", str(fps), "-i",
+                    os.path.join(frame_dir, "%04d.png"), "-c:v", "libx264", "-preset", "slow", "-crf", "21",
+                    "-profile:v", "main", "-pix_fmt", "yuv420p", "-movflags", "+faststart", "-an", mp4], check=True)
+    os.makedirs(os.path.dirname(poster), exist_ok=True)
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", poster_src, "-vf", "scale=320:-1",
+                    "-c:v", "libwebp", "-quality", "86", poster], check=True)
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--out", default=os.path.normpath(os.path.join(HERE, "..", "..", "app", "src", "main", "assets")))
+    ap.add_argument("--frames", default=os.path.join(HERE, "build", "frames"))
+    ap.add_argument("--only", nargs="*")
+    ap.add_argument("--preview", help="yalnızca bu kareleri render et (virgüllü), video üretme")
+    ap.add_argument("--samples", type=int, default=10)
+    ap.add_argument("--draft", action="store_true", help="düşük çözünürlükte her 4. kare + temas sayfası")
+    args = ap.parse_args(sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else sys.argv[1:])
+    # iskelet ölçülerini gövdeye eşitle, sonra hareketleri yükle (pozlar yüklenirken çözülür)
+    studio.reset_scene()
+    retarget.configure_skeleton(retarget.body_dims(Character("probe", shape=FIGHTER_SHAPE)))
+    from generate import MOVES
+    ids = args.only or sorted(MOVES)
+    global WIDTH, HEIGHT
+    if args.draft:
+        WIDTH, HEIGHT = 320, 256
+        args.samples = 6
+    for mid in ids:
+        t0 = time.time()
+        r = MoveRenderer(mid, MOVES[mid], samples=args.samples)
+        r.build()
+        fdir = os.path.join(args.frames, mid)
+        if args.draft:
+            frames = list(range(0, MOVES[mid].dur, 4))
+            r.render(fdir, frames)
+            sheet = os.path.join(args.frames, f"{mid}_sheet.jpg")
+            cols = 6
+            rows = (len(frames) + cols - 1) // cols
+            subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-pattern_type", "glob", "-i",
+                            os.path.join(fdir, "*.png"), "-vf", f"tile={cols}x{rows}", "-frames:v", "1",
+                            "-q:v", "4", sheet], check=True)
+        elif args.preview:
+            r.render(fdir, [int(x) for x in args.preview.split(",")])
+        else:
+            r.render(fdir)
+            encode(fdir, os.path.join(args.out, "video", f"{mid}.mp4"),
+                   os.path.join(fdir, f"{r.poster_frame():04d}.png"), os.path.join(args.out, "poster", f"{mid}.webp"))
+        print(f"{mid}: {time.time() - t0:.0f} sn", flush=True)
+
+
+if __name__ == "__main__":
+    main()

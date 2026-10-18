@@ -8,3 +8,8 @@ build/
 .externalNativeBuild/
 .cxx/
 __pycache__/
+
+# gerçekçi render: indirilen veri ve ara kareler
+tools/render3d/.venv/
+tools/render3d/assets/
+tools/render3d/build/

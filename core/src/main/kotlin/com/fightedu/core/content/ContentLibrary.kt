@@ -21,7 +21,7 @@ class ContentLibrary(
 
     /**
      * İçerik tutarlılığını kontrol eder; boş liste = sorun yok.
-     * [assetExists] verilirse her hareketin animasyon dosyası da aranır.
+     * [assetExists] verilirse her hareketin videosu ve kapak resmi de aranır.
      */
     fun validate(assetExists: ((String) -> Boolean)? = null): List<String> {
         val errors = mutableListOf<String>()
@@ -30,7 +30,11 @@ class ContentLibrary(
             if (move.sport != GENERAL && move.sport !in sportIds) errors += "${move.id}: bilinmeyen spor ${move.sport}"
             if (move.steps.isEmpty()) errors += "${move.id}: adım yok"
             if (move.level !in 1..3) errors += "${move.id}: seviye 1-3 olmalı"
-            if (assetExists != null && !assetExists(move.lottieAsset)) errors += "${move.id}: animasyon yok (${move.lottieAsset})"
+            if (assetExists != null) {
+                for (asset in listOf(move.videoAsset, move.posterAsset)) {
+                    if (!assetExists(asset)) errors += "${move.id}: dosya yok ($asset)"
+                }
+            }
         }
         for (sport in sports) {
             val program = programs[sport.id]

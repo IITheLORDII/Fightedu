@@ -20,11 +20,8 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Lottie üreticisi çalışıyor ve tüm hareketleri kapsıyor mu?
-        run: |
-          mkdir -p "$RUNNER_TEMP/lottie_check"
-          cp -r app/src/main/assets/content "$RUNNER_TEMP/lottie_check/content"
-          python3 tools/lottie_gen/generate.py --check-content --out "$RUNNER_TEMP/lottie_check/lottie"
+      - name: Hareket tanımları çözülüyor ve tüm içerikleri kapsıyor mu?
+        run: python3 tools/lottie_gen/generate.py --check-content --out "$RUNNER_TEMP/lottie_preview"
 
       - uses: gradle/actions/setup-gradle@v4
 

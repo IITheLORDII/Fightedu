@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-"""FightEdu Lottie animasyon üreticisi (3B iskelet + kamera projeksiyonu).
+"""FightEdu hareket tanımları: hızlı 2B Lottie önizleme ve içerik kapsam kontrolü.
 
-Hareketler (moves.py) 3B anahtar pozlarla tanımlanır: kalça/göğüs dönüşü, baş bakışı,
-el ve ayak hedefleri. Dirsek ve dizler IK ile çözülür; figür her karede seçilen kamera
-açısından 2B'ye çizilir (figure.py) ve Lottie JSON'a dönüştürülür (scene.py).
+Hareketler (moves.py) 3B anahtar pozlarla tanımlanır: kalça/göğüs dönüşü, baş bakışı, el ve ayak
+hedefleri. Dirsek ve dizler IK ile çözülür. Uygulamadaki gerçekçi videolar aynı tanımlardan
+tools/render3d/render_moves.py ile üretilir; bu betik ise saniyeler içinde 2B Lottie önizlemesi
+(varsayılan: tools/lottie_gen/build/lottie) üretir ve her içerik hareketinin tanımlı olduğunu denetler.
 
 Kullanım:  python3 tools/lottie_gen/generate.py [--out DIR] [--only move_id ...] [--check-content]
-Tasarımcı yapımı bir Lottie dosyası aynı isimle assets/lottie altına konarak kullanılabilir
-(o hareketi moves.py'den kaldırın).
 """
 import argparse
 import json
@@ -24,12 +23,13 @@ MOVES = {**GENERAL, **BOXING, **KICKBOXING, **WRESTLING, **TAEKWONDO}
 
 def main():
     here = os.path.dirname(os.path.abspath(__file__))
-    default_out = os.path.normpath(os.path.join(here, "..", "..", "app", "src", "main", "assets", "lottie"))
+    assets = os.path.normpath(os.path.join(here, "..", "..", "app", "src", "main", "assets"))
     parser = argparse.ArgumentParser()
-    parser.add_argument("--out", default=default_out)
+    parser.add_argument("--out", default=os.path.join(here, "build", "lottie"))
+    parser.add_argument("--content", default=os.path.join(assets, "content"))
     parser.add_argument("--only", nargs="*")
     parser.add_argument("--check-content", action="store_true",
-                        help="assets/content altındaki tüm hareketlerin animasyonu var mı kontrol et")
+                        help="assets/content altındaki tüm hareketler tanımlı mı kontrol et")
     args = parser.parse_args()
 
     os.makedirs(args.out, exist_ok=True)
@@ -44,11 +44,11 @@ def main():
     print(f"{len(ids)} animasyon yazıldı -> {args.out} ({total // 1024} KB)")
 
     if args.check_content:
-        content_dir = os.path.join(os.path.dirname(args.out), "content")
+        content_dir = args.content
 
         def covered(move_id):
-            # tasarımcı yapımı dosyalar moves.py'de yer almaz, assets/lottie altında durur
-            return move_id in MOVES or os.path.exists(os.path.join(default_out, f"{move_id}.json"))
+            # gerçek çekim bir video konmuşsa hareketin moves.py'de tanımlı olması gerekmez
+            return move_id in MOVES or os.path.exists(os.path.join(assets, "video", f"{move_id}.mp4"))
 
         missing = []
         for name in sorted(os.listdir(content_dir)):

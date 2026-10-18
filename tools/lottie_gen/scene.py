@@ -20,7 +20,7 @@ ACCENTS = {"boxing": "#D32F2F", "kickboxing": "#1565C0", "wrestling": "#2E7D32",
            "taekwondo": "#6A1B9A", "general": "#EF6C00"}
 FLOORS = {"boxing": "#E2DED6", "kickboxing": "#DCE0E3", "wrestling": "#EDCB5C",
           "taekwondo": "#C7D5EA", "general": "#DCE0E3"}
-HIT_PAD = {"hand": 6.0, "ankle": 4.0, "ball": 3.2, "heel": 4.0, "knee": 6.0, "toe": 2.4}
+HIT_PAD = {"hand": 6.0, "ankle": 4.0, "ball": 3.2, "heel": 4.0, "knee": 6.0, "toe": 2.4, "shin": 5.0}
 
 
 # --------------------------------------------------------------------------
@@ -428,11 +428,26 @@ class SceneBuilder:
             self.hit_pts.append((f, name, pre[f].point(name)))
         direction = -1 if mv.target == "partner_left" else 1
         if mv.target in ("bag", "long_bag"):
-            xs = [pt[0] + point_pad(n) for _f, n, pt in self.hit_pts]
-            zs = [pt[2] for _f, _n, pt in self.hit_pts]
             radius = 17.0
-            self.bag = {"x": min(xs) + radius - 1.5, "z": sum(zs) / len(zs), "r": radius,
-                        "long": mv.target == "long_bag"}
+            centers, pushes = [], []
+            for f, n, pt in self.hit_pts:
+                reach = point_pad(n) + radius - 1.5
+                if n.endswith("shin"):
+                    # yandan savrulan kaval: torba, kavalın savrulma yönündeki yanında durur
+                    sk = pre[f]
+                    d = sub(sk.j[n[0] + "ankle"], sk.j[n[0] + "knee"])
+                    h = unit((d[0], 0.0, d[2]))
+                    side = 1.0 if n[0] == "r" else -1.0
+                    nrm = (h[2] * side, 0.0, -h[0] * side)
+                    centers.append(madd(pt, (nrm, reach)))
+                    pushes.append(nrm)
+                else:
+                    centers.append((pt[0] + reach, pt[1], pt[2]))
+                    pushes.append((1.0, 0.0, 0.0))
+            # en kısa uzanan vuruş torbaya değsin; yan konum ortalama
+            self.bag = {"x": min(c[0] for c in centers), "z": sum(c[2] for c in centers) / len(centers),
+                        "r": radius, "long": mv.target == "long_bag", "centers": centers,
+                        "pushes": pushes}
         recoil = [0.0] * (dur + 1)
         pbase = None
         if mv.target in ("partner", "partner_left"):
@@ -560,14 +575,25 @@ class SceneBuilder:
         return [item], cam.depth(sk.origin) + (12.0 if depth > 0 else -12.0)
 
     # -- kum torbası ------------------------------------------------------------
-    def bag_angle(self, t):
-        a = 0.0
-        for f, _n, _p in self.hit_pts:
+    def bag_swing(self, t):
+        """Torbanın sallanması: (açı derece, yatay itme yönü) – her darbe kendi yönünde iter."""
+        sx = sz = 0.0
+        for k, (f, _n, _p) in enumerate(self.hit_pts):
+            push = self.bag["pushes"][k]
             for cyc in (0, -self.dur):
                 dt = t - (f + cyc)
                 if dt >= 0:
-                    a += 7.0 * math.exp(-dt / 11.0) * math.sin(dt / 4.2)
-        return a * (0.55 if self.bag["long"] else 1.0)
+                    a = 7.0 * math.exp(-dt / 11.0) * math.sin(dt / 4.2)
+                    sx += a * push[0]
+                    sz += a * push[2]
+        k = 0.55 if self.bag["long"] else 1.0
+        ang = math.hypot(sx, sz)
+        return ang * k, ((sx / ang, 0.0, sz / ang) if ang > 1e-9 else (1.0, 0.0, 0.0))
+
+    def bag_angle(self, t):
+        """2B önizleme (yandan görünüm) için ileri yöndeki bileşen."""
+        ang, d = self.bag_swing(t)
+        return ang * d[0]
 
     def bag_items(self, t):
         b = self.bag

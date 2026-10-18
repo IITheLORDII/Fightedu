@@ -15,7 +15,7 @@ class ContentLibraryTest {
     }
 
     @Test
-    fun `içerik tutarlı ve her hareketin animasyonu var`() {
+    fun `içerik tutarlı ve her hareketin videosu ile kapak resmi var`() {
         val errors = library.validate { File(TestContent.assetsDir, it).isFile }
         assertTrue(errors.joinToString("\n"), errors.isEmpty())
     }
