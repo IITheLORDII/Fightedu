@@ -290,6 +290,8 @@ class Poser:
             # uzanan yumrukta önkol/bilek içe döner (pronasyon)
             ext = np.linalg.norm(target - root) / (self.len[nu] + self.len[nl] + l2_extra)
             ang = 0.0 if flat is not None else side * self.pronate * smoothstep(0.82, 0.99, ext)
+            # pozda istenen ek önkol dönüşü (supinasyon: avuç yukarı; pronasyonun tersi)
+            ang -= side * math.radians(sk.p.get(s + "sup", 0.0))
             Rl = axis_angle(b, 0.45 * ang) @ Rl
         setw(nu, Ru @ R[nu][:3, :3], root)
         setw(nl, Rl @ R[nl][:3, :3])

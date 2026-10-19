@@ -53,6 +53,8 @@ SCALAR_KEYS = [
     "look", "hyaw", "hpitch", "hroll", "chin",  # baş
     "lhk", "rhk",                               # 0 = el göğüs çerçevesinde, 1 = dünyada
     "lfy", "lfp", "rfy", "rfp",                 # ayak yönü (yaw) ve eğimi (pitch, + = parmak aşağı)
+    "lfr", "rfr",                               # ayak bileği dönüşü (roll, + = taban içe döner)
+    "lsup", "rsup",                             # önkol supinasyonu (derece, + = avuç yukarı döner)
     "autoy",                                    # 1 = basan ayaklar için kalçayı otomatik indir
 ]
 
@@ -72,12 +74,13 @@ def planted(x, z, yaw=0.0, heel=0.0):
     return {"a": ankle, "yaw": yaw, "pitch": heel, "knee": knee}
 
 
-def air(ankle, yaw=0.0, pitch=0.0, knee=None):
-    """Havadaki ayak: bilek konumu, ayak yönü (yaw), eğimi (pitch + = parmak ucu aşağı)."""
+def air(ankle, yaw=0.0, pitch=0.0, knee=None, roll=0.0):
+    """Havadaki ayak: bilek konumu, ayak yönü (yaw), eğimi (pitch + = parmak ucu aşağı),
+    bilek dönüşü (roll + = taban içe, örn. dönen tekmede ayak üstü hedefe bakar)."""
     if knee is None:
         fy = math.radians(yaw)
         knee = (math.cos(fy), 0.3, math.sin(fy))
-    return {"a": tuple(ankle), "yaw": yaw, "pitch": pitch, "knee": tuple(knee)}
+    return {"a": tuple(ankle), "yaw": yaw, "pitch": pitch, "knee": tuple(knee), "roll": roll}
 
 
 BASE_POSE = {
@@ -163,6 +166,7 @@ def normalize_key(pose, base):
         out[side + "fk"] = tuple(foot["knee"])
         out[side + "fy"] = float(foot["yaw"])
         out[side + "fp"] = float(foot["pitch"])
+        out[side + "fr"] = float(foot.get("roll", 0.0))
     for k in SCALAR_KEYS:
         out.setdefault(k, float(BASE_POSE.get(k, 0.0)))
     return out
@@ -192,7 +196,7 @@ def mirror_pose(pose):
     out = {}
     neg = {"z", "yaw", "roll", "cyaw", "croll", "hyaw", "hroll"}
     swap = {"lh": "rh", "rh": "lh", "lhw": "rhw", "rhw": "lhw", "le": "re", "re": "le",
-            "lhk": "rhk", "rhk": "lhk", "lf": "rf", "rf": "lf"}
+            "lhk": "rhk", "rhk": "lhk", "lf": "rf", "rf": "lf", "lsup": "rsup", "rsup": "lsup"}
     for k, v in pose.items():
         nk = swap.get(k, k)
         if k in neg:
@@ -201,7 +205,7 @@ def mirror_pose(pose):
             v = (v[0], v[1], -v[2])
         elif k in ("lf", "rf"):
             v = {"a": (v["a"][0], v["a"][1], -v["a"][2]), "yaw": -v["yaw"], "pitch": v["pitch"],
-                 "knee": (v["knee"][0], v["knee"][1], -v["knee"][2])}
+                 "knee": (v["knee"][0], v["knee"][1], -v["knee"][2]), "roll": v.get("roll", 0.0)}
         out[nk] = v
     return out
 
@@ -322,6 +326,11 @@ class Skeleton:
             fd = base.vector(fd_l)
             frr = base.vector(fr_l)
             fu = cross(frr, fd)
+            fr_ang = math.radians(p[s + "fr"]) * (1.0 if s == "r" else -1.0)
+            if fr_ang:
+                # taban içe: sağ ayakta üst yüz dışa (+Z) döner
+                fu, frr = madd((0, 0, 0), (fu, math.cos(fr_ang)), (frr, math.sin(fr_ang))), \
+                    madd((0, 0, 0), (frr, math.cos(fr_ang)), (fu, -math.sin(fr_ang)))
             flat = base.vector((math.cos(fy), 0.0, math.sin(fy)))
             airness = smoothstep(10.0, 22.0, ankle[1])
             toe_dir = unit(lerp(flat, fd, airness))
