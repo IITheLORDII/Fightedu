@@ -1360,5 +1360,5 @@ TAEKWONDO = {
         (0, TKD_FW), (4, TKD_FW_UP), (8, TKD_FW), (12, shift(TKD_FW_UP, dx=15)), (16, shift(TKD_FW, dx=30)),
         (20, shift(TKD_FW_UP, dx=15)), (24, TKD_FW), (28, TKD_SWITCH), (32, TKD_FW_S), (36, TKD_FW_S_UP),
         (40, TKD_FW_S), (44, TKD_SWITCH), (48, TKD_FW), (52, TKD_FW_UP)], cam=dict(az=70)),
-    "tkd_taegeuk1": Move("taekwondo", 172, TAEGEUK, cam=dict(az=105)),
+    "tkd_taegeuk1": Move("taekwondo", 172, TAEGEUK, cam=dict(az=-15)),
 }
