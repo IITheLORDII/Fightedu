@@ -403,7 +403,7 @@ def _vunit(v):
     return tuple(c / n for c in v)
 
 
-def kick_leg(pose, side, a, e, bend, pole, hook=25.0):
+def kick_leg(pose, side, a, e, bend, pole, hook=25.0, roll=0.0):
     """Havadaki bacak: uyluk yönü (a, e), diz bükümü 'bend' derece; diz kapağı 'pole' yönüne
     bakar, baldır ters yöne bükülür. Ayak baldır doğrultusunda, 'hook' derece diz kapağı
     tarafına kıvrık (gergin ayak bileği)."""
@@ -419,7 +419,7 @@ def kick_leg(pose, side, a, e, bend, pole, hook=25.0):
     fd = _vunit(_vlin((sd, _math.cos(h)), (pl, _math.sin(h))))
     fy = _math.degrees(_math.atan2(fd[2], fd[0]))
     fp = -_math.degrees(_math.asin(max(-1.0, min(1.0, fd[1]))))
-    return P(pose, **{side + "f": air(ank, yaw=fy, pitch=fp, knee=pole)})
+    return P(pose, **{side + "f": air(ank, yaw=fy, pitch=fp, knee=pole, roll=roll)})
 
 
 def _sweep(a, up=0.35):
@@ -428,8 +428,9 @@ def _sweep(a, up=0.35):
     return (_math.sin(r), up, -_math.cos(r))
 
 
-def rk_leg(pose, a, e, bend, up=0.35, hook=25.0):
-    return kick_leg(pose, "r", a, e, bend, _sweep(a, up), hook)
+def rk_leg(pose, a, e, bend, up=0.35, hook=25.0, roll=-55.0):
+    # dönen tekmede ayak bileği içe döner: ayak üstü ve kaval hedefe bakar
+    return kick_leg(pose, "r", a, e, bend, _sweep(a, up), hook, roll)
 
 
 def leg_off(pose, side, off, pole, fy, fp):
@@ -1106,8 +1107,8 @@ from skeleton import mirror_pose as _tkd_mirror, solve_point as _tkd_solve  # no
 
 # Tekvandoya özel kol pozları (genel CHAMBER_* "eller belde" duruşu yerine): çekilen yumruk kuşağın
 # yanında, dirsek dümdüz geride ve kaburgaya yakın.
-TKD_HK_L = dict(lh=(12, -6, -19), le=(-1, -0.8, 0.2))
-TKD_HK_R = dict(rh=(12, -6, 19), re=(-1, -0.8, -0.2))
+TKD_HK_L = dict(lh=(12, -6, -19), le=(-1, -0.8, 0.2), lsup=95.0)
+TKD_HK_R = dict(rh=(12, -6, 19), re=(-1, -0.8, -0.2), rsup=95.0)
 # gard: yumruklar göğüs/çene önünde ~15-20 cm, dirsekler aşağıda
 TKD_GUARD = dict(lh=(34, 20, -16), rh=(28, 34, 4), le=(-0.2, -1, -0.4), re=(-0.2, -1, 0.4))
 TKD_G = P(BASE_POSE, y=94, yaw=52, pitch=2, cpitch=4, chin=6,
@@ -1127,13 +1128,13 @@ def tkd_opp(pose, back):
     return shift(pose, dx=-back)
 
 
-def tkd_leg(pose, side, direction, length, yaw=0.0, pitch=0.0, knee=None):
+def tkd_leg(pose, side, direction, length, yaw=0.0, pitch=0.0, knee=None, roll=0.0):
     """Havadaki bacak: bilek, aynı pozdaki kalça ekleminden 'direction' yönünde 'length' cm ötede
     (86-87 cm ≈ düz bacak)."""
     hip = _tkd_solve(P(pose, **{side + "f": air((0, 60, 0))}), side + "hip")
     n = sum(c * c for c in direction) ** 0.5
     ank = tuple(h + c / n * length for h, c in zip(hip, direction))
-    return P(pose, **{side + "f": air(ank, yaw=yaw, pitch=pitch, knee=knee)})
+    return P(pose, **{side + "f": air(ank, yaw=yaw, pitch=pitch, knee=knee, roll=roll)})
 
 
 # --- duruşlar ---------------------------------------------------------------
@@ -1182,7 +1183,7 @@ DOLLYO_CH = P(TKD_G, x=12, yaw=0, roll=-10, cyaw=20, lf=planted(22, -5, -40, hee
               rf=air((22, 72, 38), yaw=-20, pitch=55, knee=(1, 0.6, -0.2)), lh=(32, 36, -4), rh=(22, 30, 14))
 DOLLYO_BODY = P(TKD_G, x=26, y=101, yaw=-86, pitch=0, roll=-28, cyaw=30, croll=10,
                 lf=planted(20, -6, -150, heel=20), lh=(30, 40, -2), rhw=(0, 110, 24), rhk=1, re=(-0.5, -1, 0.6))
-DOLLYO = tkd_leg(DOLLYO_BODY, "r", (80, 15, 23), 86.5, yaw=-8, pitch=20, knee=(0.1, 1, -0.4))
+DOLLYO = tkd_leg(DOLLYO_BODY, "r", (80, 15, 23), 86.5, yaw=-8, pitch=20, knee=(0.1, 1, -0.4), roll=-60)
 DOLLYO_BACK = P(DOLLYO_CH, x=18, yaw=-50, roll=-18, cyaw=30, lf=planted(20, -6, -110, heel=22),
                 rf=air((40, 88, 30), yaw=-40, pitch=55, knee=(1, 0.6, -0.4)))
 # yeop: ön (sol) bacakla; destek ayağının topuğu hedefe döner, gövde kicken uzağa yatar, bacak düz,
@@ -1359,5 +1360,5 @@ TAEKWONDO = {
         (0, TKD_FW), (4, TKD_FW_UP), (8, TKD_FW), (12, shift(TKD_FW_UP, dx=15)), (16, shift(TKD_FW, dx=30)),
         (20, shift(TKD_FW_UP, dx=15)), (24, TKD_FW), (28, TKD_SWITCH), (32, TKD_FW_S), (36, TKD_FW_S_UP),
         (40, TKD_FW_S), (44, TKD_SWITCH), (48, TKD_FW), (52, TKD_FW_UP)], cam=dict(az=70)),
-    "tkd_taegeuk1": Move("taekwondo", 172, TAEGEUK, cam=dict(az=30)),
+    "tkd_taegeuk1": Move("taekwondo", 172, TAEGEUK, cam=dict(az=105)),
 }
