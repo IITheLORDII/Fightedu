@@ -380,7 +380,7 @@ def shape_layer(name, shapes, dur, ind=1, ks=None):
 # --------------------------------------------------------------------------
 class Move:
     def __init__(self, sport, dur, fig, cam=None, target=None, opp=None, opp_dist=None, hits=(),
-                 trails=None, fighter_bias=25.0, look=None, opp_mirror=True, rope=None):
+                 trails=None, fighter_bias=25.0, look=None, opp_mirror=True, rope=None, poster=None):
         self.sport = sport
         self.dur = dur
         self.fig = fig
@@ -395,6 +395,7 @@ class Move:
         self.look = look
         self.opp_mirror = opp_mirror
         self.rope = rope          # ip atlama: ipin ayak altından geçtiği kare
+        self.poster = poster      # kapak karesi (verilmezse ilk vuruş ya da sürenin %30'u)
 
 
 def point_pad(name):

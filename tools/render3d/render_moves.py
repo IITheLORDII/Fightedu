@@ -300,6 +300,8 @@ class MoveRenderer:
             os.replace(path + ".tmp.png", path)
 
     def poster_frame(self):
+        if self.mv.poster is not None:
+            return self.mv.poster
         if self.mv.hits:
             return min(self.mv.dur - 1, self.mv.hits[0][0])
         return int(self.mv.dur * 0.3)

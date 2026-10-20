@@ -368,8 +368,8 @@ KB_CROSS = P(KB, x=6, yaw=-4, cyaw=-14, pitch=8, rf=planted(-24, 13, 80, heel=48
              re=(0, -1, 0.2), rhw=(81, 137, 4), rhk=1)
 # Sol kroşe (kb_combo_jcm): dirsek ~90°, önkol yatay; yumruk torbanın sol-ön yüzüne yandan girer.
 JCM_BAG = (102.5, -5.4)
-KB_LHOOK_PREP = P(KB, x=4, z=-3, yaw=22, cyaw=-6, lf=planted(28, -12, 20), lh=(20, 44, -18), le=(-0.3, -1, -0.8))
-KB_LHOOK = P(KB, x=12, z=-8, yaw=42, cyaw=10, pitch=6, lf=planted(34, -15, 52, heel=14),
+KB_LHOOK_PREP = P(KB, x=4, z=-3, yaw=22, cyaw=-6, lf=planted(26, -15, 20), lh=(20, 44, -18), le=(-0.3, -1, -0.8))
+KB_LHOOK = P(KB, x=12, z=-8, yaw=42, cyaw=10, pitch=6, lf=planted(24, -19, 52, heel=14),
              rf=planted(-14, 6, 40, heel=20), rh=(13, 41, 6), le=(0.1, 0.1, -1),
              lhw=(JCM_BAG[0] - 17.7, 139, JCM_BAG[1] - 14.8), lhk=1)
 TEEP_CH = P(KB, pitch=-4, lf=air((32, 52, -6), yaw=10, pitch=-15, knee=(1, 0.6, 0)), rf=planted(-24, 13, 40, heel=8))
@@ -570,21 +570,21 @@ KICKBOXING = {
                          hits=[(7, "lhand"), (19, "rhand")]),
     "kb_teep": Move("kickboxing", 46, [(0, KB), (10, TEEP_CH), (17, TEEP), (22, TEEP), (29, TEEP_CH), (38, KB)],
                     cam=dict(az=10), target="long_bag", hits=[(17, "lball")]),
-    "kb_low_kick": Move("kickboxing", 48, [(0, KB), *rk_seq(18, "low"), (40, KB)], cam=dict(az=0, el=16),
+    "kb_low_kick": Move("kickboxing", 48, [(0, KB), *rk_seq(18, "low"), (40, KB)], cam=dict(az=-18, el=24),
                         target="long_bag", hits=[(18, "rshin")]),
-    "kb_middle_kick": Move("kickboxing", 50, [(0, KB), *rk_seq(19, "mid"), (42, KB)], cam=dict(az=0, el=16),
+    "kb_middle_kick": Move("kickboxing", 50, [(0, KB), *rk_seq(19, "mid"), (42, KB)], cam=dict(az=-18, el=24),
                            target="long_bag", hits=[(19, "rshin")]),
-    "kb_high_kick": Move("kickboxing", 52, [(0, KB), *rk_seq(20, "high"), (44, KB)], cam=dict(az=0, el=14),
+    "kb_high_kick": Move("kickboxing", 52, [(0, KB), *rk_seq(20, "high"), (44, KB)], cam=dict(az=-18, el=24),
                          target="long_bag", hits=[(20, "rshin")]),
     "kb_knee": Move("kickboxing", 42, [(0, KB), (6, CLINCH), (12, KNEE), (18, KNEE), (28, CLINCH), (36, KB)],
                     cam=dict(az=12), target="long_bag", hits=[(12, "rknee")]),
     "kb_check": Move("kickboxing", 42, [(0, KB), (10, CHECK), (22, CHECK), (32, KB)], cam=dict(az=170, el=14),
                      target="partner", opp_dist=KB_CHECK_DIST, opp_mirror=False,
                      opp=[(0, KB), *rk_seq(16, "low", step=(40, -24), shin=_check_shin(), bend=30, sup=-140,
-                                           follow=False), (38, KB)]),
+                                           follow=False), (38, KB)], poster=17),
     "kb_combo_jcl": Move("kickboxing", 66, [(0, KB), (7, KB_JAB), (12, P(KB, yaw=26)), (19, KB_CROSS),
                                             *rk_seq(35, "low", step=(40, -24), bag=(102.5, 2.0), bend=30, sup=-140,
-                                                    x0=(4, 2)), (56, KB)], cam=dict(az=8, el=14), target="long_bag",
+                                                    x0=(4, 2)), (56, KB)], cam=dict(az=-10, el=22), target="long_bag",
                          hits=[(7, "lhand"), (19, "rhand"), (35, "rshin")]),
     "kb_combo_jcm": Move("kickboxing", 82, [(0, KB), (7, KB_JAB), (12, P(KB, yaw=26)), (19, KB_CROSS),
                                             (25, KB_LHOOK_PREP), (31, KB_LHOOK),
@@ -1205,7 +1205,7 @@ NAERYO_BODY = P(TKD_G, x=8, y=97, yaw=18, pitch=-12, cpitch=6, lf=planted(24, -5
                 lh=(32, 30, -6), rh=(24, 40, 8))
 NAERYO_UP = tkd_leg(P(NAERYO_BODY, pitch=-16), "r", (24, 86, 2), 86.5, yaw=0, pitch=-150, knee=(-0.95, 0.3, 0))
 NAERYO_MID = tkd_leg(NAERYO_BODY, "r", (42, 75, -10), 86.5, yaw=0, pitch=-140, knee=(-0.87, 0.5, 0))
-NAERYO_DOWN = tkd_leg(P(NAERYO_BODY, pitch=-6), "r", (64, 55, -20), 86.5, yaw=0, pitch=-125,
+NAERYO_DOWN = tkd_leg(P(NAERYO_BODY, pitch=-6), "r", (66, 40, -12), 86.5, yaw=60, pitch=-40,
                       knee=(-0.64, 0.77, 0))
 NAERYO_RISE = tkd_leg(P(NAERYO_BODY, pitch=-8), "r", (40, 60, 20), 80, yaw=0, pitch=-60, knee=(0.2, 1, 0.4))
 
