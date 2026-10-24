@@ -93,12 +93,12 @@ python3 tools/lottie_gen/generate.py --check-content   # tüm hareketler tanıml
 
 | Dosya | İçerik |
 |---|---|
-| `mhbody.py` | MakeHuman (MPFB2) temel gövdesi, şekil hedefleri (kas, kilo, boy, oranlar), iskelet ve deri ağırlıkları |
-| `character.py` | Sporcu: atletik gövde, ten/saç/göz/kaş/dudak malzemeleri, kısa saç |
-| `outfits.py` | Gövdeden türetilen giysiler (şort, mayo, dobok, tişört, çorap), metaball eldiven ve ayakkabılar |
+| `mhbody.py` | MakeHuman (MPFB2) temel gövdesi, şekil hedefleri (kas, kilo, boy, oranlar), iskelet ve deri ağırlıkları; omuz/önkol/kalça twist kemikleri |
+| `character.py` | Sporcu: atletik gövde, hacmi koruyan (dual quaternion) deri + düzeltici yumuşatma, ten/saç/göz/kaş/dudak malzemeleri, kısa saç |
+| `outfits.py` | Gövdeden türetilen giysiler (şort, mayo, dobok, tişört, çorap); şort ve dobok pantolonu kumaş simülasyonlu; ayak kalıbına oturan bağcıklı bot/ayakkabılar, metaball eldivenler |
 | `retarget.py` | 1. aşamadaki iskelet çözümünü MakeHuman iskeletine aktarır (gövde dönüşleri + kol/bacak IK, parmaklar) |
 | `studio.py` | Cycles ayarları, üç noktalı stüdyo ışığı, sonsuz fon, kamera |
-| `render_moves.py` | Hareket başına sahne (sporcu, partner, torba, ip), kadraj, render, MP4 + WebP kodlama |
+| `render_moves.py` | Hareket başına sahne (sporcu, partner, torba, ip), kadraj, kumaş simülasyonu (ısınma turu sonrası döngüsel), render, MP4 + WebP kodlama |
 
 `skeleton.py` ölçüleri render sırasında MakeHuman gövdesine eşitlenir; böylece yere basan ayaklar ve
 torbaya/partnere değen yumruklar gerçekçi gövdede de birebir tutar.

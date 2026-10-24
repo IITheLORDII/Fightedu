@@ -147,6 +147,7 @@ def configure_skeleton(dims):
 # Poz aktarımı
 # --------------------------------------------------------------------------------
 FINGERS = ("index", "middle", "ring", "pinky")
+TWIST_CANCEL = 0.6  # omuz/kalça twist kemiğinin geri aldığı dönüş oranı
 
 
 class Poser:
@@ -174,6 +175,7 @@ class Poser:
         self.curl = {}
         self.palm0, self.hand_y0 = {}, {}
         self.flat = {"l": False, "r": False}
+        self.twist = {"l": 0.0, "r": 0.0}
         for s in ("l", "r"):
             lateral = unit(h(f"index_01_{s}") - h(f"pinky_01_{s}"))
             for fng in FINGERS + ("thumb",):
@@ -253,7 +255,30 @@ class Poser:
                     p = self.parent[bn]
                     rel = np.linalg.inv(R[p]) @ R[bn]
                     world[bn] = world[p] @ rel
+            # twist kemikleri: omuz/kalça yakınında ana kemiğin kendi ekseni etrafındaki dönüşünün bir
+            # kısmını geri alır (deri omuz başında burulmasın); önkolda bilek dönüşünü taşır
+            for tw, main in (("upperarm_twist", "upperarm"), ("thigh_twist", "thigh")):
+                ang = -TWIST_CANCEL * self._own_twist(world, f"{main}_{s}")
+                self._twist_bone(world, f"{tw}_{s}", f"{main}_{s}", ang)
+            self._twist_bone(world, f"lowerarm_twist_{s}", f"lowerarm_{s}", self.twist[s])
         self._apply(world)
+
+    def _own_twist(self, world, n):
+        """Kemiğin dinlenme duruşuna göre kendi ekseni (yerel Y) etrafındaki dönüşü (swing-twist)."""
+        R = self.rest
+        p = self.parent[n]
+        basis = np.linalg.inv(R[n]) @ R[p] @ np.linalg.inv(world[p]) @ world[n]
+        q = Matrix(basis.tolist()).to_quaternion()
+        if q.w < 0:
+            q = -q
+        return 2.0 * math.atan2(q.y, q.w)
+
+    def _twist_bone(self, world, n, parent, ang):
+        R = self.rest
+        rel = np.linalg.inv(R[parent]) @ R[n]
+        rot = np.eye(4)
+        rot[:3, :3] = np.array(Matrix.Rotation(ang, 3, "Y"))
+        world[n] = world[parent] @ rel @ rot
 
     def _hand_len(self):
         return self.ch.dims["HAND"] / 100.0
@@ -292,14 +317,15 @@ class Poser:
             ang = 0.0 if flat is not None else side * self.pronate * smoothstep(0.82, 0.99, ext)
             # pozda istenen ek önkol dönüşü (supinasyon: avuç yukarı; pronasyonun tersi)
             ang -= side * math.radians(sk.p.get(s + "sup", 0.0))
-            Rl = axis_angle(b, 0.45 * ang) @ Rl
+            # önkol kemiği dönmez; dönüş bilekte tam, önkol boyunca twist kemiğiyle dağılır
+            self.twist[s] = ang
         setw(nu, Ru @ R[nu][:3, :3], root)
         setw(nl, Rl @ R[nl][:3, :3])
         if up == "upperarm":
             # el: önkol ile aynı göreli duruş + kalan pronasyon
             rel = np.linalg.inv(R[nl]) @ R[f"hand_{s}"]
             M = world[nl] @ rel
-            M[:3, :3] = axis_angle(b, 0.55 * ang) @ M[:3, :3]
+            M[:3, :3] = axis_angle(b, ang) @ M[:3, :3]
             if flat is not None:
                 Rh = basis_from(flat, np.array([0.0, 0.0, -1.0])) @ basis_from(self.hand_y0[s], self.palm0[s]).T
                 M[:3, :3] = Rh @ R[f"hand_{s}"][:3, :3]

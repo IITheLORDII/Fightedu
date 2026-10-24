@@ -122,9 +122,13 @@ def _smooth(values, idx_nb, iters, keep=None):
 
 
 def garment(ch, bm, name, rules, offset, materials, thickness=0.003, smooth_iters=4,
-            snap=None, subsurf=1, texspace=None, relax=None, keep_face=None, hem_z=None, edge_smooth=8):
+            snap=None, subsurf=1, texspace=None, relax=None, keep_face=None, hem_z=None, edge_smooth=8,
+            cloth=None, shape=None):
     """offset(dom_base, t, rest_pos) -> metre; materials: [(malzeme, yüz_seçici(merkez, kemik, t))...]
-    snap: {kemik: t} – bu kemikteki sınır köşeleri tam t düzlemine taşınır (düz paça/kol ağzı)."""
+    snap: {kemik: t} – bu kemikteki sınır köşeleri tam t düzlemine taşınır (düz paça/kol ağzı).
+    cloth: kumaş simülasyonu {"pin": pin(dom_base, t, rest_pos) -> 0..1, ...ayarlar}; pin 1 olan köşeler
+    gövdeye bağlı kabukta kalır (bel lastiği), küçük değerler yalnızca hafifçe şekline çekilir (sarkan paça).
+    shape(pos, body_rest, komşular) -> pos: kabuğun son biçimlendirmesi (örn. ayakkabı burnu ve tabanı)."""
     fids = bm.select_faces(rules)
     if keep_face is not None:
         fids = [k for k in fids if keep_face(ch.bv[ch.bf[k]].mean(axis=0), bm.fdom[k], bm.ft[k])]
@@ -184,11 +188,35 @@ def garment(ch, bm, name, rules, offset, materials, thickness=0.003, smooth_iter
             for lam in (0.5, -0.53):
                 avg = np.array([pos[n_].mean(axis=0) if len(n_) else pos[i] for i, n_ in enumerate(nb)])
                 pos[movable] += lam * (avg[movable] - pos[movable])
+    if shape is not None:
+        pos = shape(pos, ch.bv[used], nb)
     uvf = [ch.buvf[k] for k in fids]
     ob = mesh_from(f"{ch.name}_{name}", pos, faces, uvf, ch.base.uvs)
+    for mat, _sel in materials:
+        ob.data.materials.append(mat)
+    if len(materials) > 1:
+        for poly, k in zip(ob.data.polygons, fids):
+            vs = ch.bf[k]
+            c = ch.bv[vs].mean(axis=0)
+            dom = bm.dom_base[vs[0]]
+            tt = float(np.mean(bm.t[vs]))
+            for mi, (_m, chooser) in enumerate(materials):
+                if chooser is None or chooser(c, dom, tt):
+                    poly.material_index = mi
+    if cloth:
+        g = ob.vertex_groups.new(name="pin")
+        for i, o in enumerate(used):
+            g.add([i], float(cloth["pin"](bm.dom_base[o], bm.t[o], ch.bv[o])), "REPLACE")
+        # kıvrımlar için daha sık ağ (ağırlıklar alt bölümlemede aradeğerlenir)
+        sub0 = ob.modifiers.new("Densify", "SUBSURF")
+        sub0.levels = cloth.get("densify", 1)
+        with bpy.context.temp_override(object=ob, active_object=ob, selected_objects=[ob]):
+            bpy.ops.object.modifier_apply(modifier=sub0.name)
     # gövdenin deforme olmuş yüzeyine bağla: kalça/omuz büküldüğünde giysi deriyle birlikte hareket eder
     ob.parent = ch.arm_ob
     surface_bind(ob, ch.proxy())
+    if cloth:
+        add_cloth(ob, ch, cloth)
     if thickness:
         sol = ob.modifiers.new("Solid", "SOLIDIFY")
         sol.thickness = thickness
@@ -204,19 +232,34 @@ def garment(ch, bm, name, rules, offset, materials, thickness=0.003, smooth_iter
         lo, hi = pos.min(axis=0), pos.max(axis=0)
         texspace = ((lo + hi) / 2, (hi - lo) / 2 + 1e-3)
     set_texspace(ob, texspace[0], texspace[1])
-    for mat, _sel in materials:
-        ob.data.materials.append(mat)
-    if len(materials) > 1:
-        for poly, k in zip(ob.data.polygons, fids):
-            vs = ch.bf[k]
-            c = ch.bv[vs].mean(axis=0)
-            dom = bm.dom_base[vs[0]]
-            tt = float(np.mean(bm.t[vs]))
-            for mi, (_m, chooser) in enumerate(materials):
-                if chooser is None or chooser(c, dom, tt):
-                    poly.material_index = mi
     ob.data.update()
     return ob
+
+
+def add_cloth(ob, ch, opts):
+    """Kumaş simülasyonu (Surface Deform'dan sonra): sabitleme grubu 'pin', gövde vekili çarpışma nesnesi."""
+    col = ch.collider()
+    mod = ob.modifiers.new("Cloth", "CLOTH")
+    cs = mod.settings
+    cs.quality = opts.get("quality", 10)
+    cs.mass = opts.get("mass", 0.15)
+    cs.air_damping = 1.0
+    cs.tension_stiffness = cs.compression_stiffness = opts.get("stretch", 12.0)
+    cs.shear_stiffness = opts.get("shear", 6.0)
+    cs.bending_stiffness = opts.get("bend", 0.3)
+    cs.tension_damping = cs.compression_damping = cs.shear_damping = 5.0
+    cs.bending_damping = 0.5
+    cs.vertex_group_mass = "pin"
+    cs.pin_stiffness = opts.get("pin_stiffness", 2.0)
+    cc = mod.collision_settings
+    cc.collision_quality = opts.get("collision_quality", 4)
+    cc.distance_min = 0.004
+    cc.use_self_collision = False
+    pc = mod.point_cache
+    pc.frame_start = 1
+    pc.frame_end = 100000
+    ch.cloth.append(ob)
+    return mod
 
 
 # --------------------------------------------------------------------------------
@@ -389,99 +432,163 @@ def glove(ch, side, color="#C8102E", cuff="#141414", trim="#EDEDED", size=1.0):
     return ob
 
 
+def hide_body(ch, mask):
+    """Eldiven/ayakkabı içinde kalan deri köşelerini gizle (iç içe geçme görünmesin)."""
+    g = ch.body.vertex_groups.get("hidden")
+    if g is None:
+        g = ch.body.vertex_groups.new(name="hidden")
+        m = ch.body.modifiers.new("Hide", "MASK")
+        m.vertex_group = "hidden"
+        m.invert_vertex_group = True
+        ch.body.modifiers.move(ch.body.modifiers.find("Hide"), ch.body.modifiers.find("Corrective") + 1)
+    g.add([int(i) for i in np.nonzero(mask)[0]], 1.0, "REPLACE")
+
+
 def hide_hands(ch, bm):
-    """Eldivenin içinde kalan el köşelerini gizle (iç içe geçme görünmesin)."""
     hand = np.isin(bm.dom_base, ["hand", "index_01", "index_02", "index_03", "middle_01", "middle_02",
                                  "middle_03", "ring_01", "ring_02", "ring_03", "pinky_01", "pinky_02",
                                  "pinky_03", "thumb_01", "thumb_02", "thumb_03"])
     hand |= (bm.dom_base == "lowerarm") & (bm.t > 0.8)
-    g = ch.body.vertex_groups.new(name="hidden")
-    g.add([int(i) for i in np.nonzero(hand)[0]], 1.0, "REPLACE")
-    m = ch.body.modifiers.new("HideHands", "MASK")
-    m.vertex_group = "hidden"
-    m.invert_vertex_group = True
-    ch.body.modifiers.move(ch.body.modifiers.find("HideHands"), 1)
+    hide_body(ch, hand)
 
 
-def shoe(ch, bm, side, top_t, color, sole_color="#EDEDED", lace_color="#F0F0F0", pad=0.0065, sole_h=0.013,
-         name="boot"):
-    """Ayağın dilimlerine oturan metaball ayakkabı/bot; top_t: baldır boyunca konç yüksekliği."""
+def lace_material(name, color, lace_color, sole_color, foot, center, half, top_z, sole_h, collar=None):
+    """Deri üst + bağcık paneli (çapraz bağcıklar, rest koordinatında) + taban şeridi (+ konç yakası)."""
+    mat = leather(name, color, roughness=0.36, coat=0.35)
+    nt = mat.node_tree
+    bsdf = nt.nodes["Principled BSDF"]
+    b = NB(nt)
+    pos = b.rest_position(center, half)
+    col = srgb(color)
+    for A, fwd, lat in foot:
+        rel = b.vmath("SUBTRACT", pos, tuple(A))
+        u = b.vmath("DOT_PRODUCT", rel, tuple(fwd))
+        w = b.math("ABSOLUTE", b.vmath("DOT_PRODUCT", rel, tuple(lat)))
+        z = b.vmath("DOT_PRODUCT", rel, (0.0, 0.0, 1.0))
+        z = b.math("ADD", z, float(A[2]))
+        # panel: ayak üstü ortası, bilekten parmak kutusuna; bot konçunun önünde yukarı devam eder
+        panel = b.math("MULTIPLY", b.smooth(w, 0.015, 0.019, invert=True), b.smooth(u, 0.012, 0.03))
+        panel = b.math("MULTIPLY", panel, b.smooth(u, 0.12, 0.135, invert=True))
+        panel = b.math("MULTIPLY", panel, b.smooth(z, 0.028, 0.04))
+        panel = b.math("MULTIPLY", panel, b.smooth(z, top_z - 0.012, top_z - 0.004, invert=True))
+        # çapraz bağcıklar: yol boyunca s = z - 0.45 u; her sırada iki çapraz
+        s_ = b.math("SUBTRACT", z, b.math("MULTIPLY", u, 0.45))
+        ph1 = b.math("FRACT", b.math("ADD", b.math("DIVIDE", s_, 0.013), b.math("DIVIDE", w, 0.03)))
+        ph2 = b.math("FRACT", b.math("SUBTRACT", b.math("DIVIDE", s_, 0.013), b.math("DIVIDE", w, 0.03)))
+        cross = b.math("MAXIMUM", b.smooth(b.math("ABSOLUTE", b.math("SUBTRACT", ph1, 0.5)), 0.13, 0.2, invert=True),
+                       b.smooth(b.math("ABSOLUTE", b.math("SUBTRACT", ph2, 0.5)), 0.13, 0.2, invert=True))
+        tongue = b.math("MULTIPLY", panel, b.smooth(w, 0.013, 0.015, invert=True))
+        col = b.mix(b.math("MULTIPLY", tongue, 0.6), col, (0.02, 0.02, 0.02, 1.0))
+        col = b.mix(b.math("MULTIPLY", tongue, cross), col, srgb(lace_color))
+        # taban şeridi
+        col = b.mix(b.smooth(z, sole_h - 0.0015, sole_h + 0.0015, invert=True), col, srgb(sole_color))
+        if collar:
+            col = b.mix(b.smooth(z, top_z - 0.016, top_z - 0.013), col, srgb(collar))
+    b.set(bsdf.inputs["Base Color"], col)
+    return mat
+
+
+def shoe(ch, bm, side, top_t, color, sole_color="#EDEDED", lace_color="#F0F0F0", pad=0.0055, sole_h=0.013,
+         name="boot", welt=0.0035, flare=0.004, collar=None):
+    """Ayağın kendi yüzeyinden türetilen ayakkabı/bot: parmaklar yumuşatılmış burun, düz taban ve dışa
+    taşan taban kenarı (welt), konç ağzı top_t'de (baldır boyunca) düz kesilir; bağcıklar gölgelendiricide."""
     bones = ch.rig.bones
     A = np.asarray(bones[f"foot_{side}"]["head"])
     Bl = np.asarray(bones[f"ball_{side}"]["head"])
     fwd = Bl - A
     fwd[2] = 0.0
     fwd = unit(fwd)
-    up = np.array([0.0, 0.0, 1.0])
-    lat = np.cross(fwd, up)
-    sel = np.isin(bm.dom_base, ["foot", "ball"]) & (bm.dom == f"foot_{side}") | (bm.dom == f"ball_{side}")
-    P = ch.bv[sel]
-    u = (P - A) @ fwd
-    w = (P - A) @ lat
-    rot = rot_of(fwd, lat)
-    ku = np.linspace(u.min(), u.max(), 9)
+    lat = np.cross(fwd, np.array([0.0, 0.0, 1.0]))
+    rules = {"foot": (-9, 9), "ball": (-9, 9), "calf": (top_t, 9)}
+    sel = bm.select(rules) & np.array([d.endswith("_" + side) for d in bm.dom])
+    lo, hi = ch.bv[sel].min(axis=0), ch.bv[sel].max(axis=0)
+    center, half = (lo + hi) / 2, (hi - lo) / 2 + 0.05
 
-    def build(elem):
-        for u0, u1 in zip(ku, ku[1:]):
-            m = (u >= u0) & (u <= u1)
-            if m.sum() < 4:
-                continue
-            Q = P[m]
-            ww = w[m]
-            zc = (Q[:, 2].max() + max(Q[:, 2].min(), 0.0)) / 2
-            hz = (Q[:, 2].max() - max(Q[:, 2].min(), 0.0)) / 2 + pad
-            wc = (ww.max() + ww.min()) / 2
-            hw = (ww.max() - ww.min()) / 2 + pad
-            c = A + fwd * ((u0 + u1) / 2) + lat * wc
-            c[2] = zc
-            elem("ELLIPSOID", c, ((u1 - u0) * 0.75 + pad, hw, hz), rot, stiff=1.5)
-        # konç: baldır dilimleri
-        cn = f"calf_{side}"
-        h = np.asarray(bones[cn]["head"])
-        ax = np.asarray(bones[cn]["tail"]) - h
-        tt = ((ch.bv - h) @ ax) / (ax @ ax)
-        calf = (bm.dom == cn) | (bm.dom == f"foot_{side}")
-        for t0 in np.linspace(0.84, top_t, 4) if top_t < 0.84 else []:
-            m = calf & (np.abs(tt - t0) < 0.03)
-            if m.sum() < 4:
-                continue
-            Q = ch.bv[m]
-            c = Q.mean(axis=0)
-            rad = np.percentile(np.linalg.norm((Q - c) - np.outer((Q - c) @ unit(ax), unit(ax)), axis=1), 90)
-            elem("ELLIPSOID", c, (rad + pad, rad + pad, 0.035), rot_of(lat, fwd), stiff=1.6)
-        top = A + up * 0.04
-        elem("ELLIPSOID", top + fwd * 0.005, (0.045, 0.040, 0.045), rot, stiff=1.6)
+    def off(base, t, p):
+        if base == "ball":
+            return pad + 0.003           # burun: parmakların üstünde biraz boşluk
+        if base == "calf":
+            return pad + flare * max(0.0, (1.0 - t) / max(1.0 - top_t, 1e-3) - 0.4)
+        return pad
 
-    ob = _metaball_mesh(f"{ch.name}_{name}_{side}", build)
-    me = ob.data
+    def shape(pos, rest, nb):
+        pos = pos.copy()
+        # burun: ayakkabı kalıbı gibi; her kesitte parmak zarfının genişliği/yüksekliğinden süperelips,
+        # parmak aralıkları ve tümsekleri kaybolur
+        ub = (Bl - A) @ fwd
+        ru = (rest - A) @ fwd
+        fm = np.isin(bm.dom, [f"foot_{side}", f"ball_{side}"])
+        F = ch.bv[fm]
+        fu, fw, fz = (F - A) @ fwd, (F - A) @ lat, F[:, 2]
+        us = np.linspace(ub - 0.05, fu.max(), 18)
+        prof = []
+        for u_ in us:
+            m = np.abs(fu - u_) < 0.012
+            prof.append((fw[m].min(), fw[m].max(), fz[m].max()) if m.sum() > 2 else (np.nan,) * 3)
+        prof = np.array(prof)
+        for k in range(3):
+            good = ~np.isnan(prof[:, k])
+            prof[:, k] = np.interp(us, us[good], prof[good, k])
+        for _ in range(3):
+            prof[1:-1] = (prof[:-2] + 2 * prof[1:-1] + prof[2:]) / 4
+        tp = pad + 0.003
+        b_ = np.clip((ru - (ub - 0.035)) / 0.025, 0.0, 1.0)
+        b_ = b_ * b_ * (3 - 2 * b_)
+        sel_ = b_ > 0
+        ne = 2.6
+        # uç kapak: son cap_l metrede süperelipsoid (ön yüz yuvarlak kubbe)
+        cap_l = 0.035
+        uc0 = fu.max() + tp - cap_l
+        i0 = int(min(len(us) - 1, round(float(np.interp(uc0, us, np.arange(len(us)))))))
+        cwl, cwr, czt = prof[i0, 0] - tp, prof[i0, 1] + tp, prof[i0, 2] + tp
 
-    # tabanı düzle, konç ağzını düz kes
-    cn = f"calf_{side}"
-    h = np.asarray(bones[cn]["head"])
-    axv = np.asarray(bones[cn]["tail"]) - h
-    for v in me.vertices:
-        co = np.array(v.co[:])
-        if co[2] < 0.0015:
-            co[2] = 0.0015
-        t = ((co - h) @ axv) / (axv @ axv)
-        if t < top_t:
-            co = co + axv * (top_t - t)
-        v.co = co
+        def last(Q):
+            rel = Q - A
+            u_, w_, z_ = rel @ fwd, rel @ lat, Q[:, 2]
+            wl = np.interp(u_, us, prof[:, 0]) - tp
+            wr = np.interp(u_, us, prof[:, 1]) + tp
+            zt = np.interp(u_, us, prof[:, 2]) + tp
+            wc, hw, zc, hz = (wl + wr) / 2, (wr - wl) / 2, zt / 2, zt / 2
+            cap = u_ > uc0
+            wc[cap], hw[cap] = (cwl + cwr) / 2, (cwr - cwl) / 2
+            zc[cap], hz[cap] = czt / 2, czt / 2
+            du = np.where(cap, (u_ - uc0) / cap_l, 0.0)
+            dw, dz = (w_ - wc) / hw, (z_ - zc) / hz
+            sc_ = np.maximum((np.abs(du) ** ne + np.abs(dw) ** ne + np.abs(dz) ** ne) ** (1.0 / ne), 1e-6)
+            out = A + np.outer(np.where(cap, uc0 + du / sc_ * cap_l, u_), fwd) + np.outer(wc + dw / sc_ * hw, lat)
+            out[:, 2] = zc + dz / sc_ * hz
+            return out
 
-    me.materials.append(leather(f"{ch.name}_{name}_{side}_mat", color, roughness=0.38, coat=0.35))
-    me.materials.append(leather(f"{ch.name}_{name}_sole_{side}", sole_color, roughness=0.7, coat=0.0))
-    me.materials.append(fabric(f"{ch.name}_{name}_lace_{side}", lace_color, roughness=0.8))
-    for p in me.polygons:
-        c = np.array(p.center[:])
-        if c[2] < sole_h * ch.size:
-            p.material_index = 1
-        else:
-            rel = c - A
-            if abs(rel @ lat - 0.0) < 0.011 and (rel @ fwd) > 0.0 and (rel @ fwd) < 0.10 and c[2] > 0.04:
-                # bağcık şeridi: üstte ve önde
-                p.material_index = 2 if int(c[2] * 260) % 2 == 0 else 0
-    ob.parent = ch.arm_ob
-    surface_bind(ob, ch.proxy())
+        bw = b_[sel_][:, None]
+        pos[sel_] += (last(pos[sel_]) - pos[sel_]) * bw
+        # izdüşümde katlanan parmak arası yüzleri aç: yüzey üzerinde gevşet, tekrar izdüşür
+        idx = np.nonzero(sel_)[0]
+        for _ in range(12):
+            avg = np.array([pos[nb[i]].mean(axis=0) if len(nb[i]) else pos[i] for i in idx])
+            q = 0.5 * pos[idx] + 0.5 * avg
+            pos[idx] = q + (last(q) - q) * bw
+        # taban: ayak tabanının altı düz, zemine oturur; tabana yakın köşeler yanlara taşar (welt)
+        low = pos[:, 2] < sole_h
+        pos[pos[:, 2] < 0.0015, 2] = 0.0015
+        rel = pos[low] - A
+        w = rel @ lat
+        u = rel @ fwd
+        # ayak ekseninden yanlara ve uca/topuğa doğru
+        push = np.outer(np.sign(w) * welt, lat)
+        push += np.outer(np.sign(u - u.mean()) * welt * 0.6, fwd)
+        k = np.clip((sole_h - pos[low, 2]) / sole_h, 0.0, 1.0)[:, None]
+        pos[low] += push * np.minimum(1.0, 3.0 * k)
+        return pos
+
+    mat = lace_material(f"{ch.name}_{name}_{side}", color, lace_color, sole_color, [(A, fwd, lat)], center, half,
+                        float(_bone_pt(ch, f"calf_{side}")[2] + (_bone_pt(ch, f"calf_{side}", "tail")[2] -
+                                                                _bone_pt(ch, f"calf_{side}")[2]) * top_t),
+                        sole_h, collar)
+    hide_body(ch, np.isin(bm.dom, [f"foot_{side}", f"ball_{side}"]))
+    ob = garment(ch, bm, f"{name}_{side}", rules, off, [(mat, None)], thickness=0.0025, smooth_iters=3,
+                 snap={"calf": top_t} if top_t < 0.97 else None, texspace=(center, half),
+                 relax=(["ball", "foot"], 14), keep_face=lambda c, dom, t: (c[0] > 0) == (side == "l"),
+                 shape=shape, edge_smooth=10)
     return ob
 
 
@@ -502,7 +609,20 @@ def _bone_pt(ch, bone, end="head"):
 
 
 def shorts(ch, bm, name, color, trim, length=0.55, flare=0.030, waist=0.010, band=0.07, stripe=True,
-           shiny=True):
+           shiny=True, cloth=True):
+    hip_z = _bone_pt(ch, "thigh_l")[2]
+
+    def pin(base, t, p):
+        # bel lastiği gövdeye sabit; kalçadan aşağı sabitleme azalır, paçalar serbest sallanır
+        if p[2] > zt - band * ch.size:
+            return 1.0
+        if base in ("pelvis", "spine_01"):
+            u = min(1.0, max(0.0, (p[2] - (hip_z - 0.06 * ch.size)) / (zt - band * ch.size - hip_z + 0.06 * ch.size)))
+            return 0.12 + 0.88 * u * u
+        if base == "thigh":
+            return 0.12 * (1.0 - min(1.0, max(0.0, t / length))) + 0.03
+        return 0.5
+
     def off(base, t, p):
         if base in ("pelvis", "spine_01"):
             return waist
@@ -521,18 +641,15 @@ def shorts(ch, bm, name, color, trim, length=0.55, flare=0.030, waist=0.010, ban
     band_mat = fabric(f"{ch.name}_{name}_band", trim, roughness=0.6, sheen=0.3)
     return garment(ch, bm, name, rules, off,
                    [(body_mat, None), (band_mat, lambda c, dom, t: c[2] > zt - band * ch.size)],
-                   thickness=0.004, smooth_iters=6, snap={"thigh": length}, texspace=(center, half))
+                   thickness=0.003, smooth_iters=6, snap={"thigh": length}, texspace=(center, half),
+                   cloth=dict(pin=pin) if cloth else None)
 
 
 def boxing_kit(ch, bm, shorts_color="#1F4FC8", trim="#F4F4F4", gloves="#C8102E", boots="#111111",
                socks="#F2F2F2", **_kw):
     items = [shorts(ch, bm, "shorts", shorts_color, trim)]
-    sock = fabric(f"{ch.name}_sock", socks, roughness=0.9, sheen=0.6, weave=300.0)
-    items.append(garment(ch, bm, "socks", {"calf": (0.66, 0.92)},
-                         lambda b, t, p: 0.003, [(sock, None)], thickness=0.002, smooth_iters=2,
-                         snap={"calf": 0.66}))
     for sd in ("l", "r"):
-        items.append(shoe(ch, bm, sd, 0.76, boots, sole_color="#1C1C1C", lace_color="#E8E8E8"))
+        items.append(shoe(ch, bm, sd, 0.70, boots, sole_color="#1C1C1C", lace_color="#E8E8E8", collar=socks))
     hide_hands(ch, bm)
     for sd in ("l", "r"):
         items.append(glove(ch, sd, gloves))
@@ -622,12 +739,22 @@ def taekwondo_kit(ch, bm, belt="#111111", hogu=None, **_kw):
                       "thigh": (-9, 0.14)},
                      jacket_off, [(white, None)], thickness=0.004, smooth_iters=8,
                      snap={"lowerarm": 0.88, "thigh": 0.14}, keep_face=keep_jacket)]
+    def pants_pin(b, t, p):
+        # bel (kuşağın altı) sabit; uyluktan paçaya doğru kumaş serbestleşir
+        if b == "pelvis":
+            return 1.0 if p[2] > hip_z - 0.02 * k else 0.7
+        if b == "thigh":
+            return 0.35 * (1.0 - min(1.0, max(0.0, t))) + 0.3
+        return 0.3 - 0.1 * min(1.0, max(0.0, t))
+
     items.append(garment(ch, bm, "pants", {"pelvis": (-9, 9), "thigh": (-9, 9), "calf": (-9, 0.9)},
                          lambda b, t, p: 0.020 if b == "pelvis" else (0.022 + 0.012 * min(1, t) if b == "thigh"
                                                                       else 0.030 + 0.012 * t),
-                         [(white, None)], thickness=0.004, smooth_iters=8,
+                         [(white, None)], thickness=0.003, smooth_iters=8,
                          snap={"calf": 0.9},
-                         keep_face=lambda c, dom, t: dom != "pelvis" or c[2] < hip_z + 0.02 * k))
+                         keep_face=lambda c, dom, t: dom != "pelvis" or c[2] < hip_z + 0.02 * k,
+                         cloth=dict(pin=pants_pin, mass=0.25, stretch=15.0, bend=0.5, quality=12,
+                                    pin_stiffness=4.0)))
     # kuşak: bel hizasında bant
     zb = hip_z + 0.085 * k
     belt_mat = fabric(f"{ch.name}_belt", belt, roughness=0.7, sheen=0.3, weave=240.0)

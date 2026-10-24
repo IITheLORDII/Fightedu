@@ -151,6 +151,11 @@ def shaped_vertices(base, shape):
 # --------------------------------------------------------------------------------
 # İskelet
 # --------------------------------------------------------------------------------
+def _smoothstep(a, b, x):
+    t = min(1.0, max(0.0, (x - a) / (b - a)))
+    return t * t * (3.0 - 2.0 * t)
+
+
 class Rig:
     def __init__(self, base, verts, name="game_engine", root=ASSET_DIR):
         with open(os.path.join(root, "rigs", "standard", f"rig.{name}.json"), encoding="utf-8") as fh:
@@ -186,6 +191,39 @@ class Rig:
         for n in self.bones:
             visit(n)
         self.order = order
+        # deri ağırlıkları: kol/bacak dönüşü (twist) uzuv boyunca yardımcı kemiklere dağıtılır;
+        # self.weights özgün kalır (giysi bölgeleri baskın kemiğe göre seçilir)
+        self.skin_weights = self._twist_weights(verts)
+
+    # yardımcı twist kemikleri: (ad, ana kemik, kemik boyunca baş/uç, ağırlık(t))
+    TWIST = (
+        ("upperarm_twist", "upperarm", (0.0, 0.5), lambda t: 1.0 - _smoothstep(0.05, 0.6, t)),
+        ("lowerarm_twist", "lowerarm", (0.5, 1.0), lambda t: _smoothstep(0.2, 0.95, t)),
+        ("thigh_twist", "thigh", (0.0, 0.5), lambda t: 1.0 - _smoothstep(0.05, 0.55, t)),
+    )
+
+    def _twist_weights(self, verts):
+        weights = {b: list(p) for b, p in self.weights.items()}
+        for tw, main, (a, b), wfun in self.TWIST:
+            for s in ("l", "r"):
+                parent = self.bones[f"{main}_{s}"]
+                h, tl = np.asarray(parent["head"]), np.asarray(parent["tail"])
+                ax = tl - h
+                name = f"{tw}_{s}"
+                self.bones[name] = dict(head=h + ax * a, tail=h + ax * b, roll=parent["roll"],
+                                        parent=f"{main}_{s}")
+                self.order.append(name)
+                keep, moved = [], []
+                for vi, w in weights[f"{main}_{s}"]:
+                    t = float((verts[vi] - h) @ ax / (ax @ ax))
+                    f = wfun(t)
+                    if f > 1e-3:
+                        moved.append((vi, w * f))
+                    if f < 1.0 - 1e-3:
+                        keep.append((vi, w * (1.0 - f)))
+                weights[f"{main}_{s}"] = keep
+                weights[name] = moved
+        return weights
 
     def joint(self, base, verts, cube):
         return verts[base.groups[cube]].mean(axis=0)

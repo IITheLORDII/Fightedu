@@ -290,14 +290,53 @@ class MoveRenderer:
         os.makedirs(frame_dir, exist_ok=True)
         sc = bpy.context.scene
         frames = range(self.mv.dur) if frames is None else frames
-        for t in frames:
-            path = os.path.join(frame_dir, f"{t:04d}.png")
-            if os.path.exists(path):
-                continue
+        todo = [t for t in frames if not os.path.exists(os.path.join(frame_dir, f"{t:04d}.png"))]
+        if not todo:
+            return
+        sim = bool(self.fig.cloth or (self.opp is not None and self.opp.cloth))
+        if sim:
+            # kumaş sırayla simüle edilir: dinlenme duruşundan ilk poza geçiş, bir ısınma turu (döngünün
+            # başı ile sonu aynı kumaş durumuna otursun), render ikinci turda
+            f = self._preroll()
+            for t in range(self.mv.dur):
+                self.pose(t)
+                sc.frame_set(f)
+                f += 1
+            steps = range(max(todo) + 1)
+        else:
+            steps = todo
+        for t in steps:
             self.pose(t)
+            if sim:
+                sc.frame_set(f)
+                f += 1
+            if t not in todo:
+                continue
+            path = os.path.join(frame_dir, f"{t:04d}.png")
             sc.render.filepath = path + ".tmp.png"
             bpy.ops.render.render(write_still=True)
             os.replace(path + ".tmp.png", path)
+
+    def _preroll(self, n=24):
+        """Kumaş simülasyonu dinlenme duruşunda (giysinin dikildiği şekil) başlar, ilk poza yumuşakça geçer."""
+        sc = bpy.context.scene
+        self.pose(0)
+        target = []
+        for ch in (self.fig, self.opp):
+            if ch is None:
+                continue
+            for pb in ch.arm_ob.pose.bones:
+                target.append((pb, pb.location.copy(), pb.rotation_quaternion.copy()))
+        f = 1
+        for k in range(n):
+            u = k / (n - 1)
+            u = u * u * (3.0 - 2.0 * u)
+            for pb, loc, rot in target:
+                pb.location = loc * u
+                pb.rotation_quaternion = Quaternion().slerp(rot, u)
+            sc.frame_set(f)
+            f += 1
+        return f
 
     def poster_frame(self):
         if self.mv.poster is not None:

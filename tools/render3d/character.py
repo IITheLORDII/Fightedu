@@ -141,6 +141,21 @@ def submesh(base, verts, group, extra_faces=None):
     return verts[used], faces, uvf, np.array(used)
 
 
+def _deform(ob, arm_ob):
+    """İskelet deformasyonu: hacmi koruyan (dual quaternion) bükme + eklemlerdeki büzülmeleri gideren
+    düzeltici yumuşatma (dinlenme şeklindeki ayrıntıyı geri ekler, yalnızca deformasyon bozukluklarını siler)."""
+    mod = ob.modifiers.new("Armature", "ARMATURE")
+    mod.object = arm_ob
+    mod.use_deform_preserve_volume = True
+    cs = ob.modifiers.new("Corrective", "CORRECTIVE_SMOOTH")
+    cs.rest_source = "ORCO"
+    cs.smooth_type = "LENGTH_WEIGHTED"
+    cs.iterations = 8
+    cs.factor = 0.5
+    cs.use_pin_boundary = True
+    return mod
+
+
 # --------------------------------------------------------------------------------
 # Karakter
 # --------------------------------------------------------------------------------
@@ -197,6 +212,7 @@ class Character:
         self.body.data.materials.append(skin_material(f"{name}_skin", skin, self.regions, hair_color=hair))
         self._subsurf(self.body, 2)
 
+        self.cloth = []  # kumaş simülasyonlu giysiler (outfits.add_cloth)
         self.hair = self._short_hair(hair)
         self.eyes = self._eyes(iris)
 
@@ -223,8 +239,7 @@ class Character:
     def _weights(self, ob, used, nearest=False):
         rig = self.rig
         ob.parent = self.arm_ob
-        mod = ob.modifiers.new("Armature", "ARMATURE")
-        mod.object = self.arm_ob
+        _deform(ob, self.arm_ob)
         if nearest:
             # yardımcı geometri: en yakın gövde köşesinin ağırlıklarını kopyala
             from mathutils.kdtree import KDTree
@@ -234,7 +249,7 @@ class Character:
                 kd.insert(Vector(self.verts[vi]), i)
             kd.balance()
             src = {}
-            for bone, pairs in rig.weights.items():
+            for bone, pairs in rig.skin_weights.items():
                 for vi, w in pairs:
                     src.setdefault(vi, []).append((bone, w))
             for i, vi in enumerate(used):
@@ -244,7 +259,7 @@ class Character:
                     g.add([i], w, "REPLACE")
             return
         local = {int(o): i for i, o in enumerate(used)}
-        for bone, pairs in rig.weights.items():
+        for bone, pairs in rig.skin_weights.items():
             idx = [(local[vi], w) for vi, w in pairs if vi in local]
             if not idx:
                 continue
@@ -266,13 +281,23 @@ class Character:
             bpy.context.scene.collection.objects.link(ob)
             # köşe grupları (deri ağırlıkları) ağ verisiyle birlikte kopyalanır
             ob.parent = self.arm_ob
-            mod = ob.modifiers.new("Armature", "ARMATURE")
-            mod.object = self.arm_ob
+            _deform(ob, self.arm_ob)
             ob.hide_render = True
             ob.visible_camera = False
             ob.visible_shadow = False
             self._proxy = ob
         return self._proxy
+
+    def collider(self):
+        """Kumaşın çarptığı yüzey: vekil gövdeye çarpışma niteliği."""
+        ob = self.proxy()
+        if ob.modifiers.get("Collision") is None:
+            ob.modifiers.new("Collision", "COLLISION")
+            c = ob.collision
+            c.thickness_outer = 0.004
+            c.cloth_friction = 8.0
+            c.damping = 0.3
+        return ob
 
     def joint(self, cube):
         return self.verts[self.base.groups[cube]].mean(axis=0)
