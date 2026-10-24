@@ -744,8 +744,8 @@ def taekwondo_kit(ch, bm, belt="#111111", hogu=None, **_kw):
         if b == "pelvis":
             return 1.0 if p[2] > hip_z - 0.02 * k else 0.7
         if b == "thigh":
-            return 0.35 * (1.0 - min(1.0, max(0.0, t))) + 0.3
-        return 0.3 - 0.1 * min(1.0, max(0.0, t))
+            return 0.3 * (1.0 - min(1.0, max(0.0, t))) + 0.45
+        return 0.42 - 0.1 * min(1.0, max(0.0, t))
 
     items.append(garment(ch, bm, "pants", {"pelvis": (-9, 9), "thigh": (-9, 9), "calf": (-9, 0.9)},
                          lambda b, t, p: 0.020 if b == "pelvis" else (0.022 + 0.012 * min(1, t) if b == "thigh"
@@ -754,7 +754,7 @@ def taekwondo_kit(ch, bm, belt="#111111", hogu=None, **_kw):
                          snap={"calf": 0.9},
                          keep_face=lambda c, dom, t: dom != "pelvis" or c[2] < hip_z + 0.02 * k,
                          cloth=dict(pin=pants_pin, mass=0.25, stretch=15.0, bend=0.5, quality=12,
-                                    pin_stiffness=4.0)))
+                                    pin_stiffness=5.0)))
     # kuşak: bel hizasında bant
     zb = hip_z + 0.085 * k
     belt_mat = fabric(f"{ch.name}_belt", belt, roughness=0.7, sheen=0.3, weave=240.0)
