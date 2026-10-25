@@ -472,10 +472,13 @@ def _shin_bag(pose):
     return sh[0] + h[2] * 20.5, sh[2] - h[0] * 20.5
 
 
-def rk_seq(t, height, step=(32, -24), pel=(34, -14), bag=None, bend=None, sup=-150, x0=(0.0, 2.0), shin=None,
+RK_SUP = 8.0  # yuvarlak tekmede destek ayağının yönü: parmak uçları torbaya bakar
+
+
+def rk_seq(t, height, step=(32, -24), pel=(34, -14), bag=None, bend=None, sup=RK_SUP, x0=(0.0, 2.0), shin=None,
            follow=True):
-    """Sağ arka bacakla yuvarlak tekme; vuruş t karesinde. Ön ayak dışa açık adım alır, ayak
-    topunda topuk hedefe dönecek kadar döner; kalça devrilir, gövde karşı yana yatar, sol el
+    """Sağ arka bacakla yuvarlak tekme; vuruş t karesinde. Ön ayak öne adım alır, destek ayağının
+    parmak uçları vuruş boyunca torbaya bakar (sup); kalça devrilir, gövde karşı yana yatar, sol el
     çenede, sağ kol aşağı-geriye savrulur. Bacak hemen hemen düz, arkadan-yandan yatay bir yayla
     gelir ve aynı yoldan geri döner (öne kalkan diz/chamber yok). x0: tekmeden önceki kalça (x, z).
     bag=(x, z) verilirse tekme o torba merkezine, shin=(x, y, z) verilirse kaval vuruş noktası oraya
@@ -512,7 +515,7 @@ def _rk_build(t, hp, step, pel, sup, x0, follow=True):
 
     sp = lambda u: 15 + (sup - 15) * u  # noqa: E731  destek ayağının topunda dönüşü
     x1, z1 = lerp(0.25)
-    stp = P(KB, x=x1, z=z1, yaw=18, pitch=2, lf=planted(sx, sz, -35), rf=planted(-24, 13, KB_RF_YAW, heel=40),
+    stp = P(KB, x=x1, z=z1, yaw=18, pitch=2, lf=planted(sx, sz, sup), rf=planted(-24, 13, KB_RF_YAW, heel=40),
             lh=(22, 45, -8))
     hit_base = body(1.0, -82, sup, 25, (-26, -16, 34), (-1, -0.2, 0.5), 1.0, 1.0)
     eh, hit = rk_aim(hit_base, 8, hp["bend"], hp["y"])
@@ -530,7 +533,7 @@ def _rk_build(t, hp, step, pel, sup, x0, follow=True):
     ret2 = rk_leg(body(0.7, -30, sp(0.66), 18, (26, 2, 24), (-0.5, -1, 0.6), 0.35, 0.5), 88, arc(88) - 6, 18,
                   up=0.6)
     x5, z5 = lerp(0.3)
-    land = P(KB, x=x5, z=z5, yaw=22, pitch=2, lf=planted(sx, sz, -30), rf=planted(-18, 15, KB_RF_YAW + 4, heel=38))
+    land = P(KB, x=x5, z=z5, yaw=22, pitch=2, lf=planted(sx, sz, KB_LF_YAW), rf=planted(-18, 15, KB_RF_YAW + 4, heel=38))
     return [(t - 12, stp), (t - 8, sw1), (t - 5, sw2), (t - 2, sw3), (t, hit), (t + 4, hold), (t + 8, ret1),
             (t + 12, ret2), (t + 16, land)]
 
@@ -585,10 +588,10 @@ KICKBOXING = {
                     cam=dict(az=12), target="long_bag", hits=[(12, "rknee")]),
     "kb_check": Move("kickboxing", 42, [(0, KB), (10, CHECK), (22, CHECK), (32, KB)], cam=dict(az=170, el=14),
                      target="partner", opp_dist=KB_CHECK_DIST, opp_mirror=False,
-                     opp=[(0, KB), *rk_seq(16, "low", step=(40, -24), shin=_check_shin(), bend=30, sup=-140,
+                     opp=[(0, KB), *rk_seq(16, "low", step=(40, -24), shin=_check_shin(), bend=30,
                                            follow=False), (38, KB)], poster=17),
     "kb_combo_jcl": Move("kickboxing", 66, [(0, KB), (7, KB_JAB), (12, P(KB, yaw=26)), (19, KB_CROSS),
-                                            *rk_seq(35, "low", step=(40, -24), bag=(102.5, 2.0), bend=30, sup=-140,
+                                            *rk_seq(35, "low", step=(40, -24), bag=(102.5, 2.0), bend=30,
                                                     x0=(4, 2)), (56, KB)], cam=dict(az=-10, el=22), target="long_bag",
                          hits=[(7, "lhand"), (19, "rhand"), (35, "rshin")]),
     "kb_combo_jcm": Move("kickboxing", 82, [(0, KB), (7, KB_JAB), (12, P(KB, yaw=26)), (19, KB_CROSS),
@@ -1182,14 +1185,14 @@ TKD_KNEE_R = P(TKD_G, x=6, yaw=30, lf=planted(24, -5, 20, heel=14),
                rf=air((30, 64, 10), yaw=10, pitch=10, knee=(1, 0.6, 0)), lh=(32, 30, -6), rh=(26, 38, 8))
 AP_CHAGI = tkd_leg(P(TKD_G, x=10, yaw=24, pitch=-10, cpitch=8, lf=planted(24, -5, 16, heel=18),
                      lh=(32, 30, -6), rh=(26, 38, 8)), "r", (80, 16, 2), 85, yaw=0, pitch=-35, knee=(1, 0.3, 0))
-# dollyo: destek ayağı ~150° döner, kalça devrilir (yaw ~-86, roll < 0), bacak düz; ayak üstü/kaval
+# dollyo: destek ayağının parmak uçları hedefe bakar, kalça devrilir (yaw ~-86, roll < 0), bacak düz; ayak üstü/kaval
 # göğüs koruyucunun kameraya bakan yüzüne değer
-DOLLYO_CH = P(TKD_G, x=12, yaw=0, roll=-10, cyaw=20, lf=planted(22, -5, -40, heel=25),
+DOLLYO_CH = P(TKD_G, x=12, yaw=0, roll=-10, cyaw=20, lf=planted(22, -5, 4, heel=25),
               rf=air((22, 72, 38), yaw=-20, pitch=55, knee=(1, 0.6, -0.2)), lh=(32, 36, -4), rh=(22, 30, 14))
 DOLLYO_BODY = P(TKD_G, x=26, y=101, yaw=-86, pitch=0, roll=-28, cyaw=30, croll=10,
-                lf=planted(20, -6, -150, heel=20), lh=(30, 40, -2), rhw=(0, 110, 24), rhk=1, re=(-0.5, -1, 0.6))
+                lf=planted(20, -6, 6, heel=20), lh=(30, 40, -2), rhw=(0, 110, 24), rhk=1, re=(-0.5, -1, 0.6))
 DOLLYO = tkd_leg(DOLLYO_BODY, "r", (80, 15, 23), 86.5, yaw=-8, pitch=20, knee=(0.1, 1, -0.4), roll=-60)
-DOLLYO_BACK = P(DOLLYO_CH, x=18, yaw=-50, roll=-18, cyaw=30, lf=planted(20, -6, -110, heel=22),
+DOLLYO_BACK = P(DOLLYO_CH, x=18, yaw=-50, roll=-18, cyaw=30, lf=planted(20, -6, 6, heel=22),
                 rf=air((40, 88, 30), yaw=-40, pitch=55, knee=(1, 0.6, -0.4)))
 # yeop: ön (sol) bacakla; destek ayağının topuğu hedefe döner, gövde kicken uzağa yatar, bacak düz,
 # topuk önde ve ayak tabanı hedefe bakar
