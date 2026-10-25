@@ -203,5 +203,25 @@ def skin_material(name, tone, regions, hair_color="#20140E", stubble=0.22):
     b.set(pores.inputs["Vector"], pos)
     bump = b.node("ShaderNodeBump", Strength=0.04)
     b.l.new(pores.outputs["Fac"], bump.inputs["Height"])
-    b.l.new(bump.outputs["Normal"], bsdf.inputs["Normal"])
+    normal = bump.outputs["Normal"]
+    # anatomik kas ayrımları (kabartma haritası) ve oluklarda hafif koyulaşma
+    relief = regions.get("relief", [])
+    if relief:
+        hgt = None
+        groove = None
+        for c, r, h in relief:
+            m = b.ellipsoid(pos, c, r, 0.6)
+            term = b.math("MULTIPLY", m, h)
+            hgt = term if hgt is None else b.math("ADD", hgt, term)
+            if h < 0:
+                g = b.math("MULTIPLY", m, -h)
+                groove = g if groove is None else b.math("MAXIMUM", groove, g)
+        mb = b.node("ShaderNodeBump", Strength=1.0, Distance=0.006)
+        b.set(mb.inputs["Height"], hgt)
+        b.l.new(normal, mb.inputs["Normal"])
+        normal = mb.outputs["Normal"]
+        dark = b.mix(b.math("MULTIPLY", groove, 0.45), bsdf.inputs["Base Color"].links[0].from_socket,
+                     (base[0] * 0.62, base[1] * 0.45, base[2] * 0.40, 1.0))
+        b.l.new(dark, bsdf.inputs["Base Color"])
+    b.l.new(normal, bsdf.inputs["Normal"])
     return mat

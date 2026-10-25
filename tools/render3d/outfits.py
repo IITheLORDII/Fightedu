@@ -608,7 +608,7 @@ def _bone_pt(ch, bone, end="head"):
     return np.asarray(ch.rig.bones[bone][end])
 
 
-def shorts(ch, bm, name, color, trim, length=0.55, flare=0.030, waist=0.010, band=0.07, stripe=True,
+def shorts(ch, bm, name, color, trim, length=0.86, flare=0.032, waist=0.010, band=0.07, stripe=True,
            shiny=True, cloth=True):
     hip_z = _bone_pt(ch, "thigh_l")[2]
 
@@ -620,7 +620,8 @@ def shorts(ch, bm, name, color, trim, length=0.55, flare=0.030, waist=0.010, ban
             u = min(1.0, max(0.0, (p[2] - (hip_z - 0.06 * ch.size)) / (zt - band * ch.size - hip_z + 0.06 * ch.size)))
             return 0.12 + 0.88 * u * u
         if base == "thigh":
-            return 0.12 * (1.0 - min(1.0, max(0.0, t / length))) + 0.03
+            # dize kadar uzun paça: kalçaya yakın sıkı, paçaya doğru serbest (tekmede takılıp yırtılmasın)
+            return 0.25 * (1.0 - min(1.0, max(0.0, t / length))) + 0.12
         return 0.5
 
     def off(base, t, p):
@@ -657,7 +658,7 @@ def boxing_kit(ch, bm, shorts_color="#1F4FC8", trim="#F4F4F4", gloves="#C8102E",
 
 
 def kickboxing_kit(ch, bm, shorts_color="#151515", trim="#D9A21B", gloves="#1F4FC8", ankle="#151515", **_kw):
-    items = [shorts(ch, bm, "shorts", shorts_color, trim, length=0.40, flare=0.05, band=0.085, stripe=False)]
+    items = [shorts(ch, bm, "shorts", shorts_color, trim, length=0.84, flare=0.045, band=0.085, stripe=False)]
     sup = fabric(f"{ch.name}_ankle", ankle, roughness=0.85, sheen=0.4, weave=260.0)
     items.append(garment(ch, bm, "ankle", {"calf": (0.84, 9), "foot": (-9, 0.55)},
                          lambda b, t, p: 0.003, [(sup, None)], thickness=0.002, smooth_iters=2,
@@ -806,7 +807,7 @@ def general_kit(ch, bm, shirt="#7B8794", shorts_color="#1E1E1E", shoes="#F4F4F4"
                                       (0.009 + 0.008 * t if b == "upperarm" else
                                        (0.017 if b == "pelvis" else 0.011))), [(tee, None)],
                      thickness=0.003, smooth_iters=6, snap={"upperarm": 0.42}, keep_face=keep, hem_z=hem)]
-    items.append(shorts(ch, bm, "shorts", shorts_color, "#E6E6E6", length=0.45, flare=0.025, band=0.04,
+    items.append(shorts(ch, bm, "shorts", shorts_color, "#E6E6E6", length=0.84, flare=0.028, band=0.04,
                         stripe=True, shiny=False))
     sock = fabric(f"{ch.name}_sock", "#F2F2F2", roughness=0.9, sheen=0.6, weave=300.0)
     items.append(garment(ch, bm, "socks", {"calf": (0.84, 0.97)}, lambda b, t, p: 0.003, [(sock, None)],

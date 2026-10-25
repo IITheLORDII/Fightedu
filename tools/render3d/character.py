@@ -160,22 +160,29 @@ def _deform(ob, arm_ob):
 # Karakter
 # --------------------------------------------------------------------------------
 ATHLETE = dict(
-    gender=1.0, age=0.45, muscle=1.0, weight=0.32, height=0.48, proportions=0.85,
+    gender=1.0, age=0.45, muscle=1.0, weight=0.24, height=0.5, proportions=0.9,
     race=dict(african=0.06, asian=0.06, caucasian=0.88),
     details={
-        "torso/torso-vshape-incr": 0.55,
-        "torso/torso-muscle-pectoral-incr": 0.45,
-        "torso/torso-muscle-dorsi-incr": 0.5,
-        "torso/measure-waist-circ-decr": 0.35,
-        "stomach/stomach-pregnant-decr": 0.4,
-        "neck/measure-neck-circ-incr": 0.35,
+        # gövde: geniş sırt (latissimus), dolgun göğüs, ince bel, sıkı karın
+        "torso/torso-vshape-incr": 0.85,
+        "torso/torso-muscle-pectoral-incr": 0.8,
+        "torso/torso-muscle-dorsi-incr": 0.85,
+        "torso/measure-waist-circ-decr": 0.5,
+        "torso/measure-shoulder-dist-incr": 0.45,
+        "stomach/stomach-pregnant-decr": 0.6,
+        "stomach/stomach-tone-incr": 1.0,
+        "neck/measure-neck-circ-incr": 0.6,
+        # kollar: deltoid, biseps/triseps, önkol
         "arms/l-upperarm-muscle-incr": 1.0, "arms/r-upperarm-muscle-incr": 1.0,
-        "arms/l-upperarm-shoulder-muscle-incr": 0.9, "arms/r-upperarm-shoulder-muscle-incr": 0.9,
-        "arms/l-lowerarm-muscle-incr": 0.7, "arms/r-lowerarm-muscle-incr": 0.7,
-        "arms/l-upperarm-scale-horiz-incr": 0.35, "arms/r-upperarm-scale-horiz-incr": 0.35,
-        "torso/measure-shoulder-dist-incr": 0.3,
-        "legs/l-upperleg-muscle-incr": 0.35, "legs/r-upperleg-muscle-incr": 0.35,
-        "legs/l-lowerleg-muscle-incr": 0.4, "legs/r-lowerleg-muscle-incr": 0.4,
+        "arms/l-upperarm-shoulder-muscle-incr": 1.0, "arms/r-upperarm-shoulder-muscle-incr": 1.0,
+        "arms/l-lowerarm-muscle-incr": 1.0, "arms/r-lowerarm-muscle-incr": 1.0,
+        "arms/l-upperarm-scale-horiz-incr": 0.45, "arms/r-upperarm-scale-horiz-incr": 0.45,
+        "arms/l-upperarm-fat-decr": 0.6, "arms/r-upperarm-fat-decr": 0.6,
+        # bacaklar: kuadriseps ve baldır (gastroknemius)
+        "legs/l-upperleg-muscle-incr": 0.8, "legs/r-upperleg-muscle-incr": 0.8,
+        "legs/l-lowerleg-muscle-incr": 0.9, "legs/r-lowerleg-muscle-incr": 0.9,
+        "legs/l-upperleg-fat-decr": 0.5, "legs/r-upperleg-fat-decr": 0.5,
+        "buttocks/buttocks-volume-incr": 0.25,
     },
 )
 
@@ -355,7 +362,70 @@ class Character:
             nipples.append(((x, y, z), (0.011 * k, 0.012 * k, 0.010 * k)))
         self.hairline = (p0, n)
         return dict(center=center, half=half, brows=brows, lips=lips, stubble=stubble, scalp=scalp,
-                    nipples=nipples)
+                    nipples=nipples, relief=self._muscle_relief(bv, nipples))
+
+    def _muscle_relief(self, bv, nipples):
+        """Anatomik kas ayrımları (rest koordinatında elipsoid kabartma/oluk; yükseklik + = kabarık, - = oluk):
+        rectus abdominis dilimleri ve linea alba, pektoral alt sınırı ve sternum oluğu, deltoid başı ve
+        deltopektoral oluk, serratus dişleri, kasık V çizgisi, omurga oluğu, vastus medialis."""
+        k = self.size
+        torso = bv[np.abs(bv[:, 0]) < 0.2 * k]
+
+        def surf(x, z, back=False, tol=0.008):
+            m = (np.abs(torso[:, 0] - x) < tol * k) & (np.abs(torso[:, 2] - z) < tol * k)
+            if not m.any():
+                return None
+            return torso[m, 1].max() if back else torso[m, 1].min()
+
+        out = []
+
+        def add(x, z, r, h, back=False, sym=True):
+            for sx in ((1, -1) if sym and abs(x) > 1e-6 else (1,)):
+                y = surf(sx * x, z, back)
+                if y is not None:
+                    out.append(((sx * x, y, z), (r[0] * k, r[1] * k, r[2] * k), h))
+
+        nip_z = nipples[0][0][2]
+        nip_x = abs(nipples[0][0][0])
+        hip_z = float(np.asarray(self.rig.bones["thigh_l"]["head"])[2])
+        sh = np.asarray(self.rig.bones["upperarm_l"]["head"])
+        # pektoral: kabarık kas, alt sınırda oluk, ortada sternum oluğu
+        add(nip_x * 0.85, nip_z + 0.03 * k, (0.07, 0.03, 0.05), 0.7)
+        add(nip_x * 0.9, nip_z - 0.036 * k, (0.065, 0.025, 0.009), -1.3)
+        add(0.0, nip_z + 0.02 * k, (0.007, 0.03, 0.06), -0.9)
+        # rectus abdominis: üç sıra dilim + alt karın, ortada linea alba
+        top, bot = nip_z - 0.075 * k, hip_z + 0.035 * k
+        span = top - bot
+        for f, rz in ((0.10, 0.026), (0.30, 0.027), (0.50, 0.028)):
+            add(0.03 * k, top - f * span, (0.024, 0.02, rz), 1.2)
+        add(0.028 * k, top - 0.80 * span, (0.026, 0.02, 0.05), 0.5)
+        add(0.0, top - 0.33 * span, (0.0045, 0.025, 0.12), -1.0)
+        for f in (0.20, 0.40, 0.62):
+            add(0.03 * k, top - f * span, (0.03, 0.02, 0.005), -1.1)
+        # dış oblik kenarı (karın kasının yanı)
+        add(0.062 * k, top - 0.45 * span, (0.006, 0.025, 0.07), -0.7)
+        # kasık V çizgisi (inguinal): kalça kemiğinden kasığa
+        for u in (0.0, 0.5, 1.0):
+            add((0.10 - 0.06 * u) * k, hip_z + (0.07 - 0.09 * u) * k, (0.006, 0.025, 0.02), -0.9)
+        # serratus anterior dişleri (kaburga yanları)
+        for j in range(3):
+            add(0.125 * k, nip_z - (0.03 + 0.03 * j) * k, (0.012, 0.03, 0.008), 0.6)
+        # deltoid başı ve deltopektoral oluk
+        add(abs(sh[0]) + 0.01 * k, sh[2] - 0.01 * k, (0.045, 0.06, 0.06), 0.5)
+        add(abs(sh[0]) - 0.04 * k, sh[2] - 0.045 * k, (0.006, 0.03, 0.04), -0.8)
+        # sırt: omurga oluğu, kürek kemiği altı
+        add(0.0, nip_z - 0.04 * k, (0.006, 0.03, 0.2), -1.0, back=True)
+        add(0.09 * k, nip_z - 0.07 * k, (0.05, 0.03, 0.01), -0.6, back=True)
+        # vastus medialis (dizin üstü iç uyluk): bacaklar gövde dışında, uyluk kemiğinden hesapla
+        for s_, sx in (("l", 1.0), ("r", -1.0)):
+            h = np.asarray(self.rig.bones[f"thigh_{s_}"]["head"])
+            t = np.asarray(self.rig.bones[f"thigh_{s_}"]["tail"])
+            c = h + (t - h) * 0.82
+            leg = bv[np.linalg.norm(bv[:, [0, 2]] - c[[0, 2]], axis=1) < 0.06 * k]
+            if len(leg):
+                y = leg[:, 1].min()
+                out.append(((c[0] - sx * 0.025 * k, y + 0.01 * k, c[2]), (0.03 * k, 0.03 * k, 0.04 * k), 0.8))
+        return out
 
     def _short_hair(self, color, top=0.0035, margin=0.02):
         """Üstte hacimli kısa saç kabuğu; kenarları boyalı saç çizgisinin içinde incelir (fade)."""
