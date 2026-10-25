@@ -252,20 +252,21 @@ GENERAL = {
 # BOKS
 # ==========================================================================
 # Duruşta ayak uçları rakibe/torbaya bakar: ön ayak neredeyse düz, arka ayak ~30° açık (topuk hafif kalkık).
-# Arka elle vuruşta (cross, arka kroşe/aparkat) arka ayak topun üstünde döner: topuk dışarı, parmaklar
-# torbaya; ön elle kroşede ön ayak aynı şekilde içe döner.
+# Her yumrukta arka ayak topun üstünde döner: topuk dışarı, parmaklar torbaya; ön elle kroşede ön ayak da
+# içe döner.
 BOX_LF_YAW, BOX_RF_YAW = 8.0, 30.0
+BOX_RF_PUNCH = dict(rf=planted(-28, 15, 0.0, heel=30))  # her yumrukta arka ayak döner: parmaklar torbaya
 BOX = P(BASE_POSE, y=90, z=2, yaw=38, pitch=5, cpitch=7, chin=10,
         lh=(24, 42, -15), rh=(14, 39, 7), le=(-0.1, -1, -0.45), re=(-0.25, -1, 0.4),
         lf=planted(26, -9, BOX_LF_YAW), rf=planted(-28, 15, BOX_RF_YAW, heel=20))
 BOX_DIP = P(BOX, y=87, chin=12)
-JAB = hand_at(P(BOX, yaw=44, cyaw=6, pitch=7, rf=planted(-28, 15, BOX_RF_YAW, heel=26), le=(0, -1, -0.2)),
+JAB = hand_at(P(BOX, yaw=44, cyaw=6, pitch=7, **BOX_RF_PUNCH, le=(0, -1, -0.2)),
               "l", (57, 6, 6))
 # cross: kalça ve omuz tam döner, kol neredeyse düz; yumruk jab ile aynı uzaklığa (torbanın önüne) gider
 CROSS = P(BOX, x=5, yaw=-4, cyaw=-12, pitch=11, rf=planted(-28, 15, 2, heel=50), lh=(18, 41, -9),
           re=(0, -1, 0.2), rhw=(81.5, 136, 4), rhk=1)
 LHOOK_PREP = P(BOX, yaw=30, cyaw=-6)
-LHOOK = hand_at(P(BOX, yaw=62, cyaw=14, pitch=6, lf=planted(26, -9, 62, heel=14), rh=(13, 40, 6),
+LHOOK = hand_at(P(BOX, yaw=62, cyaw=14, pitch=6, lf=planted(26, -9, 62, heel=14), **BOX_RF_PUNCH, rh=(13, 40, 6),
                   le=(0.1, 0.35, -1)), "l", (38, 6, 26))
 RHOOK = hand_at(P(BOX, yaw=-2, cyaw=-16, pitch=6, rf=planted(-28, 15, 0, heel=50), lh=(14, 43, -15),
                   re=(0.1, 0.35, 1)), "r", (38, 6, -26))
@@ -274,7 +275,7 @@ RHOOK = hand_at(P(BOX, yaw=-2, cyaw=-16, pitch=6, rf=planted(-28, 15, 0, heel=50
 RHOOK_MID = hand_at(P(BOX, yaw=16, cyaw=-8, pitch=6, rf=planted(-28, 15, 14, heel=36), lh=(16, 43, -16),
                       re=(0, 0.15, 1)), "r", (32, 6, 8))
 LUPPER_DIP = P(BOX, y=84, roll=-6, croll=-8, cpitch=10, lh=(22, 28, -14), le=(0, -1, -0.2))
-LUPPER = hand_at(P(BOX, yaw=50, cyaw=8, pitch=2, cpitch=4, roll=4, lf=planted(26, -9, 40, heel=10),
+LUPPER = hand_at(P(BOX, yaw=50, cyaw=8, pitch=2, cpitch=4, roll=4, lf=planted(26, -9, 40, heel=10), **BOX_RF_PUNCH,
                    le=(0, -1, -0.1)), "l", (38, 4, 14))
 RUPPER_DIP = P(BOX, y=84, roll=6, croll=8, cpitch=10, rh=(16, 26, 8), re=(0, -1, 0.2))
 RUPPER = hand_at(P(BOX, yaw=8, cyaw=-8, pitch=4, rf=planted(-28, 15, 6, heel=45), lh=(18, 41, -8),
@@ -290,7 +291,7 @@ BLOCK = P(BOX, lh=(5, 50, -15), le=(1, -0.5, -0.15), chin=14)
 # Torba merkezi jab/cross/kroşe vuruşlarından (103, -4.8) çıkar.
 C123_BAG = (103.0, -4.8)
 LHOOK_C = P(BOX, x=17, z=-8, yaw=44, cyaw=10, pitch=6, lf=planted(43, -17, 52, heel=14),
-            rf=planted(-11, 7, BOX_RF_YAW, heel=24), rh=(13, 40, 6), le=(0.1, 0.1, -1),
+            rf=planted(-11, 7, 0.0, heel=30), rh=(13, 40, 6), le=(0.1, 0.1, -1),
             lhw=(C123_BAG[0] - 17.7, 137, C123_BAG[1] - 14.8), lhk=1)
 LHOOK_C_PREP = P(BOX, x=4, z=-3, yaw=26, cyaw=-6, lf=planted(32, -13, 16), lh=(20, 43, -18), le=(-0.3, -1, -0.8))
 
@@ -304,7 +305,7 @@ def _parry_hook():
     g = _skl.solve_point(BLOCK, "lhand")
     tgt = (PARRY_DIST - g[0], g[1] + 1.0, g[2] - 11.0)
     return P(BOX, x=30, yaw=48, cyaw=10, pitch=6, lf=planted(56, -9, 52, heel=14),
-             rf=planted(0, 15, BOX_RF_YAW, heel=24), rh=(13, 40, 6), le=(0.1, 0.6, -1), lhw=tgt, lhk=1)
+             rf=planted(0, 15, 0.0, heel=30), rh=(13, 40, 6), le=(0.1, 0.6, -1), lhw=tgt, lhk=1)
 
 
 PARRY_DIST = 118.0
@@ -367,7 +368,7 @@ KB = P(BOX, y=92, yaw=33, pitch=3, cpitch=5, lf=planted(24, -7, KB_LF_YAW), rf=p
        lh=(24, 43, -14), rh=(14, 40, 7))
 KB_DIP = P(KB, y=89)
 # Torba merkezi (102.5, ~2): jab ve cross yumrukları aynı noktaya (torbanın önü) gider.
-KB_JAB = P(KB, yaw=40, cyaw=6, pitch=5, rf=planted(-24, 13, KB_RF_YAW, heel=22), le=(0, -1, -0.2),
+KB_JAB = P(KB, yaw=40, cyaw=6, pitch=5, rf=planted(-24, 13, 0.0, heel=28), le=(0, -1, -0.2),
            lhw=(81, 140, 0), lhk=1)
 KB_CROSS = P(KB, x=6, yaw=-4, cyaw=-14, pitch=8, rf=planted(-24, 13, 2, heel=48), lh=(18, 42, -9),
              re=(0, -1, 0.2), rhw=(81, 137, 4), rhk=1)
@@ -375,7 +376,7 @@ KB_CROSS = P(KB, x=6, yaw=-4, cyaw=-14, pitch=8, rf=planted(-24, 13, 2, heel=48)
 JCM_BAG = (102.5, -5.4)
 KB_LHOOK_PREP = P(KB, x=4, z=-3, yaw=22, cyaw=-6, lf=planted(26, -15, 14), lh=(20, 44, -18), le=(-0.3, -1, -0.8))
 KB_LHOOK = P(KB, x=12, z=-8, yaw=42, cyaw=10, pitch=6, lf=planted(24, -19, 52, heel=14),
-             rf=planted(-14, 6, KB_RF_YAW, heel=20), rh=(13, 41, 6), le=(0.1, 0.1, -1),
+             rf=planted(-14, 6, 0.0, heel=28), rh=(13, 41, 6), le=(0.1, 0.1, -1),
              lhw=(JCM_BAG[0] - 17.7, 139, JCM_BAG[1] - 14.8), lhk=1)
 TEEP_CH = P(KB, pitch=-4, lf=air((32, 52, -6), yaw=10, pitch=-15, knee=(1, 0.6, 0)), rf=planted(-24, 13, KB_RF_YAW, heel=8))
 TEEP = P(KB, x=4, pitch=-14, cpitch=0, lf=air((80, 94, -4), yaw=0, pitch=-55, knee=(1, 0.3, 0)),
