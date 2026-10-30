@@ -123,12 +123,13 @@ def _smooth(values, idx_nb, iters, keep=None):
 
 def garment(ch, bm, name, rules, offset, materials, thickness=0.003, smooth_iters=4,
             snap=None, subsurf=1, texspace=None, relax=None, keep_face=None, hem_z=None, edge_smooth=8,
-            cloth=None, shape=None):
+            cloth=None, shape=None, anatomy=1.0):
     """offset(dom_base, t, rest_pos) -> metre; materials: [(malzeme, yüz_seçici(merkez, kemik, t))...]
     snap: {kemik: t} – bu kemikteki sınır köşeleri tam t düzlemine taşınır (düz paça/kol ağzı).
     cloth: kumaş simülasyonu {"pin": pin(dom_base, t, rest_pos) -> 0..1, ...ayarlar}; pin 1 olan köşeler
     gövdeye bağlı kabukta kalır (bel lastiği), küçük değerler yalnızca hafifçe şekline çekilir (sarkan paça).
-    shape(pos, body_rest, komşular) -> pos: kabuğun son biçimlendirmesi (örn. ayakkabı burnu ve tabanı)."""
+    shape(pos, body_rest, komşular) -> pos: kabuğun son biçimlendirmesi (örn. ayakkabı burnu ve tabanı).
+    anatomy: gövdenin kas yontusunun giysiye geçen oranı (giysi gövde UV'sini taşır; deri kumaştan taşmasın)."""
     fids = bm.select_faces(rules)
     if keep_face is not None:
         fids = [k for k in fids if keep_face(ch.bv[ch.bf[k]].mean(axis=0), bm.fdom[k], bm.ft[k])]
@@ -227,6 +228,11 @@ def garment(ch, bm, name, rules, offset, materials, thickness=0.003, smooth_iter
     sub = ob.modifiers.new("Subsurf", "SUBSURF")
     sub.levels = 0
     sub.render_levels = subsurf
+    if anatomy:
+        # kas ayrıntısı derideki yoğunlukta örneklensin (kumaşlı giysiler zaten bir kez sıklaştırıldı)
+        if not cloth:
+            sub.render_levels = subsurf + 1
+        ch.displace(ob, anatomy)
     # malzemeler
     if texspace is None:
         lo, hi = pos.min(axis=0), pos.max(axis=0)
@@ -699,7 +705,7 @@ def wrestling_kit(ch, bm, singlet="#1F3FA8", trim="#F2F2F2", shoes="#1A1A1A", **
     center, half = (lo + hi) / 2, (hi - lo) / 2 + 0.05
     mat = fabric(f"{ch.name}_singlet", singlet, roughness=0.42, sheen=0.25, weave=320.0,
                  stripes=[(trim, leg_side_stripe(ch, 0.012))], center=center, half=half)
-    items = [garment(ch, bm, "singlet", rules, lambda b, t, p: 0.004, [(mat, None)], thickness=0.0015,
+    items = [garment(ch, bm, "singlet", rules, lambda b, t, p: 0.0065, [(mat, None)], thickness=0.0015,
                      smooth_iters=3, snap={"thigh": 0.32}, texspace=(center, half), keep_face=keep)]
     for sd in ("l", "r"):
         items.append(shoe(ch, bm, sd, 0.62, shoes, sole_color="#EDEDED", lace_color=shoes, pad=0.0035,
