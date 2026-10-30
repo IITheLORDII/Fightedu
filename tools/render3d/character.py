@@ -8,6 +8,7 @@ import bpy
 import numpy as np
 from mathutils import Matrix, Vector
 
+import muscles
 from mhbody import BaseMesh, Rig, shaped_vertices
 from shading import set_texspace, skin_material, srgb
 
@@ -206,6 +207,8 @@ class Character:
         verts *= self.scale
         self.verts = verts
         self.rig = Rig(base, verts)
+        # kasları ayrı hacimler olarak yont (iskelet eklem noktaları yardımcı ağdan, etkilenmez)
+        muscles.sculpt(base, verts, self.rig, target_height / 1.76)
         self.base = base
 
         self.arm_ob = self._armature()
