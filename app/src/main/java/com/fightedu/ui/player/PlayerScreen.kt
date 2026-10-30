@@ -1,7 +1,6 @@
 package com.fightedu.ui.player
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
@@ -181,7 +180,7 @@ private fun WorkContent(step: Step.Work, ui: PlayerUi, onDoneReps: () -> Unit) {
         Box(Modifier.fillMaxWidth()) {
             MoveAnimation(shown, modifier = Modifier.fillMaxWidth().aspectRatio(1.25f), paused = ui.paused)
             // koç komutu bandı
-            AnimatedVisibility(
+            androidx.compose.animation.AnimatedVisibility( // ColumnScope sürümü değil; Box içinde hizalanır
                 visible = ui.callout != null,
                 enter = fadeIn() + scaleIn(initialScale = 0.8f),
                 exit = fadeOut(),
