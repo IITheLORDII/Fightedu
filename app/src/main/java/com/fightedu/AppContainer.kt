@@ -2,7 +2,7 @@ package com.fightedu
 
 import android.content.Context
 import com.fightedu.core.content.ContentLibrary
-import com.fightedu.core.domain.PlanGenerator
+import com.fightedu.core.domain.TrainingPlanner
 import com.fightedu.data.TrainingRepository
 import com.fightedu.data.db.AppDatabase
 
@@ -14,7 +14,7 @@ class AppContainer(context: Context) {
         ContentLibrary.load { path -> appContext.assets.open(path).bufferedReader().use { it.readText() } }
     }
 
-    val planGenerator: PlanGenerator by lazy { PlanGenerator(content) }
+    val planner: TrainingPlanner by lazy { TrainingPlanner(content) }
 
     private val database: AppDatabase by lazy { AppDatabase.create(appContext) }
 

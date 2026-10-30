@@ -10,12 +10,14 @@ data class UserPlanEntity(
     val sportId: String,
     /** Pazartesi = bit 0 ... Pazar = bit 6 */
     val daysMask: Int,
-    val startEpochDay: Long,
     val reminderEnabled: Boolean = false,
     val reminderHour: Int = 18,
+    /** Antrenmanda Türkçe sesli koç. */
+    val voiceCoach: Boolean = true,
+    val vibration: Boolean = true,
 )
 
-/** Tamamlanan seans; anahtar PlannedSession.key ("w3_d1"). */
+/** Tamamlanan antrenman günü; anahtar ProgressTracker.keyOf(gün) ("day_3"). */
 @Entity(tableName = "completed_sessions")
 data class CompletedSessionEntity(
     @PrimaryKey val sessionKey: String,

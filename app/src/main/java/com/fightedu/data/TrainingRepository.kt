@@ -7,9 +7,10 @@ import com.fightedu.data.db.CompletedSessionEntity
 import com.fightedu.data.db.UserPlanEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import java.time.LocalDate
 
 data class ReminderSettings(val enabled: Boolean, val hour: Int)
+
+data class CoachSettings(val voice: Boolean = true, val vibration: Boolean = true)
 
 /** Kullanıcı planı ve ilerlemesinin cihazdaki (Room) kaydı. */
 class TrainingRepository(private val db: AppDatabase) {
@@ -22,11 +23,18 @@ class TrainingRepository(private val db: AppDatabase) {
         ReminderSettings(it?.reminderEnabled ?: false, it?.reminderHour ?: DEFAULT_REMINDER_HOUR)
     }
 
+    val coach: Flow<CoachSettings> = planDao.observe().map {
+        CoachSettings(it?.voiceCoach ?: true, it?.vibration ?: true)
+    }
+
     val completedKeys: Flow<Set<String>> = progressDao.observeAll().map { list -> list.map { it.sessionKey }.toSet() }
 
     suspend fun currentPlan(): PlanConfig? = planDao.get()?.toConfig()
 
     suspend fun completedKeysNow(): Set<String> = progressDao.keys().toSet()
+
+    /** En son tamamlanan antrenmanın zamanı (epoch ms). */
+    suspend fun lastCompletedAt(): Long? = progressDao.lastCompletedAt()
 
     suspend fun reminderNow(): ReminderSettings {
         val p = planDao.get()
@@ -42,9 +50,10 @@ class TrainingRepository(private val db: AppDatabase) {
                 UserPlanEntity(
                     sportId = config.sportId,
                     daysMask = PlanConfig.daysToMask(config.trainingDays),
-                    startEpochDay = config.startDate.toEpochDay(),
                     reminderEnabled = old?.reminderEnabled ?: false,
                     reminderHour = old?.reminderHour ?: DEFAULT_REMINDER_HOUR,
+                    voiceCoach = old?.voiceCoach ?: true,
+                    vibration = old?.vibration ?: true,
                 ),
             )
         }
@@ -53,6 +62,11 @@ class TrainingRepository(private val db: AppDatabase) {
     suspend fun setReminder(enabled: Boolean, hour: Int) {
         val current = planDao.get() ?: return
         planDao.upsert(current.copy(reminderEnabled = enabled, reminderHour = hour))
+    }
+
+    suspend fun setCoach(settings: CoachSettings) {
+        val current = planDao.get() ?: return
+        planDao.upsert(current.copy(voiceCoach = settings.voice, vibration = settings.vibration))
     }
 
     suspend fun markCompleted(sessionKey: String) {
@@ -71,7 +85,6 @@ class TrainingRepository(private val db: AppDatabase) {
     private fun UserPlanEntity.toConfig() = PlanConfig(
         sportId = sportId,
         trainingDays = PlanConfig.maskToDays(daysMask),
-        startDate = LocalDate.ofEpochDay(startEpochDay),
     )
 
     companion object {

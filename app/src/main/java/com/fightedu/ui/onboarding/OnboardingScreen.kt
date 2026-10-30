@@ -36,33 +36,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.fightedu.core.content.ContentLibrary
 import com.fightedu.core.domain.PlanConfig
-import com.fightedu.core.domain.PlanGenerator
 import com.fightedu.core.model.Sport
-import com.fightedu.ui.longLabel
 import com.fightedu.ui.longTr
 import com.fightedu.ui.shortTr
 import com.fightedu.ui.theme.parseColor
 import java.time.DayOfWeek
-import java.time.LocalDate
-import java.time.temporal.TemporalAdjusters
 
 private val RECOMMENDED_DAYS = mapOf(
     3 to setOf(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY),
     4 to setOf(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY),
     5 to setOf(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY),
 )
-
-private enum class StartOption(val label: String) {
-    TODAY("Bugün"),
-    TOMORROW("Yarın"),
-    NEXT_MONDAY("Gelecek Pazartesi");
-
-    fun date(today: LocalDate): LocalDate = when (this) {
-        TODAY -> today
-        TOMORROW -> today.plusDays(1)
-        NEXT_MONDAY -> today.with(TemporalAdjusters.next(DayOfWeek.MONDAY))
-    }
-}
 
 @Composable
 fun OnboardingScreen(
@@ -74,12 +58,10 @@ fun OnboardingScreen(
     var step by rememberSaveable { mutableIntStateOf(0) }
     var sportId by rememberSaveable { mutableStateOf(initialSportId) }
     var daysMask by rememberSaveable { mutableIntStateOf(PlanConfig.daysToMask(RECOMMENDED_DAYS.getValue(3))) }
-    var startOption by rememberSaveable { mutableStateOf(StartOption.TODAY) }
     var acceptedSafety by rememberSaveable { mutableStateOf(false) }
 
     val days = PlanConfig.maskToDays(daysMask)
     val daysValid = days.size in ContentLibrary.MIN_DAYS_PER_WEEK..ContentLibrary.MAX_DAYS_PER_WEEK
-    val today = LocalDate.now()
 
     Column(
         modifier = Modifier
@@ -90,7 +72,7 @@ fun OnboardingScreen(
     ) {
         Spacer(Modifier.padding(top = 12.dp))
         Text("FightEdu", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.primary)
-        Text("8 haftada temel dövüş eğitimi", style = MaterialTheme.typography.bodyMedium)
+        Text("24 günde koç eşliğinde temel dövüş eğitimi", style = MaterialTheme.typography.bodyMedium)
         LinearProgressIndicator(
             progress = { (step + 1) / 3f },
             modifier = Modifier
@@ -110,12 +92,10 @@ fun OnboardingScreen(
                 }
                 1 -> DaysStep(days) { daysMask = PlanConfig.daysToMask(it) }
                 else -> {
-                    val config = PlanConfig(sportId!!, days, startOption.date(today))
+                    val config = PlanConfig(sportId!!, days)
                     StartStep(
                         content = content,
                         config = config,
-                        startOption = startOption,
-                        onStartOption = { startOption = it },
                         acceptedSafety = acceptedSafety,
                         onAcceptedSafety = { acceptedSafety = it },
                     )
@@ -139,12 +119,12 @@ fun OnboardingScreen(
             }
             Button(
                 onClick = {
-                    if (step < 2) step++ else onCreate(PlanConfig(sportId!!, days, startOption.date(LocalDate.now())))
+                    if (step < 2) step++ else onCreate(PlanConfig(sportId!!, days))
                 },
                 enabled = canContinue,
                 modifier = Modifier.weight(1f),
             ) {
-                Text(if (step < 2) "Devam" else "Programı Oluştur")
+                Text(if (step < 2) "Devam" else "Antrenmana Başla")
             }
         }
     }
@@ -229,11 +209,13 @@ private fun DaysStep(days: Set<DayOfWeek>, onChange: (Set<DayOfWeek>) -> Unit) {
     Spacer(Modifier.padding(top = 16.dp))
     Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)) {
         Column(Modifier.padding(16.dp)) {
-            Text("Gün sayısına göre program", style = MaterialTheme.typography.titleMedium)
+            Text("Antrenmanlar sırayla ilerler", style = MaterialTheme.typography.titleMedium)
             Spacer(Modifier.padding(top = 4.dp))
-            Text("• 3 gün: Teknik + kombinasyon + savunma seansları", style = MaterialTheme.typography.bodyMedium)
-            Text("• 4 gün: + teknik tekrar seansı", style = MaterialTheme.typography.bodyMedium)
-            Text("• 5 gün: + kondisyon seansı", style = MaterialTheme.typography.bodyMedium)
+            Text(
+                "Gün 1'den Gün 24'e kadar her antrenmanı koç kurar: ip, gölge, torba/drill raundları, kondisyon ve " +
+                    "esneme. Seçtiğin günlerde sana hatırlatma gönderilir; bir günü kaçırırsan kaldığın yerden devam edersin.",
+                style = MaterialTheme.typography.bodyMedium,
+            )
         }
     }
 }
@@ -243,32 +225,23 @@ private fun DaysStep(days: Set<DayOfWeek>, onChange: (Set<DayOfWeek>) -> Unit) {
 private fun StartStep(
     content: ContentLibrary,
     config: PlanConfig,
-    startOption: StartOption,
-    onStartOption: (StartOption) -> Unit,
     acceptedSafety: Boolean,
     onAcceptedSafety: (Boolean) -> Unit,
 ) {
     val sport = content.sport(config.sportId)
-    val weeks = content.program(config.sportId)?.totalWeeks ?: ContentLibrary.MIN_WEEKS
-    val total = weeks * config.daysPerWeek
-    val dates = PlanGenerator.trainingDates(config, total)
+    val program = content.program(config.sportId)
+    val total = program?.totalDays ?: ContentLibrary.TOTAL_DAYS
+    val weeks = (total + config.daysPerWeek - 1) / config.daysPerWeek
 
-    Text("Ne zaman başlıyoruz?", style = MaterialTheme.typography.titleLarge)
+    Text("Hazırsın", style = MaterialTheme.typography.titleLarge)
     Spacer(Modifier.padding(top = 12.dp))
-    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        StartOption.entries.forEach { option ->
-            FilterChip(selected = option == startOption, onClick = { onStartOption(option) }, label = { Text(option.label) })
-        }
-    }
-    Spacer(Modifier.padding(top = 16.dp))
     Card(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text("${sport?.emoji.orEmpty()} ${sport?.name.orEmpty()} programın", style = MaterialTheme.typography.titleMedium)
-            Text("• $weeks hafta, haftada ${config.daysPerWeek} gün")
-            Text("• Toplam $total antrenman")
-            Text("• Günler: ${config.sortedDays.joinToString { it.shortTr }}")
-            Text("• İlk antrenman: ${dates.first().longLabel()}")
-            Text("• Tahmini bitiş: ${dates.last().longLabel()}")
+            Text("${sport?.emoji.orEmpty()} ${sport?.name.orEmpty()} antrenmanların", style = MaterialTheme.typography.titleMedium)
+            Text("• $total günlük antrenman, ${program?.phases?.size ?: 4} evre")
+            Text("• Haftada ${config.daysPerWeek} gün ile yaklaşık $weeks hafta")
+            Text("• Hatırlatma günleri: ${config.sortedDays.joinToString { it.shortTr }}")
+            program?.phases?.forEach { Text("• Gün ${it.from}–${it.to}: ${it.title}") }
         }
     }
     Spacer(Modifier.padding(top = 16.dp))

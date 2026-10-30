@@ -1,0 +1,2338 @@
+{
+ "sport": "taekwondo",
+ "phases": [
+  {
+   "title": "Temeller",
+   "from": 1,
+   "to": 6,
+   "goal": "Duruşlar, jireugi ve alt/orta blok."
+  },
+  {
+   "title": "Tekmeler",
+   "from": 7,
+   "to": 12,
+   "goal": "Ön, yuvarlak ve yan tekme; ayak oyunu."
+  },
+  {
+   "title": "İleri Tekmeler",
+   "from": 13,
+   "to": 18,
+   "goal": "Geri ve balta tekmesi, üst blok, form."
+  },
+  {
+   "title": "Form ve Tempo",
+   "from": 19,
+   "to": 24,
+   "goal": "Taegeuk 1, tekme kombinasyonları, dayanıklılık."
+  }
+ ],
+ "days": [
+  {
+   "day": 1,
+   "title": "Duruşlar",
+   "focus": "Ap seogi yürüyüş boyunda, ap kubi'de ön diz ayak ucunun üstünde.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "tkd_ap_seogi",
+      "tkd_ap_kubi"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Ap seogi yürüyüş boyunda, ap kubi'de ön diz ayak ucunun üstünde."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "tkd_footwork"
+     ],
+     "calls": [
+      "tkd_ap_seogi",
+      "tkd_ap_kubi",
+      "tkd_footwork"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Tekme raundu",
+     "mode": "round",
+     "rounds": 4,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "tkd_ap_kubi",
+      "tkd_ap_seogi"
+     ],
+     "calls": [
+      "tkd_ap_seogi",
+      "tkd_ap_kubi",
+      "tkd_footwork"
+     ],
+     "cue": "Tekme raundu: 4 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 2,
+   "title": "Jireugi",
+   "focus": "Yumruk kalçadan döner, çeken el avuç yukarı bele.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "tkd_jireugi",
+      "tkd_ap_kubi"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Yumruk kalçadan döner, çeken el avuç yukarı bele."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "tkd_footwork"
+     ],
+     "calls": [
+      "tkd_jireugi",
+      "tkd_ap_seogi"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Tekme raundu",
+     "mode": "round",
+     "rounds": 4,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "tkd_jireugi"
+     ],
+     "calls": [
+      "tkd_jireugi",
+      "tkd_ap_seogi"
+     ],
+     "cue": "Tekme raundu: 4 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_situp",
+      "gen_squat"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 3,
+   "title": "Alt Blok",
+   "focus": "Blok eli karşı omuzdan iner, çeken el bele.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "tkd_arae_makgi",
+      "tkd_ap_kubi"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Blok eli karşı omuzdan iner, çeken el bele."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "tkd_footwork"
+     ],
+     "calls": [
+      "tkd_arae_makgi",
+      "tkd_jireugi"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Tekme raundu",
+     "mode": "round",
+     "rounds": 4,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "tkd_arae_makgi",
+      "tkd_jireugi"
+     ],
+     "calls": [
+      "tkd_arae_makgi",
+      "tkd_jireugi"
+     ],
+     "cue": "Tekme raundu: 4 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_situp",
+      "gen_burpee",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 4,
+   "title": "Orta Blok",
+   "focus": "Kol dışarıdan içeriye, dirsek 90 derece.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "tkd_momtong_makgi",
+      "tkd_dwit_kubi"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Kol dışarıdan içeriye, dirsek 90 derece."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "tkd_footwork"
+     ],
+     "calls": [
+      "tkd_momtong_makgi",
+      "tkd_jireugi",
+      "tkd_arae_makgi"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Tekme raundu",
+     "mode": "round",
+     "rounds": 4,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "tkd_momtong_makgi",
+      "tkd_jireugi"
+     ],
+     "calls": [
+      "tkd_momtong_makgi",
+      "tkd_jireugi",
+      "tkd_arae_makgi"
+     ],
+     "cue": "Tekme raundu: 4 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 5,
+   "title": "Ön Tekme",
+   "focus": "Diz yukarı, ayak topuyla vur, hemen geri çek.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "tkd_ap_chagi",
+      "tkd_ap_seogi"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Diz yukarı, ayak topuyla vur, hemen geri çek."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "tkd_footwork"
+     ],
+     "calls": [
+      "tkd_ap_chagi",
+      "tkd_jireugi",
+      "tkd_footwork"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Tekme raundu",
+     "mode": "round",
+     "rounds": 4,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "tkd_ap_chagi"
+     ],
+     "calls": [
+      "tkd_ap_chagi",
+      "tkd_jireugi",
+      "tkd_footwork"
+     ],
+     "cue": "Tekme raundu: 4 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_situp",
+      "gen_squat"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 6,
+   "title": "Değerlendirme 1",
+   "focus": "Duruş, yumruk, blok ve ön tekme.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "tkd_footwork"
+     ],
+     "calls": [
+      "tkd_jireugi",
+      "tkd_arae_makgi",
+      "tkd_momtong_makgi",
+      "tkd_ap_chagi"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Tekme raundu",
+     "mode": "round",
+     "rounds": 6,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "tkd_ap_chagi",
+      "tkd_jireugi"
+     ],
+     "calls": [
+      "tkd_jireugi",
+      "tkd_arae_makgi",
+      "tkd_momtong_makgi",
+      "tkd_ap_chagi"
+     ],
+     "cue": "Tekme raundu: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_situp",
+      "gen_burpee",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 7,
+   "title": "Dollyo Chagi",
+   "focus": "Destek ayağı hedefe, kalça döner, ayak üstüyle vur.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "tkd_dollyo_chagi",
+      "tkd_footwork"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Destek ayağı hedefe, kalça döner, ayak üstüyle vur."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "tkd_footwork"
+     ],
+     "calls": [
+      "tkd_dollyo_chagi",
+      "tkd_ap_chagi"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Tekme raundu",
+     "mode": "round",
+     "rounds": 5,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "tkd_dollyo_chagi"
+     ],
+     "calls": [
+      "tkd_dollyo_chagi",
+      "tkd_ap_chagi"
+     ],
+     "cue": "Tekme raundu: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 8,
+   "title": "Ayak Oyunu",
+   "focus": "Hafif sekme, mesafeyi tekmeyle kontrol et.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "tkd_footwork",
+      "tkd_dollyo_chagi"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Hafif sekme, mesafeyi tekmeyle kontrol et."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "tkd_footwork"
+     ],
+     "calls": [
+      "tkd_footwork",
+      "tkd_dollyo_chagi",
+      "tkd_ap_chagi"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Tekme raundu",
+     "mode": "round",
+     "rounds": 5,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "tkd_dollyo_chagi",
+      "tkd_ap_chagi"
+     ],
+     "calls": [
+      "tkd_footwork",
+      "tkd_dollyo_chagi",
+      "tkd_ap_chagi"
+     ],
+     "cue": "Tekme raundu: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_situp",
+      "gen_squat"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 9,
+   "title": "Yeop Chagi",
+   "focus": "Yan dön, diz göğse, topuk önde düz it.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "tkd_yeop_chagi",
+      "tkd_dwit_kubi"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Yan dön, diz göğse, topuk önde düz it."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "tkd_footwork"
+     ],
+     "calls": [
+      "tkd_yeop_chagi",
+      "tkd_dollyo_chagi"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Tekme raundu",
+     "mode": "round",
+     "rounds": 5,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "tkd_yeop_chagi"
+     ],
+     "calls": [
+      "tkd_yeop_chagi",
+      "tkd_dollyo_chagi"
+     ],
+     "cue": "Tekme raundu: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_situp",
+      "gen_burpee",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 10,
+   "title": "Tekme Karışık",
+   "focus": "Ön, yuvarlak, yan: komuta göre değiştir.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "tkd_ap_chagi",
+      "tkd_yeop_chagi"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Ön, yuvarlak, yan: komuta göre değiştir."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "tkd_footwork"
+     ],
+     "calls": [
+      "tkd_ap_chagi",
+      "tkd_dollyo_chagi",
+      "tkd_yeop_chagi",
+      "tkd_footwork"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Tekme raundu",
+     "mode": "round",
+     "rounds": 5,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "tkd_dollyo_chagi",
+      "tkd_yeop_chagi"
+     ],
+     "calls": [
+      "tkd_ap_chagi",
+      "tkd_dollyo_chagi",
+      "tkd_yeop_chagi",
+      "tkd_footwork"
+     ],
+     "cue": "Tekme raundu: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 11,
+   "title": "Blok ve Karşı",
+   "focus": "Blokla, aynı anda çeken elle cevap ver.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "tkd_momtong_makgi",
+      "tkd_jireugi"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Blokla, aynı anda çeken elle cevap ver."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "tkd_footwork"
+     ],
+     "calls": [
+      "tkd_momtong_makgi",
+      "tkd_arae_makgi",
+      "tkd_jireugi",
+      "tkd_dollyo_chagi"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Tekme raundu",
+     "mode": "round",
+     "rounds": 5,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "tkd_jireugi",
+      "tkd_dollyo_chagi"
+     ],
+     "calls": [
+      "tkd_momtong_makgi",
+      "tkd_arae_makgi",
+      "tkd_jireugi",
+      "tkd_dollyo_chagi"
+     ],
+     "cue": "Tekme raundu: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_situp",
+      "gen_squat"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 12,
+   "title": "Değerlendirme 2",
+   "focus": "Üç temel tekme ve ayak oyunu.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "tkd_footwork"
+     ],
+     "calls": [
+      "tkd_ap_chagi",
+      "tkd_dollyo_chagi",
+      "tkd_yeop_chagi",
+      "tkd_footwork"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Tekme raundu",
+     "mode": "round",
+     "rounds": 7,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "tkd_dollyo_chagi",
+      "tkd_yeop_chagi"
+     ],
+     "calls": [
+      "tkd_ap_chagi",
+      "tkd_dollyo_chagi",
+      "tkd_yeop_chagi",
+      "tkd_footwork"
+     ],
+     "cue": "Tekme raundu: 7 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_situp",
+      "gen_burpee",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 13,
+   "title": "Dwi Chagi",
+   "focus": "Dön, omzun üstünden bak, topuk düz geriye.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "tkd_dwi_chagi",
+      "tkd_dwit_kubi"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Dön, omzun üstünden bak, topuk düz geriye."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "tkd_footwork"
+     ],
+     "calls": [
+      "tkd_dwi_chagi",
+      "tkd_dollyo_chagi"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Tekme raundu",
+     "mode": "round",
+     "rounds": 5,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "tkd_dwi_chagi"
+     ],
+     "calls": [
+      "tkd_dwi_chagi",
+      "tkd_dollyo_chagi"
+     ],
+     "cue": "Tekme raundu: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 14,
+   "title": "Naeryo Chagi",
+   "focus": "Bacak düz yukarı, topukla aşağı in.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "tkd_naeryo_chagi",
+      "tkd_ap_seogi"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Bacak düz yukarı, topukla aşağı in."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "tkd_footwork"
+     ],
+     "calls": [
+      "tkd_naeryo_chagi",
+      "tkd_ap_chagi"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Tekme raundu",
+     "mode": "round",
+     "rounds": 5,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "tkd_naeryo_chagi"
+     ],
+     "calls": [
+      "tkd_naeryo_chagi",
+      "tkd_ap_chagi"
+     ],
+     "cue": "Tekme raundu: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_situp",
+      "gen_squat"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 15,
+   "title": "Üst Blok",
+   "focus": "Kol alnın üstünde, bilek dışa dönük.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "tkd_olgul_makgi",
+      "tkd_ap_kubi"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Kol alnın üstünde, bilek dışa dönük."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "tkd_footwork"
+     ],
+     "calls": [
+      "tkd_olgul_makgi",
+      "tkd_jireugi",
+      "tkd_momtong_makgi"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Tekme raundu",
+     "mode": "round",
+     "rounds": 5,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "tkd_olgul_makgi",
+      "tkd_jireugi"
+     ],
+     "calls": [
+      "tkd_olgul_makgi",
+      "tkd_jireugi",
+      "tkd_momtong_makgi"
+     ],
+     "cue": "Tekme raundu: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_situp",
+      "gen_burpee",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 16,
+   "title": "Taegeuk 1 – Bölüm 1",
+   "focus": "Formun ilk bölümü: yavaş, net duruşlar.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "tkd_taegeuk1",
+      "tkd_arae_makgi"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Formun ilk bölümü: yavaş, net duruşlar."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "tkd_footwork"
+     ],
+     "calls": [
+      "tkd_arae_makgi",
+      "tkd_jireugi",
+      "tkd_ap_seogi"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Tekme raundu",
+     "mode": "round",
+     "rounds": 5,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "tkd_taegeuk1"
+     ],
+     "calls": [
+      "tkd_arae_makgi",
+      "tkd_jireugi",
+      "tkd_ap_seogi"
+     ],
+     "cue": "Tekme raundu: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 17,
+   "title": "İleri Tekmeler",
+   "focus": "Dwi ve naeryo arası geçiş; her tekmeden sonra gard.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "tkd_dwi_chagi",
+      "tkd_naeryo_chagi"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Dwi ve naeryo arası geçiş; her tekmeden sonra gard."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "tkd_footwork"
+     ],
+     "calls": [
+      "tkd_dwi_chagi",
+      "tkd_naeryo_chagi",
+      "tkd_dollyo_chagi"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Tekme raundu",
+     "mode": "round",
+     "rounds": 5,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "tkd_dwi_chagi",
+      "tkd_naeryo_chagi"
+     ],
+     "calls": [
+      "tkd_dwi_chagi",
+      "tkd_naeryo_chagi",
+      "tkd_dollyo_chagi"
+     ],
+     "cue": "Tekme raundu: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_situp",
+      "gen_squat"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 18,
+   "title": "Değerlendirme 3",
+   "focus": "İleri tekmeler ve form.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "tkd_footwork"
+     ],
+     "calls": [
+      "tkd_dwi_chagi",
+      "tkd_naeryo_chagi",
+      "tkd_yeop_chagi",
+      "tkd_olgul_makgi"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Tekme raundu",
+     "mode": "round",
+     "rounds": 7,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "tkd_taegeuk1",
+      "tkd_dwi_chagi"
+     ],
+     "calls": [
+      "tkd_dwi_chagi",
+      "tkd_naeryo_chagi",
+      "tkd_yeop_chagi",
+      "tkd_olgul_makgi"
+     ],
+     "cue": "Tekme raundu: 7 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_situp",
+      "gen_burpee",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 19,
+   "title": "Taegeuk 1 – Tam Form",
+   "focus": "Formu baştan sona; her hareket sonunda dur ve kontrol et.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "tkd_taegeuk1",
+      "tkd_ap_kubi"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Formu baştan sona; her hareket sonunda dur ve kontrol et."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 3,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "tkd_footwork"
+     ],
+     "calls": [
+      "tkd_arae_makgi",
+      "tkd_olgul_makgi",
+      "tkd_ap_chagi",
+      "tkd_jireugi"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Tekme raundu",
+     "mode": "round",
+     "rounds": 6,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "tkd_taegeuk1"
+     ],
+     "calls": [
+      "tkd_arae_makgi",
+      "tkd_olgul_makgi",
+      "tkd_ap_chagi",
+      "tkd_jireugi"
+     ],
+     "cue": "Tekme raundu: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 20,
+   "title": "Kombinasyonlar",
+   "focus": "Dollyo–dwi, ap–dollyo: ikinci tekme ilkinin dönüşünden.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "tkd_dollyo_chagi",
+      "tkd_dwi_chagi"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Dollyo–dwi, ap–dollyo: ikinci tekme ilkinin dönüşünden."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 3,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "tkd_footwork"
+     ],
+     "calls": [
+      "tkd_ap_chagi",
+      "tkd_dollyo_chagi",
+      "tkd_dwi_chagi",
+      "tkd_footwork"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Tekme raundu",
+     "mode": "round",
+     "rounds": 6,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "tkd_dollyo_chagi",
+      "tkd_dwi_chagi"
+     ],
+     "calls": [
+      "tkd_ap_chagi",
+      "tkd_dollyo_chagi",
+      "tkd_dwi_chagi",
+      "tkd_footwork"
+     ],
+     "cue": "Tekme raundu: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_situp",
+      "gen_squat"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 21,
+   "title": "Güç Raundu",
+   "focus": "Her tekme tam kalça dönüşüyle; az ama sert.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "tkd_yeop_chagi",
+      "tkd_naeryo_chagi"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Her tekme tam kalça dönüşüyle; az ama sert."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 3,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "tkd_footwork"
+     ],
+     "calls": [
+      "tkd_yeop_chagi",
+      "tkd_naeryo_chagi",
+      "tkd_dollyo_chagi"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Tekme raundu",
+     "mode": "round",
+     "rounds": 6,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "tkd_yeop_chagi",
+      "tkd_dollyo_chagi"
+     ],
+     "calls": [
+      "tkd_yeop_chagi",
+      "tkd_naeryo_chagi",
+      "tkd_dollyo_chagi"
+     ],
+     "cue": "Tekme raundu: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_situp",
+      "gen_burpee",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 22,
+   "title": "Duruş ve Blok Akışı",
+   "focus": "Dwit kubi'de orta blok, ap kubi'de yumruk.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "tkd_dwit_kubi",
+      "tkd_momtong_makgi"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Dwit kubi'de orta blok, ap kubi'de yumruk."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 3,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "tkd_footwork"
+     ],
+     "calls": [
+      "tkd_momtong_makgi",
+      "tkd_olgul_makgi",
+      "tkd_jireugi",
+      "tkd_arae_makgi"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Tekme raundu",
+     "mode": "round",
+     "rounds": 6,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "tkd_taegeuk1",
+      "tkd_jireugi"
+     ],
+     "calls": [
+      "tkd_momtong_makgi",
+      "tkd_olgul_makgi",
+      "tkd_jireugi",
+      "tkd_arae_makgi"
+     ],
+     "cue": "Tekme raundu: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 23,
+   "title": "Yüksek Tempo",
+   "focus": "Raundun her dakikası farklı tempo: hafif, orta, tam güç.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "tkd_footwork",
+      "tkd_ap_chagi"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Raundun her dakikası farklı tempo: hafif, orta, tam güç."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 3,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "tkd_footwork"
+     ],
+     "calls": [
+      "tkd_ap_chagi",
+      "tkd_dollyo_chagi",
+      "tkd_yeop_chagi",
+      "tkd_dwi_chagi"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Tekme raundu",
+     "mode": "round",
+     "rounds": 6,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "tkd_dollyo_chagi",
+      "tkd_ap_chagi"
+     ],
+     "calls": [
+      "tkd_ap_chagi",
+      "tkd_dollyo_chagi",
+      "tkd_yeop_chagi",
+      "tkd_dwi_chagi"
+     ],
+     "cue": "Tekme raundu: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_situp",
+      "gen_squat"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 24,
+   "title": "Final",
+   "focus": "Form + 8 raunt tekme: son raundu en iyi raundun yap.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 3,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "tkd_footwork"
+     ],
+     "calls": [
+      "tkd_dollyo_chagi",
+      "tkd_dwi_chagi",
+      "tkd_naeryo_chagi",
+      "tkd_yeop_chagi",
+      "tkd_ap_chagi"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Tekme raundu",
+     "mode": "round",
+     "rounds": 8,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "tkd_dollyo_chagi",
+      "tkd_taegeuk1",
+      "tkd_yeop_chagi"
+     ],
+     "calls": [
+      "tkd_dollyo_chagi",
+      "tkd_dwi_chagi",
+      "tkd_naeryo_chagi",
+      "tkd_yeop_chagi",
+      "tkd_ap_chagi"
+     ],
+     "cue": "Tekme raundu: 8 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_situp",
+      "gen_burpee",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  }
+ ]
+}

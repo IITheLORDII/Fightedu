@@ -1,46 +1,50 @@
 # FightEdu 🥊🦵🤼🥋
 
-**Boks, Kick Boks, Güreş ve Tekvando** için yeni başlayanları **8 haftalık (2 ay)** programla
+**Boks, Kick Boks, Güreş ve Tekvando** için yeni başlayanları **24 günlük, koç yönetimli** antrenmanlarla
 temel seviyeye getiren, tamamen çevrimdışı çalışan bir Android uygulaması.
 
 ## Özellikler
 
-- **Kişiye göre program:** Kullanıcı sporu, haftada kaç gün (3/4/5) ve **hangi günler** çalışacağını
-  seçer. 8 haftalık program bu günlere otomatik yerleştirilir ve takvim tarihleri hesaplanır.
-- **4 evreli müfredat (her spor için):**
-  1. Hafta 1-2 – Temeller (duruş, ayak oyunu, temel teknikler)
-  2. Hafta 3-4 – Yeni teknikler ve savunma
-  3. Hafta 5-6 – Akıcılık, kombinasyonlar ve raunt temposu
-  4. Hafta 7-8 – Pekiştirme ve **değerlendirme seansı**
-- **Gün sayısına göre seanslar:** 3 gün → A, B, C · 4 gün → + D (teknik tekrar) · 5 gün → + E (kondisyon).
-  Her evrenin 2. haftasında tekrar/süreler %15 artar (kademeli yüklenme).
+- **Koç yönetimli günlük antrenman:** Program bir tablo değil; kullanıcı "**Gün 3 antrenmanını başlat**"
+  der, koç günü kurar ve raunt raunt ilerletir. Örnek gün: *2 raunt ip → 3 dk teknik → 2 raunt gölge boksu →
+  6 raunt torba → kondisyon devresi → esneme*. Günler sırayla açılır (Gün 1 → Gün 24); bir günü kaçırmak
+  sorun değil, kaldığın yerden devam edersin. Seçilen hafta günleri yalnızca hatırlatıcı içindir.
+- **4 evre (her spor için, 6'şar gün):** temeller → yeni teknikler → raunt temposu/kombinasyonlar →
+  dövüş temposu ve final. Raunt süresi 2 → 3 dakikaya, ana raunt sayısı 4 → 8'e çıkar; her evrenin son
+  günü bir değerlendirme günüdür. Güreşte torba yerine dalış/sprawl drilleri, tekvandoda tekme raundları
+  ve Taegeuk 1 formu vardır.
 - **Gerçekçi hareket videoları:** 63 hareketin her biri, gerçek insan oranlarına ve kas yapısına sahip
   3B bir sporcuyla (stüdyo ışığında render edilmiş, döngüsel kısa video) gösterilir. Kıyafetler spora
   göredir: boksta şort, eldiven ve bot; kick boksta tay şortu ve eldiven; güreşte mayo ve güreş
   ayakkabısı; tekvandoda dobok ve kuşak. Kalça/omuz dönüşü, ayak pivotu ve ağırlık aktarımı görünür;
   vuruşlar kum torbasına veya partnere yapılır, savunmalar gelen saldırıya karşı gösterilir
   (yavaş çekim seçeneği). Her hareketin adım adım anlatımı, sık yapılan hataları ve ipucu vardır.
-- **Antrenman oynatıcısı:** Isınma → ana bölüm → soğuma; set/tekrar takibi, geri sayım, dinlenme
-  zamanlayıcısı, sesli uyarı, ekranın açık kalması.
-- **İlerleme takibi:** Tamamlanan seanslar cihazda (Room) saklanır. Bir sonraki hafta, öncekinin
-  %70'i tamamlanınca açılır (yumuşak kilit – istenirse uyarıyla geçilebilir).
-- **Hatırlatıcı:** Antrenman günlerinde seçilen saatte bildirim (WorkManager).
+- **Antrenman oynatıcısı:** Raunt sayacı ("RAUNT 3 / 6"), halka geri sayım, blok renkli ilerleme şeridi,
+  hareket videosu, koç komutları ekranda ("BİR-İKİ!") ve videoda o hareket; dinlenme ekranında sıradaki
+  raunt/blok, +15 sn; devre (istasyon) ve tekrarlı bloklar; bitişte özet. Ekran açık kalır, döndürmede
+  kaldığı yerden devam eder.
+- **Türkçe sesli koç:** Raunt başı/sonu gong, "Raunt 3. Başla!", raunt içinde komutlar ("Jab!",
+  "Bir iki üç!", "Low kick!"), "Son on saniye!", dinlenmede sıradaki blok; titreşim. Cihazın metin okuma
+  motorunu kullanır (Türkçe ses yoksa yalnızca zil); ayarlardan kapatılabilir.
+- **İlerleme takibi:** Tamamlanan günler cihazda (Room) saklanır; evre ve genel ilerleme ana sayfada.
+- **Hatırlatıcı:** Seçilen hafta günlerinde, o gün antrenman yapılmadıysa sıradaki günü hatırlatan bildirim (WorkManager).
 - **Hareket kütüphanesi:** Spora ve kategoriye göre filtrelenebilir.
 
 ## Proje yapısı
 
 ```
 core/                      Saf Kotlin (JVM) modül – Android'e bağımlı değil, birim testli
-  model/Content.kt           Sport, Move, ProgramTemplate... (kotlinx.serialization)
+  model/Content.kt           Sport, Move, TrainingProgram/Day/Block (kotlinx.serialization)
   content/ContentLibrary.kt  assets/content JSON'larını yükler ve doğrular
-  domain/PlanGenerator.kt    Kullanıcı seçimlerinden 8 haftalık takvimli program üretir
-  domain/Progress.kt         İlerleme, hafta kilidi, sıradaki seans
-  domain/Workout.kt          Oynatıcı adımları (set/dinlenme) ve süre tahmini
+  domain/Training.kt         Günü raunt/istasyon adımlarına açar (TrainingPlanner), koç komut zamanları,
+                             oynatıcı durum makinesi ve olayları (SessionRunner)
+  domain/Progress.kt         Sıralı gün ilerlemesi, sıradaki gün, evre ilerlemesi
 app/                       Android uygulaması (Jetpack Compose, Material 3)
   data/                      Room veritabanı + TrainingRepository
   reminders/                 WorkManager hatırlatıcısı
-  ui/                        Ekranlar: onboarding, ana sayfa, program, seans, oynatıcı, kütüphane, ayarlar
-  src/main/assets/content/   Sporlar, hareketler ve program şablonları (JSON)
+  coach/Coach.kt             Sesli koç: TextToSpeech (tr-TR), gong/bip, titreşim
+  ui/                        Ekranlar: onboarding, ana sayfa, antrenmanlar, gün, oynatıcı, kütüphane, ayarlar
+  src/main/assets/content/   Sporlar, hareketler ve günlük antrenman programları (JSON)
   src/main/assets/video/     Hareket videoları (H.264 MP4, döngüsel)
   src/main/assets/poster/    Liste küçük resimleri (WebP)
 tools/lottie_gen/          Hareket tanımları (3B anahtar pozlar) + hızlı 2B Lottie önizleme
@@ -52,7 +56,7 @@ tools/render3d/            Gerçekçi render: MakeHuman gövdesi + Blender Cycle
 Gereksinimler: Android Studio (Ladybug veya üstü) ya da JDK 17 + Android SDK 35.
 
 ```bash
-./gradlew :core:test            # program üretici ve içerik testleri
+./gradlew :core:test            # içerik, planlayıcı, oynatıcı durum makinesi ve ilerleme testleri
 ./gradlew :app:assembleDebug    # APK: app/build/outputs/apk/debug/
 ```
 
@@ -62,10 +66,12 @@ debug APK'yı **fightedu-debug-apk** artifact'ı olarak yükler.
 ## İçerik düzenleme
 
 - **Hareket eklemek/değiştirmek:** `app/src/main/assets/content/moves_<spor>.json`
-- **Programı değiştirmek:** `app/src/main/assets/content/program_<spor>.json`
-  (her evrede 5 seans şablonu – A..E – olmalı; her egzersizde `reps` veya `sec`'ten biri bulunmalı)
-- `./gradlew :core:test` içerik tutarlılığını (geçersiz hareket referansı, eksik video/kapak resmi, hafta sayısı)
-  otomatik doğrular.
+- **Antrenmanları değiştirmek:** `tools/content/make_training.py` içindeki gün tanımlarını (tema, koç notu,
+  teknik hareketleri, komutlar, ana raunt hareketleri) düzenleyip `python3 tools/content/make_training.py`
+  çalıştır; `app/src/main/assets/content/training_<spor>.json` yeniden üretilir. Blok biçimleri:
+  `round` (raunt; `calls` koç komutları), `circuit` (istasyonlu devre), `reps` (tekrarlı set).
+- `./gradlew :core:test` içerik tutarlılığını (24 gün, evre kapsamı, geçersiz hareket, eksik video/kapak resmi,
+  her hareketin kullanılması, günlük süre 20–60 dk) otomatik doğrular.
 
 ## Hareket videoları
 

@@ -32,11 +32,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.fightedu.data.CoachSettings
 import com.fightedu.reminders.ReminderNotifications
 import com.fightedu.ui.UiState
 import com.fightedu.ui.components.AppScaffold
 import com.fightedu.ui.components.SectionTitle
-import com.fightedu.ui.longLabel
 import com.fightedu.ui.longTr
 
 private val REMINDER_HOURS = listOf(7, 9, 12, 17, 18, 19, 20)
@@ -46,6 +46,7 @@ private val REMINDER_HOURS = listOf(7, 9, 12, 17, 18, 19, 20)
 fun SettingsScreen(
     state: UiState,
     onSetReminder: (enabled: Boolean, hour: Int) -> Unit,
+    onSetCoach: (CoachSettings) -> Unit,
     onResetPlan: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -81,12 +82,28 @@ fun SettingsScreen(
                     if (plan != null) {
                         Text("${sport?.emoji.orEmpty()} ${sport?.name.orEmpty()}", style = MaterialTheme.typography.titleMedium)
                         Text("Haftada ${plan.daysPerWeek} gün: ${plan.sortedDays.joinToString { it.longTr }}")
-                        Text("Başlangıç: ${plan.startDate.longLabel()}")
-                        state.sessions.lastOrNull()?.let { Text("Bitiş: ${it.date.longLabel()}") }
-                        Text("Tamamlanan: ${state.tracker.completedCount} / ${state.sessions.size}")
+                        state.tracker?.let { Text("Tamamlanan: ${it.completedCount} / ${it.totalDays} gün") }
                     }
                     Spacer(Modifier.padding(top = 8.dp))
                     OutlinedButton(onClick = { confirmReset = true }) { Text("Spor / günleri değiştir") }
+                }
+            }
+
+            SectionTitle("Koç")
+            Card(Modifier.fillMaxWidth()) {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    SettingSwitch(
+                        title = "Sesli koç",
+                        subtitle = "Raunt başı, komutlar (\"Bir-iki!\"), son 10 saniye ve dinlenme Türkçe söylenir.",
+                        checked = state.coach.voice,
+                        onChange = { onSetCoach(state.coach.copy(voice = it)) },
+                    )
+                    SettingSwitch(
+                        title = "Titreşim",
+                        subtitle = "Raunt ve dinlenme başında kısa titreşim.",
+                        checked = state.coach.vibration,
+                        onChange = { onSetCoach(state.coach.copy(vibration = it)) },
+                    )
                 }
             }
 
@@ -97,7 +114,7 @@ fun SettingsScreen(
                         Column(Modifier.weight(1f)) {
                             Text("Antrenman günlerinde bildirim", style = MaterialTheme.typography.bodyLarge)
                             Text(
-                                "Seçtiğin saatte, o günün antrenmanı henüz yapılmadıysa hatırlatır.",
+                                "Seçtiğin günlerde ve saatte, o gün antrenman yapılmadıysa sıradaki günü hatırlatır.",
                                 style = MaterialTheme.typography.bodySmall,
                             )
                         }
@@ -163,5 +180,16 @@ fun SettingsScreen(
             },
             dismissButton = { TextButton(onClick = { confirmReset = false }) { Text("Vazgeç") } },
         )
+    }
+}
+
+@Composable
+private fun SettingSwitch(title: String, subtitle: String, checked: Boolean, onChange: (Boolean) -> Unit) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Column(Modifier.weight(1f)) {
+            Text(title, style = MaterialTheme.typography.bodyLarge)
+            Text(subtitle, style = MaterialTheme.typography.bodySmall)
+        }
+        Switch(checked = checked, onCheckedChange = onChange)
     }
 }

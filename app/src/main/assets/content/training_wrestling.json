@@ -1,0 +1,2341 @@
+{
+ "sport": "wrestling",
+ "phases": [
+  {
+   "title": "Temeller",
+   "from": 1,
+   "to": 6,
+   "goal": "Duruş, seviye değiştirme ve penetrasyon."
+  },
+  {
+   "title": "Dalışlar",
+   "from": 7,
+   "to": 12,
+   "goal": "Çift ve tek bacak dalışı, sprawl savunması."
+  },
+  {
+   "title": "Bağlantılar",
+   "from": 13,
+   "to": 18,
+   "goal": "El mücadelesi, snap down ve yer çıkışları."
+  },
+  {
+   "title": "Maç Temposu",
+   "from": 19,
+   "to": 24,
+   "goal": "Zincir drill, yüksek tempo ve dayanıklılık."
+  }
+ ],
+ "days": [
+  {
+   "day": 1,
+   "title": "Duruş",
+   "focus": "Dizler bükük, sırt düz, eller önde; ağırlık ayak uçlarında.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "wr_stance",
+      "wr_level_change"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Dizler bükük, sırt düz, eller önde; ağırlık ayak uçlarında."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_level_change",
+      "wr_stance"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Dalış drilli",
+     "mode": "round",
+     "rounds": 4,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "wr_level_change",
+      "wr_stance"
+     ],
+     "calls": [
+      "wr_level_change",
+      "wr_stance"
+     ],
+     "cue": "Dalış drilli: 4 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 2,
+   "title": "Seviye Değiştirme",
+   "focus": "Belden değil dizlerden in; baş yukarıda, sırt düz.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "wr_level_change",
+      "wr_stance"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Belden değil dizlerden in; baş yukarıda, sırt düz."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_level_change",
+      "wr_penetration"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Dalış drilli",
+     "mode": "round",
+     "rounds": 4,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "wr_level_change"
+     ],
+     "calls": [
+      "wr_level_change",
+      "wr_penetration"
+     ],
+     "cue": "Dalış drilli: 4 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_situp",
+      "gen_squat"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 3,
+   "title": "Penetrasyon",
+   "focus": "Ön diz yere yakın kayar, arka ayak hemen toparlanır.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "wr_penetration",
+      "wr_level_change"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Ön diz yere yakın kayar, arka ayak hemen toparlanır."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_penetration",
+      "wr_level_change"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Dalış drilli",
+     "mode": "round",
+     "rounds": 4,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "wr_penetration"
+     ],
+     "calls": [
+      "wr_penetration",
+      "wr_level_change"
+     ],
+     "cue": "Dalış drilli: 4 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_situp",
+      "gen_burpee",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 4,
+   "title": "Köprü",
+   "focus": "Boyun ve ayaklar üzerinde kalça yukarı; yavaş ve kontrollü.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "wr_bridge",
+      "wr_stance"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Boyun ve ayaklar üzerinde kalça yukarı; yavaş ve kontrollü."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_level_change",
+      "wr_penetration"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Dalış drilli",
+     "mode": "round",
+     "rounds": 4,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "wr_penetration",
+      "wr_level_change"
+     ],
+     "calls": [
+      "wr_level_change",
+      "wr_penetration"
+     ],
+     "cue": "Dalış drilli: 4 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 5,
+   "title": "Sprawl",
+   "focus": "Kalçayı yere at, bacaklar geriye; eller rakibin sırtında.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "wr_sprawl",
+      "wr_stance"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Kalçayı yere at, bacaklar geriye; eller rakibin sırtında."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_sprawl",
+      "wr_level_change",
+      "wr_penetration"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Dalış drilli",
+     "mode": "round",
+     "rounds": 4,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "wr_sprawl",
+      "wr_penetration"
+     ],
+     "calls": [
+      "wr_sprawl",
+      "wr_level_change",
+      "wr_penetration"
+     ],
+     "cue": "Dalış drilli: 4 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_situp",
+      "gen_squat"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 6,
+   "title": "Değerlendirme 1",
+   "focus": "Seviye değiştir, penetrasyon, sprawl: komutlara anında tepki.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_level_change",
+      "wr_penetration",
+      "wr_sprawl"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Dalış drilli",
+     "mode": "round",
+     "rounds": 6,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "wr_penetration",
+      "wr_sprawl"
+     ],
+     "calls": [
+      "wr_level_change",
+      "wr_penetration",
+      "wr_sprawl"
+     ],
+     "cue": "Dalış drilli: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_situp",
+      "gen_burpee",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 7,
+   "title": "Çift Bacak",
+   "focus": "Penetrasyon + iki dizin arkası; baş yan tarafta, kalçayı sür.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "wr_double_leg",
+      "wr_penetration"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Penetrasyon + iki dizin arkası; baş yan tarafta, kalçayı sür."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_double_leg",
+      "wr_level_change",
+      "wr_sprawl"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Dalış drilli",
+     "mode": "round",
+     "rounds": 5,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "wr_double_leg"
+     ],
+     "calls": [
+      "wr_double_leg",
+      "wr_level_change",
+      "wr_sprawl"
+     ],
+     "cue": "Dalış drilli: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 8,
+   "title": "Tek Bacak",
+   "focus": "Ön bacağı yakala, baş içeride; bacağı kaldır ve döndür.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "wr_single_leg",
+      "wr_penetration"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Ön bacağı yakala, baş içeride; bacağı kaldır ve döndür."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_single_leg",
+      "wr_level_change",
+      "wr_sprawl"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Dalış drilli",
+     "mode": "round",
+     "rounds": 5,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "wr_single_leg"
+     ],
+     "calls": [
+      "wr_single_leg",
+      "wr_level_change",
+      "wr_sprawl"
+     ],
+     "cue": "Dalış drilli: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_situp",
+      "gen_squat"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 9,
+   "title": "Dalış Karışık",
+   "focus": "Komuta göre çift ya da tek bacak; her dalıştan sonra hemen duruşa dön.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "wr_double_leg",
+      "wr_single_leg"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Komuta göre çift ya da tek bacak; her dalıştan sonra hemen duruşa dön."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_double_leg",
+      "wr_single_leg",
+      "wr_sprawl"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Dalış drilli",
+     "mode": "round",
+     "rounds": 5,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "wr_double_leg",
+      "wr_single_leg"
+     ],
+     "calls": [
+      "wr_double_leg",
+      "wr_single_leg",
+      "wr_sprawl"
+     ],
+     "cue": "Dalış drilli: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_situp",
+      "gen_burpee",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 10,
+   "title": "Sprawl ve Dönüş",
+   "focus": "Sprawl'dan sonra yana dön, arkaya geç.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "wr_sprawl",
+      "wr_bridge"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Sprawl'dan sonra yana dön, arkaya geç."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_sprawl",
+      "wr_double_leg",
+      "wr_level_change"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Dalış drilli",
+     "mode": "round",
+     "rounds": 5,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "wr_sprawl",
+      "wr_double_leg"
+     ],
+     "calls": [
+      "wr_sprawl",
+      "wr_double_leg",
+      "wr_level_change"
+     ],
+     "cue": "Dalış drilli: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 11,
+   "title": "Yerden Çıkış",
+   "focus": "Sit-out ile yana dön, stand-up ile ayağa kalk; eller kontrolde.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "wr_sit_out",
+      "wr_stand_up"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Sit-out ile yana dön, stand-up ile ayağa kalk; eller kontrolde."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_sit_out",
+      "wr_stand_up",
+      "wr_sprawl"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Dalış drilli",
+     "mode": "round",
+     "rounds": 5,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "wr_sit_out",
+      "wr_stand_up"
+     ],
+     "calls": [
+      "wr_sit_out",
+      "wr_stand_up",
+      "wr_sprawl"
+     ],
+     "cue": "Dalış drilli: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_situp",
+      "gen_squat"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 12,
+   "title": "Değerlendirme 2",
+   "focus": "Dalış + savunma + yerden çıkış.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_double_leg",
+      "wr_single_leg",
+      "wr_sprawl",
+      "wr_stand_up"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Dalış drilli",
+     "mode": "round",
+     "rounds": 7,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "wr_double_leg",
+      "wr_sit_out"
+     ],
+     "calls": [
+      "wr_double_leg",
+      "wr_single_leg",
+      "wr_sprawl",
+      "wr_stand_up"
+     ],
+     "cue": "Dalış drilli: 7 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_situp",
+      "gen_burpee",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 13,
+   "title": "El Mücadelesi",
+   "focus": "Bilekleri kontrol et, dirsekleri içeride tut; açıklık yarat.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "wr_hand_fight",
+      "wr_stance"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Bilekleri kontrol et, dirsekleri içeride tut; açıklık yarat."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_hand_fight",
+      "wr_level_change",
+      "wr_single_leg"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Dalış drilli",
+     "mode": "round",
+     "rounds": 5,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "wr_hand_fight"
+     ],
+     "calls": [
+      "wr_hand_fight",
+      "wr_level_change",
+      "wr_single_leg"
+     ],
+     "cue": "Dalış drilli: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 14,
+   "title": "Snap Down",
+   "focus": "Başı çek, rakibi öne düşür, arkasına geç.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "wr_snap_down",
+      "wr_hand_fight"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Başı çek, rakibi öne düşür, arkasına geç."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_snap_down",
+      "wr_hand_fight",
+      "wr_sprawl"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Dalış drilli",
+     "mode": "round",
+     "rounds": 5,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "wr_snap_down",
+      "wr_hand_fight"
+     ],
+     "calls": [
+      "wr_snap_down",
+      "wr_hand_fight",
+      "wr_sprawl"
+     ],
+     "cue": "Dalış drilli: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_situp",
+      "gen_squat"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 15,
+   "title": "Zincir Drill",
+   "focus": "Bir hareket diğerine bağlanır: hand fight, seviye, dalış.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "wr_shadow",
+      "wr_hand_fight"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Bir hareket diğerine bağlanır: hand fight, seviye, dalış."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_hand_fight",
+      "wr_double_leg",
+      "wr_snap_down"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Dalış drilli",
+     "mode": "round",
+     "rounds": 5,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_hand_fight",
+      "wr_double_leg",
+      "wr_snap_down"
+     ],
+     "cue": "Dalış drilli: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_situp",
+      "gen_burpee",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 16,
+   "title": "Alt Pozisyon",
+   "focus": "Sit-out, stand-up, köprü: yerde asla düz kalma.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "wr_sit_out",
+      "wr_bridge"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Sit-out, stand-up, köprü: yerde asla düz kalma."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_sit_out",
+      "wr_stand_up",
+      "wr_bridge"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Dalış drilli",
+     "mode": "round",
+     "rounds": 5,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "wr_stand_up",
+      "wr_sit_out"
+     ],
+     "calls": [
+      "wr_sit_out",
+      "wr_stand_up",
+      "wr_bridge"
+     ],
+     "cue": "Dalış drilli: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 17,
+   "title": "Dayanıklılık",
+   "focus": "Son 30 saniyede sürekli sprawl.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "wr_sprawl",
+      "wr_penetration"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Son 30 saniyede sürekli sprawl."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_sprawl",
+      "wr_penetration",
+      "wr_double_leg"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Dalış drilli",
+     "mode": "round",
+     "rounds": 5,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "wr_sprawl",
+      "wr_double_leg"
+     ],
+     "calls": [
+      "wr_sprawl",
+      "wr_penetration",
+      "wr_double_leg"
+     ],
+     "cue": "Dalış drilli: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_situp",
+      "gen_squat"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 18,
+   "title": "Değerlendirme 3",
+   "focus": "El mücadelesi, snap down ve dalış zinciri.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_hand_fight",
+      "wr_snap_down",
+      "wr_single_leg",
+      "wr_double_leg",
+      "wr_sprawl"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Dalış drilli",
+     "mode": "round",
+     "rounds": 7,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "wr_shadow",
+      "wr_snap_down"
+     ],
+     "calls": [
+      "wr_hand_fight",
+      "wr_snap_down",
+      "wr_single_leg",
+      "wr_double_leg",
+      "wr_sprawl"
+     ],
+     "cue": "Dalış drilli: 7 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_situp",
+      "gen_burpee",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 19,
+   "title": "Tüm Dalışlar",
+   "focus": "Komuta göre dalış, sprawl ya da snap down.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "wr_single_leg",
+      "wr_double_leg"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Komuta göre dalış, sprawl ya da snap down."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 3,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_double_leg",
+      "wr_single_leg",
+      "wr_snap_down",
+      "wr_sprawl"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Dalış drilli",
+     "mode": "round",
+     "rounds": 6,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "wr_double_leg",
+      "wr_single_leg"
+     ],
+     "calls": [
+      "wr_double_leg",
+      "wr_single_leg",
+      "wr_snap_down",
+      "wr_sprawl"
+     ],
+     "cue": "Dalış drilli: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 20,
+   "title": "Karşı Atak",
+   "focus": "Sprawl'dan snap down'a, snap down'dan arkaya.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "wr_sprawl",
+      "wr_snap_down"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Sprawl'dan snap down'a, snap down'dan arkaya."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 3,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_sprawl",
+      "wr_snap_down",
+      "wr_hand_fight"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Dalış drilli",
+     "mode": "round",
+     "rounds": 6,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "wr_sprawl",
+      "wr_snap_down"
+     ],
+     "calls": [
+      "wr_sprawl",
+      "wr_snap_down",
+      "wr_hand_fight"
+     ],
+     "cue": "Dalış drilli: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_situp",
+      "gen_squat"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 21,
+   "title": "Güç ve Patlayıcılık",
+   "focus": "Her dalış tam güç; arada kısa toparlanma.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "wr_penetration",
+      "wr_double_leg"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Her dalış tam güç; arada kısa toparlanma."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 3,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_penetration",
+      "wr_double_leg",
+      "wr_level_change"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Dalış drilli",
+     "mode": "round",
+     "rounds": 6,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "wr_double_leg",
+      "wr_penetration"
+     ],
+     "calls": [
+      "wr_penetration",
+      "wr_double_leg",
+      "wr_level_change"
+     ],
+     "cue": "Dalış drilli: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_situp",
+      "gen_burpee",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 22,
+   "title": "Maç Simülasyonu",
+   "focus": "Ayakta, altta, üstte: her komutta pozisyon değişir.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "wr_shadow",
+      "wr_sit_out"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Ayakta, altta, üstte: her komutta pozisyon değişir."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 3,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_hand_fight",
+      "wr_single_leg",
+      "wr_sprawl",
+      "wr_sit_out",
+      "wr_stand_up"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Dalış drilli",
+     "mode": "round",
+     "rounds": 6,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_hand_fight",
+      "wr_single_leg",
+      "wr_sprawl",
+      "wr_sit_out",
+      "wr_stand_up"
+     ],
+     "cue": "Dalış drilli: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 23,
+   "title": "Yüksek Tempo",
+   "focus": "Raundun her dakikası farklı tempo: hafif, orta, tam güç.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "wr_level_change",
+      "wr_sprawl"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Raundun her dakikası farklı tempo: hafif, orta, tam güç."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 3,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_level_change",
+      "wr_double_leg",
+      "wr_sprawl",
+      "wr_snap_down"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Dalış drilli",
+     "mode": "round",
+     "rounds": 6,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "wr_shadow",
+      "wr_sprawl"
+     ],
+     "calls": [
+      "wr_level_change",
+      "wr_double_leg",
+      "wr_sprawl",
+      "wr_snap_down"
+     ],
+     "cue": "Dalış drilli: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_situp",
+      "gen_squat"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 24,
+   "title": "Final",
+   "focus": "8 raunt: zincir drill ve dalışlar; son raundu en iyi raundun yap.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 3,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "wr_shadow"
+     ],
+     "calls": [
+      "wr_hand_fight",
+      "wr_double_leg",
+      "wr_single_leg",
+      "wr_snap_down",
+      "wr_sprawl",
+      "wr_stand_up"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "drill",
+     "title": "Dalış drilli",
+     "mode": "round",
+     "rounds": 8,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "wr_shadow",
+      "wr_double_leg",
+      "wr_snap_down"
+     ],
+     "calls": [
+      "wr_hand_fight",
+      "wr_double_leg",
+      "wr_single_leg",
+      "wr_snap_down",
+      "wr_sprawl",
+      "wr_stand_up"
+     ],
+     "cue": "Dalış drilli: 8 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_situp",
+      "gen_burpee",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  }
+ ]
+}

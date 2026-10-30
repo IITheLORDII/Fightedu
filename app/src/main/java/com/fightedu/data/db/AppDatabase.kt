@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [UserPlanEntity::class, CompletedSessionEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false,
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -16,6 +16,9 @@ abstract class AppDatabase : RoomDatabase() {
 
     companion object {
         fun create(context: Context): AppDatabase =
-            Room.databaseBuilder(context, AppDatabase::class.java, "fightedu.db").build()
+            Room.databaseBuilder(context, AppDatabase::class.java, "fightedu.db")
+                // 1 -> 2: haftalık takvimden sıralı günlere geçildi; eski ilerleme anahtarları geçersiz
+                .fallbackToDestructiveMigration()
+                .build()
     }
 }

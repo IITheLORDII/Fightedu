@@ -30,6 +30,9 @@ interface ProgressDao {
     @Query("SELECT sessionKey FROM completed_sessions")
     suspend fun keys(): List<String>
 
+    @Query("SELECT MAX(completedAt) FROM completed_sessions")
+    suspend fun lastCompletedAt(): Long?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(entity: CompletedSessionEntity)
 

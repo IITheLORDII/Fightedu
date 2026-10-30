@@ -59,40 +59,75 @@ data class Move(
         }
 }
 
-/** Program şablonunda bir hareketin dozu (set x tekrar veya set x süre). */
+/** Antrenman bloğunun türü (arayüzde ikon ve renk için). */
 @Serializable
-data class ExerciseRef(
-    val move: String,
-    val sets: Int = 1,
+enum class BlockKind(val label: String) {
+    @SerialName("warmup") WARMUP("Isınma"),
+    @SerialName("technique") TECHNIQUE("Teknik"),
+    @SerialName("shadow") SHADOW("Gölge"),
+    @SerialName("bag") BAG("Torba"),
+    @SerialName("drill") DRILL("Drill"),
+    @SerialName("form") FORM("Form"),
+    @SerialName("conditioning") CONDITIONING("Kondisyon"),
+    @SerialName("cooldown") COOLDOWN("Esneme"),
+}
+
+/**
+ * Blok oynatma biçimi:
+ * - ROUND: her raunt [Block.work] saniye; video [Block.moves] arasında döner, koç [Block.calls] komutlarını verir.
+ * - CIRCUIT: her hareket bir istasyon ([Block.work] sn), istasyonlar arası [Block.rest]; [Block.rounds] tur.
+ * - REPS: her harekette [Block.reps] tekrar, kullanıcı "Bitti" der; [Block.rounds] set.
+ */
+@Serializable
+enum class BlockMode {
+    @SerialName("round") ROUND,
+    @SerialName("circuit") CIRCUIT,
+    @SerialName("reps") REPS,
+}
+
+@Serializable
+data class Block(
+    val kind: BlockKind,
+    val title: String,
+    val mode: BlockMode,
+    val rounds: Int,
+    val work: Int = 0,
+    val rest: Int = 0,
     val reps: Int? = null,
-    val sec: Int? = null,
-    val rest: Int = 30,
+    val moves: List<String>,
+    val calls: List<String> = emptyList(),
+    /** Koçun blok başında söylediği kısa talimat. */
+    val cue: String = "",
 )
 
+/** Antrenmanın bir günü: koç notu ve sıralı bloklar. */
 @Serializable
-data class SessionTemplate(
-    val code: String,
+data class TrainingDay(
+    val day: Int,
     val title: String,
-    val main: List<ExerciseRef>,
+    val focus: String,
+    val blocks: List<Block>,
 )
 
-/** Programın 2 haftalık bir evresi; seanslar A..E sırasıyla öncelik taşır. */
+/** Programın bir evresi: [from]..[to] günleri. */
 @Serializable
-data class Phase(
+data class TrainingPhase(
     val title: String,
-    val weeks: List<Int>,
+    val from: Int,
+    val to: Int,
     val goal: String,
-    val sessions: List<SessionTemplate>,
 )
 
+/** Bir sporun sıralı günlerden oluşan antrenman programı. */
 @Serializable
-data class ProgramTemplate(
+data class TrainingProgram(
     val sport: String,
-    val warmup: List<ExerciseRef>,
-    val cooldown: List<ExerciseRef>,
-    val phases: List<Phase>,
+    val phases: List<TrainingPhase>,
+    val days: List<TrainingDay>,
 ) {
-    val totalWeeks: Int get() = phases.flatMap { it.weeks }.maxOrNull() ?: 0
+    val totalDays: Int get() = days.size
 
-    fun phaseForWeek(week: Int): Phase? = phases.firstOrNull { week in it.weeks }
+    fun day(number: Int): TrainingDay? = days.firstOrNull { it.day == number }
+
+    fun phaseOf(day: Int): TrainingPhase? = phases.firstOrNull { day in it.from..it.to }
 }

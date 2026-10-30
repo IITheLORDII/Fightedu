@@ -1,0 +1,2339 @@
+{
+ "sport": "boxing",
+ "phases": [
+  {
+   "title": "Temeller",
+   "from": 1,
+   "to": 6,
+   "goal": "Duruş, ayak oyunu, jab–cross ve temel savunma."
+  },
+  {
+   "title": "Kroşe ve Aparkat",
+   "from": 7,
+   "to": 12,
+   "goal": "Dört yumruğu tamamla, kafa hareketini ekle."
+  },
+  {
+   "title": "Raunt Temposu",
+   "from": 13,
+   "to": 18,
+   "goal": "3 dakikalık raundlarda saldırı ve savunmayı birleştir."
+  },
+  {
+   "title": "Ringe Hazırlık",
+   "from": 19,
+   "to": 24,
+   "goal": "Kombinasyon akışı, karşı atak ve dayanıklılık."
+  }
+ ],
+ "days": [
+  {
+   "day": 1,
+   "title": "Duruş ve Jab",
+   "focus": "Ağırlık ortada, çene içeride; jab omuzdan düz çıkar, aynı yoldan döner.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "İp atlama",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 30,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Isınma: ip atla, omuzlar gevşek, ayak uçlarında."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "box_stance",
+      "box_jab"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Ağırlık ortada, çene içeride; jab omuzdan düz çıkar, aynı yoldan döner."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "box_shadow"
+     ],
+     "calls": [
+      "box_jab",
+      "box_footwork"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "bag",
+     "title": "Torba",
+     "mode": "round",
+     "rounds": 4,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "box_jab"
+     ],
+     "calls": [
+      "box_jab",
+      "box_footwork"
+     ],
+     "cue": "Torba: 4 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 2,
+   "title": "Cross ve 1-2",
+   "focus": "Cross'ta arka ayak döner, kalça ve omuz birlikte; yumruk dönerken gard yüze.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "İp atlama",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 30,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Isınma: ip atla, omuzlar gevşek, ayak uçlarında."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "box_cross",
+      "box_combo_12"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Cross'ta arka ayak döner, kalça ve omuz birlikte; yumruk dönerken gard yüze."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "box_shadow"
+     ],
+     "calls": [
+      "box_jab",
+      "box_combo_12"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "bag",
+     "title": "Torba",
+     "mode": "round",
+     "rounds": 4,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "box_combo_12",
+      "box_cross"
+     ],
+     "calls": [
+      "box_jab",
+      "box_combo_12"
+     ],
+     "cue": "Torba: 4 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_situp",
+      "gen_squat"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 3,
+   "title": "Blok ve Parry",
+   "focus": "Gelen jab'ı arka elle sektir; blokta dirsekler kaburgada.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "İp atlama",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 30,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Isınma: ip atla, omuzlar gevşek, ayak uçlarında."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "box_parry_block",
+      "box_stance"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Gelen jab'ı arka elle sektir; blokta dirsekler kaburgada."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "box_shadow"
+     ],
+     "calls": [
+      "box_parry_block",
+      "box_jab",
+      "box_combo_12"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "bag",
+     "title": "Torba",
+     "mode": "round",
+     "rounds": 4,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "box_jab",
+      "box_combo_12"
+     ],
+     "calls": [
+      "box_parry_block",
+      "box_jab",
+      "box_combo_12"
+     ],
+     "cue": "Torba: 4 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_situp",
+      "gen_burpee",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 4,
+   "title": "Ayak Oyunu",
+   "focus": "Önde giden ayak yönü belirler; adımlar kısa, ayaklar hiç çapraz geçmez.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "İp atlama",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 30,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Isınma: ip atla, omuzlar gevşek, ayak uçlarında."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "box_footwork",
+      "box_jab"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Önde giden ayak yönü belirler; adımlar kısa, ayaklar hiç çapraz geçmez."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "box_shadow"
+     ],
+     "calls": [
+      "box_footwork",
+      "box_jab",
+      "box_combo_12"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "bag",
+     "title": "Torba",
+     "mode": "round",
+     "rounds": 4,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "box_combo_12"
+     ],
+     "calls": [
+      "box_footwork",
+      "box_jab",
+      "box_combo_12"
+     ],
+     "cue": "Torba: 4 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 5,
+   "title": "1-2 Torba Günü",
+   "focus": "Her 1-2'den sonra çık ya da açı al; torbanın önünde durma.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "İp atlama",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 30,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Isınma: ip atla, omuzlar gevşek, ayak uçlarında."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "box_combo_12",
+      "box_footwork"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Her 1-2'den sonra çık ya da açı al; torbanın önünde durma."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "box_shadow"
+     ],
+     "calls": [
+      "box_combo_12",
+      "box_jab",
+      "box_cross"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "bag",
+     "title": "Torba",
+     "mode": "round",
+     "rounds": 4,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "box_combo_12",
+      "box_jab"
+     ],
+     "calls": [
+      "box_combo_12",
+      "box_jab",
+      "box_cross"
+     ],
+     "cue": "Torba: 4 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_situp",
+      "gen_squat"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 6,
+   "title": "Değerlendirme 1",
+   "focus": "Temeller tamam: 6 raunt torba, temiz 1-2 ve ayak oyunu.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "İp atlama",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 30,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Isınma: ip atla, omuzlar gevşek, ayak uçlarında."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "box_shadow"
+     ],
+     "calls": [
+      "box_jab",
+      "box_cross",
+      "box_combo_12",
+      "box_footwork"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "bag",
+     "title": "Torba",
+     "mode": "round",
+     "rounds": 6,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "box_combo_12",
+      "box_jab"
+     ],
+     "calls": [
+      "box_jab",
+      "box_cross",
+      "box_combo_12",
+      "box_footwork"
+     ],
+     "cue": "Torba: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_situp",
+      "gen_burpee",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 7,
+   "title": "Sol Kroşe",
+   "focus": "Dirsek omuz hizasında, ön ayak içe döner; yumruk yatay bir yayla gelir.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "İp atlama",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 30,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Isınma: ip atla, omuzlar gevşek, ayak uçlarında."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "box_lead_hook",
+      "box_combo_123"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Dirsek omuz hizasında, ön ayak içe döner; yumruk yatay bir yayla gelir."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "box_shadow"
+     ],
+     "calls": [
+      "box_lead_hook",
+      "box_combo_12",
+      "box_combo_123"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "bag",
+     "title": "Torba",
+     "mode": "round",
+     "rounds": 5,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "box_lead_hook",
+      "box_combo_123"
+     ],
+     "calls": [
+      "box_lead_hook",
+      "box_combo_12",
+      "box_combo_123"
+     ],
+     "cue": "Torba: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 8,
+   "title": "Sağ Kroşe",
+   "focus": "Arka ayak döner, kalça önce; sol eldiven yanakta kalır.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "İp atlama",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 30,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Isınma: ip atla, omuzlar gevşek, ayak uçlarında."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "box_rear_hook",
+      "box_lead_hook"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Arka ayak döner, kalça önce; sol eldiven yanakta kalır."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "box_shadow"
+     ],
+     "calls": [
+      "box_rear_hook",
+      "box_jab",
+      "box_lead_hook"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "bag",
+     "title": "Torba",
+     "mode": "round",
+     "rounds": 5,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "box_rear_hook",
+      "box_combo_12"
+     ],
+     "calls": [
+      "box_rear_hook",
+      "box_jab",
+      "box_lead_hook"
+     ],
+     "cue": "Torba: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_situp",
+      "gen_squat"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 9,
+   "title": "Aparkatlar",
+   "focus": "Dizlerden yay, yumruk aşağıdan çeneye; kol savrulmaz, kısa ve sıkı.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "İp atlama",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 30,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Isınma: ip atla, omuzlar gevşek, ayak uçlarında."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "box_lead_uppercut",
+      "box_rear_uppercut"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Dizlerden yay, yumruk aşağıdan çeneye; kol savrulmaz, kısa ve sıkı."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "box_shadow"
+     ],
+     "calls": [
+      "box_lead_uppercut",
+      "box_rear_uppercut",
+      "box_combo_12"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "bag",
+     "title": "Torba",
+     "mode": "round",
+     "rounds": 5,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "box_lead_uppercut",
+      "box_rear_uppercut"
+     ],
+     "calls": [
+      "box_lead_uppercut",
+      "box_rear_uppercut",
+      "box_combo_12"
+     ],
+     "cue": "Torba: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_situp",
+      "gen_burpee",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 10,
+   "title": "Slip ve Roll",
+   "focus": "Slip'te kafa gard çizgisinden az kayar; roll'da dizlerden in, belden değil.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "İp atlama",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 30,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Isınma: ip atla, omuzlar gevşek, ayak uçlarında."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "box_slip",
+      "box_roll"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Slip'te kafa gard çizgisinden az kayar; roll'da dizlerden in, belden değil."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "box_shadow"
+     ],
+     "calls": [
+      "box_slip",
+      "box_roll",
+      "box_combo_12"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "bag",
+     "title": "Torba",
+     "mode": "round",
+     "rounds": 5,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "box_combo_12",
+      "box_lead_hook"
+     ],
+     "calls": [
+      "box_slip",
+      "box_roll",
+      "box_combo_12"
+     ],
+     "cue": "Torba: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 11,
+   "title": "1-2-3",
+   "focus": "Cross'un dönüşü kroşeyi yükler; üç yumruk tek akış.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "İp atlama",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 30,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Isınma: ip atla, omuzlar gevşek, ayak uçlarında."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "box_combo_123",
+      "box_lead_hook"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Cross'un dönüşü kroşeyi yükler; üç yumruk tek akış."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "box_shadow"
+     ],
+     "calls": [
+      "box_combo_123",
+      "box_combo_12",
+      "box_slip"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "bag",
+     "title": "Torba",
+     "mode": "round",
+     "rounds": 5,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "box_combo_123"
+     ],
+     "calls": [
+      "box_combo_123",
+      "box_combo_12",
+      "box_slip"
+     ],
+     "cue": "Torba: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_situp",
+      "gen_squat"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 12,
+   "title": "Değerlendirme 2",
+   "focus": "Dört yumruk + savunma: komutlara anında cevap ver.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "İp atlama",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 30,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Isınma: ip atla, omuzlar gevşek, ayak uçlarında."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "box_shadow"
+     ],
+     "calls": [
+      "box_combo_123",
+      "box_rear_hook",
+      "box_lead_uppercut",
+      "box_roll",
+      "box_slip"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "bag",
+     "title": "Torba",
+     "mode": "round",
+     "rounds": 7,
+     "work": 120,
+     "rest": 45,
+     "moves": [
+      "box_combo_123",
+      "box_rear_hook"
+     ],
+     "calls": [
+      "box_combo_123",
+      "box_rear_hook",
+      "box_lead_uppercut",
+      "box_roll",
+      "box_slip"
+     ],
+     "cue": "Torba: 7 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_situp",
+      "gen_burpee",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 13,
+   "title": "Saldırı + Savunma",
+   "focus": "Her kombinasyondan sonra bir savunma: 1-2, slip, 1-2-3, roll.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "İp atlama",
+     "mode": "round",
+     "rounds": 3,
+     "work": 120,
+     "rest": 30,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Isınma: ip atla, omuzlar gevşek, ayak uçlarında."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "box_combo_12",
+      "box_slip"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Her kombinasyondan sonra bir savunma: 1-2, slip, 1-2-3, roll."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "box_shadow"
+     ],
+     "calls": [
+      "box_combo_12",
+      "box_slip",
+      "box_combo_123",
+      "box_roll"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "bag",
+     "title": "Torba",
+     "mode": "round",
+     "rounds": 5,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "box_combo_12",
+      "box_combo_123"
+     ],
+     "calls": [
+      "box_combo_12",
+      "box_slip",
+      "box_combo_123",
+      "box_roll"
+     ],
+     "cue": "Torba: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 14,
+   "title": "Yakın Mesafe",
+   "focus": "İçeride kroşe ve aparkat; başını gardın arkasında tut.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "İp atlama",
+     "mode": "round",
+     "rounds": 3,
+     "work": 120,
+     "rest": 30,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Isınma: ip atla, omuzlar gevşek, ayak uçlarında."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "box_lead_uppercut",
+      "box_rear_hook"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: İçeride kroşe ve aparkat; başını gardın arkasında tut."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "box_shadow"
+     ],
+     "calls": [
+      "box_lead_uppercut",
+      "box_rear_hook",
+      "box_rear_uppercut",
+      "box_roll"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "bag",
+     "title": "Torba",
+     "mode": "round",
+     "rounds": 5,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "box_rear_uppercut",
+      "box_lead_hook"
+     ],
+     "calls": [
+      "box_lead_uppercut",
+      "box_rear_hook",
+      "box_rear_uppercut",
+      "box_roll"
+     ],
+     "cue": "Torba: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_situp",
+      "gen_squat"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 15,
+   "title": "Açılar",
+   "focus": "Vur ve çık: kombinasyon sonrası yana adım, yeni açıdan jab.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "İp atlama",
+     "mode": "round",
+     "rounds": 3,
+     "work": 120,
+     "rest": 30,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Isınma: ip atla, omuzlar gevşek, ayak uçlarında."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "box_footwork",
+      "box_combo_12"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Vur ve çık: kombinasyon sonrası yana adım, yeni açıdan jab."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "box_shadow"
+     ],
+     "calls": [
+      "box_footwork",
+      "box_jab",
+      "box_combo_123"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "bag",
+     "title": "Torba",
+     "mode": "round",
+     "rounds": 5,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "box_combo_123",
+      "box_jab"
+     ],
+     "calls": [
+      "box_footwork",
+      "box_jab",
+      "box_combo_123"
+     ],
+     "cue": "Torba: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_situp",
+      "gen_burpee",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 16,
+   "title": "Hız Torbası",
+   "focus": "Hızlı ve hafif: her komutta en hızlı haliyle, sonra gevşe.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "İp atlama",
+     "mode": "round",
+     "rounds": 3,
+     "work": 120,
+     "rest": 30,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Isınma: ip atla, omuzlar gevşek, ayak uçlarında."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "box_jab",
+      "box_cross"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Hızlı ve hafif: her komutta en hızlı haliyle, sonra gevşe."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "box_shadow"
+     ],
+     "calls": [
+      "box_jab",
+      "box_combo_12",
+      "box_combo_123",
+      "box_cross"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "bag",
+     "title": "Torba",
+     "mode": "round",
+     "rounds": 5,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "box_jab",
+      "box_combo_12"
+     ],
+     "calls": [
+      "box_jab",
+      "box_combo_12",
+      "box_combo_123",
+      "box_cross"
+     ],
+     "cue": "Torba: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 17,
+   "title": "Dayanıklılık",
+   "focus": "Tempo düşmesin: son 30 saniyede sürekli 1-2.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "İp atlama",
+     "mode": "round",
+     "rounds": 3,
+     "work": 120,
+     "rest": 30,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Isınma: ip atla, omuzlar gevşek, ayak uçlarında."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "box_combo_123",
+      "box_parry_block"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Tempo düşmesin: son 30 saniyede sürekli 1-2."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "box_shadow"
+     ],
+     "calls": [
+      "box_combo_123",
+      "box_parry_block",
+      "box_combo_12"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "bag",
+     "title": "Torba",
+     "mode": "round",
+     "rounds": 5,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "box_combo_123",
+      "box_combo_12"
+     ],
+     "calls": [
+      "box_combo_123",
+      "box_parry_block",
+      "box_combo_12"
+     ],
+     "cue": "Torba: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_situp",
+      "gen_squat"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 18,
+   "title": "Değerlendirme 3",
+   "focus": "3 dakikalık raundlarda saldırı ve savunma bir arada.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "İp atlama",
+     "mode": "round",
+     "rounds": 3,
+     "work": 120,
+     "rest": 30,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Isınma: ip atla, omuzlar gevşek, ayak uçlarında."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 2,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "box_shadow"
+     ],
+     "calls": [
+      "box_combo_123",
+      "box_slip",
+      "box_rear_hook",
+      "box_roll",
+      "box_lead_uppercut"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "bag",
+     "title": "Torba",
+     "mode": "round",
+     "rounds": 7,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "box_combo_123",
+      "box_rear_hook"
+     ],
+     "calls": [
+      "box_combo_123",
+      "box_slip",
+      "box_rear_hook",
+      "box_roll",
+      "box_lead_uppercut"
+     ],
+     "cue": "Torba: 7 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_situp",
+      "gen_burpee",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 19,
+   "title": "Tüm Yumruklar",
+   "focus": "1'den 6'ya bütün yumruklar; komutları say ve at.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "İp atlama",
+     "mode": "round",
+     "rounds": 3,
+     "work": 120,
+     "rest": 30,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Isınma: ip atla, omuzlar gevşek, ayak uçlarında."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "box_lead_hook",
+      "box_rear_uppercut"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: 1'den 6'ya bütün yumruklar; komutları say ve at."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 3,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "box_shadow"
+     ],
+     "calls": [
+      "box_jab",
+      "box_cross",
+      "box_lead_hook",
+      "box_rear_hook",
+      "box_lead_uppercut",
+      "box_rear_uppercut"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "bag",
+     "title": "Torba",
+     "mode": "round",
+     "rounds": 6,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "box_lead_hook",
+      "box_rear_uppercut"
+     ],
+     "calls": [
+      "box_jab",
+      "box_cross",
+      "box_lead_hook",
+      "box_rear_hook",
+      "box_lead_uppercut",
+      "box_rear_uppercut"
+     ],
+     "cue": "Torba: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 20,
+   "title": "Karşı Atak",
+   "focus": "Önce savun, hemen cevap ver: parry-1-2, slip-kroşe, roll-aparkat.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "İp atlama",
+     "mode": "round",
+     "rounds": 3,
+     "work": 120,
+     "rest": 30,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Isınma: ip atla, omuzlar gevşek, ayak uçlarında."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "box_parry_block",
+      "box_slip"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Önce savun, hemen cevap ver: parry-1-2, slip-kroşe, roll-aparkat."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 3,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "box_shadow"
+     ],
+     "calls": [
+      "box_parry_block",
+      "box_slip",
+      "box_roll",
+      "box_combo_12"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "bag",
+     "title": "Torba",
+     "mode": "round",
+     "rounds": 6,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "box_combo_12",
+      "box_lead_hook"
+     ],
+     "calls": [
+      "box_parry_block",
+      "box_slip",
+      "box_roll",
+      "box_combo_12"
+     ],
+     "cue": "Torba: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_situp",
+      "gen_squat"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 21,
+   "title": "Güç Raundu",
+   "focus": "Her yumrukta kalça döner; az ama sert, sonra çık.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "İp atlama",
+     "mode": "round",
+     "rounds": 3,
+     "work": 120,
+     "rest": 30,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Isınma: ip atla, omuzlar gevşek, ayak uçlarında."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "box_rear_hook",
+      "box_cross"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Her yumrukta kalça döner; az ama sert, sonra çık."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 3,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "box_shadow"
+     ],
+     "calls": [
+      "box_cross",
+      "box_rear_hook",
+      "box_lead_hook"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "bag",
+     "title": "Torba",
+     "mode": "round",
+     "rounds": 6,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "box_rear_hook",
+      "box_cross"
+     ],
+     "calls": [
+      "box_cross",
+      "box_rear_hook",
+      "box_lead_hook"
+     ],
+     "cue": "Torba: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_situp",
+      "gen_burpee",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 22,
+   "title": "Kombinasyon Akışı",
+   "focus": "Kombinasyonlar arası boşluk yok; nefesini yumruklarla ver.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "İp atlama",
+     "mode": "round",
+     "rounds": 3,
+     "work": 120,
+     "rest": 30,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Isınma: ip atla, omuzlar gevşek, ayak uçlarında."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "box_combo_123",
+      "box_footwork"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Kombinasyonlar arası boşluk yok; nefesini yumruklarla ver."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 3,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "box_shadow"
+     ],
+     "calls": [
+      "box_combo_12",
+      "box_combo_123",
+      "box_lead_uppercut",
+      "box_footwork"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "bag",
+     "title": "Torba",
+     "mode": "round",
+     "rounds": 6,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "box_combo_123",
+      "box_combo_12"
+     ],
+     "calls": [
+      "box_combo_12",
+      "box_combo_123",
+      "box_lead_uppercut",
+      "box_footwork"
+     ],
+     "cue": "Torba: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 23,
+   "title": "Yüksek Tempo",
+   "focus": "Raundun her dakikası farklı tempo: hafif, orta, tam güç.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "İp atlama",
+     "mode": "round",
+     "rounds": 3,
+     "work": 120,
+     "rest": 30,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Isınma: ip atla, omuzlar gevşek, ayak uçlarında."
+    },
+    {
+     "kind": "technique",
+     "title": "Teknik",
+     "mode": "round",
+     "rounds": 3,
+     "work": 60,
+     "rest": 30,
+     "moves": [
+      "box_jab",
+      "box_roll"
+     ],
+     "calls": [],
+     "cue": "Teknik raundu: Raundun her dakikası farklı tempo: hafif, orta, tam güç."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 3,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "box_shadow"
+     ],
+     "calls": [
+      "box_jab",
+      "box_combo_123",
+      "box_roll",
+      "box_rear_uppercut"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "bag",
+     "title": "Torba",
+     "mode": "round",
+     "rounds": 6,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "box_jab",
+      "box_combo_123"
+     ],
+     "calls": [
+      "box_jab",
+      "box_combo_123",
+      "box_roll",
+      "box_rear_uppercut"
+     ],
+     "cue": "Torba: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_situp",
+      "gen_squat"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 24,
+   "title": "Final",
+   "focus": "8 raunt: her şeyi kullan, son raundu en iyi raundun yap.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "İp atlama",
+     "mode": "round",
+     "rounds": 3,
+     "work": 120,
+     "rest": 30,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Isınma: ip atla, omuzlar gevşek, ayak uçlarında."
+    },
+    {
+     "kind": "shadow",
+     "title": "Gölge",
+     "mode": "round",
+     "rounds": 3,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "box_shadow"
+     ],
+     "calls": [
+      "box_combo_12",
+      "box_combo_123",
+      "box_slip",
+      "box_roll",
+      "box_rear_hook",
+      "box_lead_uppercut"
+     ],
+     "cue": "Gölge raundu. Komutları dinle, gardını hiç düşürme."
+    },
+    {
+     "kind": "bag",
+     "title": "Torba",
+     "mode": "round",
+     "rounds": 8,
+     "work": 180,
+     "rest": 60,
+     "moves": [
+      "box_combo_123",
+      "box_rear_hook",
+      "box_combo_12"
+     ],
+     "calls": [
+      "box_combo_12",
+      "box_combo_123",
+      "box_slip",
+      "box_roll",
+      "box_rear_hook",
+      "box_lead_uppercut"
+     ],
+     "cue": "Torba: 8 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Kondisyon",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_situp",
+      "gen_burpee",
+      "gen_plank"
+     ],
+     "cue": "Kondisyon devresi: her harekette 40 saniye, temiz form."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  }
+ ]
+}

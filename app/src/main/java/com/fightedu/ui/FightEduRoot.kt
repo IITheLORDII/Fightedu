@@ -58,12 +58,12 @@ private object Routes {
     const val PROGRAM = "program"
     const val LIBRARY = "library"
     const val SETTINGS = "settings"
-    const val SESSION = "session/{week}/{index}"
-    const val PLAYER = "player/{week}/{index}"
+    const val SESSION = "day/{day}"
+    const val PLAYER = "player/{day}"
     const val MOVE = "move/{id}"
 
-    fun session(week: Int, index: Int) = "session/$week/$index"
-    fun player(week: Int, index: Int) = "player/$week/$index"
+    fun session(day: Int) = "day/$day"
+    fun player(day: Int) = "player/$day"
     fun move(id: String) = "move/$id"
 }
 
@@ -71,7 +71,7 @@ private data class Tab(val route: String, val label: String, val icon: ImageVect
 
 private val TABS = listOf(
     Tab(Routes.HOME, "Ana Sayfa", Icons.Filled.Home),
-    Tab(Routes.PROGRAM, "Program", Icons.Filled.DateRange),
+    Tab(Routes.PROGRAM, "Antrenmanlar", Icons.Filled.DateRange),
     Tab(Routes.LIBRARY, "Hareketler", Icons.AutoMirrored.Filled.List),
     Tab(Routes.SETTINGS, "Ayarlar", Icons.Filled.Settings),
 )
@@ -152,13 +152,13 @@ private fun AppNavigation(state: UiState, vm: MainViewModel, onPreviewSport: (St
             composable(Routes.HOME) {
                 HomeScreen(
                     state = state,
-                    onOpenSession = { nav.navigate(Routes.session(it.week, it.index)) },
-                    onStartSession = { nav.navigate(Routes.player(it.week, it.index)) },
+                    onOpenDay = { nav.navigate(Routes.session(it)) },
+                    onStartDay = { nav.navigate(Routes.player(it)) },
                     onNewProgram = { vm.resetPlan { restartToOnboarding() } },
                 )
             }
             composable(Routes.PROGRAM) {
-                ProgramScreen(state = state, onOpenSession = { nav.navigate(Routes.session(it.week, it.index)) })
+                ProgramScreen(state = state, onOpenDay = { nav.navigate(Routes.session(it)) })
             }
             composable(Routes.LIBRARY) {
                 LibraryScreen(
@@ -171,41 +171,41 @@ private fun AppNavigation(state: UiState, vm: MainViewModel, onPreviewSport: (St
                 SettingsScreen(
                     state = state,
                     onSetReminder = vm::setReminder,
+                    onSetCoach = vm::setCoach,
                     onResetPlan = { vm.resetPlan { restartToOnboarding() } },
                 )
             }
-            composable(
-                Routes.SESSION,
-                arguments = listOf(navArgument("week") { type = NavType.IntType }, navArgument("index") { type = NavType.IntType }),
-            ) { entry ->
-                val args = requireNotNull(entry.arguments)
-                val session = state.session(args.getInt("week"), args.getInt("index"))
-                if (session == null) {
+            composable(Routes.SESSION, arguments = listOf(navArgument("day") { type = NavType.IntType })) { entry ->
+                val day = state.day(requireNotNull(entry.arguments).getInt("day"))
+                val planner = state.planner
+                if (day == null || planner == null) {
                     MissingContent { nav.popBackStack() }
                 } else {
                     SessionDetailScreen(
-                        session = session,
-                        completed = session.key in state.completed,
+                        day = day,
+                        phase = state.program?.phaseOf(day.day),
+                        content = content,
+                        planner = planner,
+                        completed = day.day in state.completedDays,
                         onBack = { nav.popBackStack() },
-                        onStart = { nav.navigate(Routes.player(session.week, session.index)) },
-                        onToggleCompleted = { vm.setCompleted(session.key, it) },
+                        onStart = { nav.navigate(Routes.player(day.day)) },
+                        onToggleCompleted = { vm.setDayCompleted(day.day, it) },
                         onOpenMove = { nav.navigate(Routes.move(it.id)) },
                     )
                 }
             }
-            composable(
-                Routes.PLAYER,
-                arguments = listOf(navArgument("week") { type = NavType.IntType }, navArgument("index") { type = NavType.IntType }),
-            ) { entry ->
-                val args = requireNotNull(entry.arguments)
-                val session = state.session(args.getInt("week"), args.getInt("index"))
-                if (session == null) {
+            composable(Routes.PLAYER, arguments = listOf(navArgument("day") { type = NavType.IntType })) { entry ->
+                val day = state.day(requireNotNull(entry.arguments).getInt("day"))
+                val planner = state.planner
+                if (day == null || planner == null) {
                     MissingContent { nav.popBackStack() }
                 } else {
                     PlayerScreen(
-                        session = session,
+                        day = day,
+                        planner = planner,
+                        coach = state.coach,
                         onExit = { nav.popBackStack() },
-                        onCompleted = { vm.setCompleted(session.key, true) },
+                        onCompleted = { vm.setDayCompleted(day.day, true) },
                         onDone = { if (!nav.popBackStack(Routes.HOME, inclusive = false)) nav.popBackStack() },
                     )
                 }
