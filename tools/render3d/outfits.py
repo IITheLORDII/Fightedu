@@ -213,11 +213,15 @@ def garment(ch, bm, name, rules, offset, materials, thickness=0.003, smooth_iter
         sub0.levels = cloth.get("densify", 1)
         with bpy.context.temp_override(object=ob, active_object=ob, selected_objects=[ob]):
             bpy.ops.object.modifier_apply(modifier=sub0.name)
-    # gövdenin deforme olmuş yüzeyine bağla: kalça/omuz büküldüğünde giysi deriyle birlikte hareket eder
-    ob.parent = ch.arm_ob
-    surface_bind(ob, ch.proxy())
     if cloth:
+        # kumaş: sabitleme hedefi olarak deforme olan vekil gövdenin yüzeyine bağla
+        ob.parent = ch.arm_ob
+        surface_bind(ob, ch.proxy())
         add_cloth(ob, ch, cloth)
+    else:
+        # dar giysi gövde köşelerinden birebir türetildi: aynı deri ağırlıklarıyla iskelete bağla.
+        # (yüzeye bağlama koltuk altında gövde yüzlerini de yakalıyor, kol kalkınca kol giysiden çıkıyordu)
+        ch._weights(ob, ch.body_used[used])
     if thickness:
         sol = ob.modifiers.new("Solid", "SOLIDIFY")
         sol.thickness = thickness
@@ -808,11 +812,11 @@ def general_kit(ch, bm, shirt="#7B8794", shorts_color="#1E1E1E", shoes="#F4F4F4"
     tee = fabric(f"{ch.name}_tee", shirt, roughness=0.9, sheen=0.5, weave=220.0)
     items = [garment(ch, bm, "tee",
                      {"spine_01": (-9, 9), "spine_02": (-9, 9), "spine_03": (-9, 9), "clavicle": (-9, 9),
-                      "neck_01": (-9, 0.2), "upperarm": (-9, 0.42), "pelvis": (-9, 9)},
-                     lambda b, t, p: (0.005 if b in ("clavicle", "spine_03", "neck_01") else
+                      "neck_01": (-9, 0.2), "upperarm": (-9, 0.56), "pelvis": (-9, 9)},
+                     lambda b, t, p: (0.008 if b in ("clavicle", "spine_03", "neck_01") else
                                       (0.009 + 0.008 * t if b == "upperarm" else
                                        (0.017 if b == "pelvis" else 0.011))), [(tee, None)],
-                     thickness=0.003, smooth_iters=6, snap={"upperarm": 0.42}, keep_face=keep, hem_z=hem)]
+                     thickness=0.003, smooth_iters=6, snap={"upperarm": 0.56}, keep_face=keep, hem_z=hem)]
     items.append(shorts(ch, bm, "shorts", shorts_color, "#E6E6E6", length=0.84, flare=0.028, band=0.04,
                         stripe=True, shiny=False))
     sock = fabric(f"{ch.name}_sock", "#F2F2F2", roughness=0.9, sheen=0.6, weave=300.0)

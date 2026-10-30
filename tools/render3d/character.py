@@ -166,12 +166,11 @@ ATHLETE = dict(
     race=dict(african=0.06, asian=0.06, caucasian=0.88),
     details={
         # gövde: geniş omuz ve sırt (V), kalın göğüs, ince bel, düz karın, kısa-kalın boyun
-        "torso/torso-vshape-incr": 0.6,
-        "torso/torso-muscle-pectoral-incr": 1.0,
+        "torso/torso-vshape-incr": 0.45,
+        "torso/torso-muscle-pectoral-incr": 0.6,
         "torso/torso-muscle-dorsi-incr": 1.0,
-        "torso/measure-waist-circ-decr": 0.85,
+        "torso/measure-waist-circ-decr": 0.25,
         "torso/measure-shoulder-dist-decr": 0.35,
-        "torso/measure-bust-circ-incr": 0.5,
         "torso/torso-scale-depth-incr": 0.15,
         "torso/measure-hips-circ-decr": 0.3,
         "stomach/stomach-pregnant-decr": 1.0,

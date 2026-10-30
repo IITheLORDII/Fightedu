@@ -183,13 +183,6 @@ def skin_material(name, tone, regions, hair_color="#20140E", stubble=0.22):
     if nip != 0.0:
         col = b.mix(b.math("MULTIPLY", nip, 0.75), col, (base[0] * 0.55, base[1] * 0.33, base[2] * 0.28, 1.0))
 
-    # kas ayrımı: içbükey bölgeleri (pointiness) hafifçe koyulaştır
-    ao = b.n.new("ShaderNodeAmbientOcclusion")
-    ao.only_local = True
-    ao.samples = 8
-    ao.inputs["Distance"].default_value = 0.06
-    cav = b.smooth(ao.outputs["AO"], 0.55, 1.0, invert=True)
-    col = b.mix(b.math("MULTIPLY", cav, 0.55), col, (base[0] * 0.55, base[1] * 0.38, base[2] * 0.33, 1.0))
     b.l.new(col, bsdf.inputs["Base Color"])
 
     bsdf.inputs["Subsurface Weight"].default_value = 0.15
