@@ -1,0 +1,80 @@
+name: Koç sesleri (Piper)
+
+# Sesli koçun cümlelerini açık kaynak Piper'ın Türkçe sesiyle kaydedip depoya ekler (ücretsiz, anahtarsız).
+# Elle çalıştırılır: Actions -> "Koç sesleri (Piper)" -> Run workflow.
+on:
+  workflow_dispatch:
+    inputs:
+      voice:
+        description: "Piper sesi (tr_TR-fahrettin-medium, tr_TR-dfki-medium, tr_TR-fettah-medium)"
+        default: tr_TR-fahrettin-medium
+      samples:
+        description: "Üç sesten karşılaştırma örnekleri de üretilsin"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency: voice
+
+jobs:
+  synthesize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      VOICE: ${{ inputs.voice }}
+      SAMPLES: ${{ inputs.samples }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Araçlar
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          pip install -q piper-tts==1.8.0
+
+      - name: Türkçe Piper sesleri (HuggingFace rhasspy/piper-voices)
+        run: |
+          set -euo pipefail
+          case "$VOICE" in tr_TR-fahrettin-medium|tr_TR-dfki-medium|tr_TR-fettah-medium) ;; *) echo "bilinmeyen ses: $VOICE"; exit 1;; esac
+          mkdir -p tools/voice/build/piper tools/voice/samples
+          base=https://huggingface.co/rhasspy/piper-voices/resolve/main/tr/tr_TR
+          for v in tr_TR-fahrettin-medium tr_TR-dfki-medium tr_TR-fettah-medium; do
+            n=${v#tr_TR-}; name=${n%-*}; q=${n##*-}
+            curl -sSfL "$base/$name/$q/$v.onnx?download=true" -o "tools/voice/build/piper/$v.onnx"
+            curl -sSfL "$base/$name/$q/$v.onnx.json?download=true" -o "tools/voice/build/piper/$v.onnx.json"
+            curl -sSfL "$base/$name/$q/MODEL_CARD?download=true" -o "tools/voice/samples/$v.MODEL_CARD.md" || true
+            ls -la "tools/voice/build/piper/$v.onnx"
+          done
+          cat tools/voice/samples/*.MODEL_CARD.md || true
+
+      - name: Örnek sesler
+        if: env.SAMPLES == 'true'
+        run: python3 tools/voice/synthesize.py --engine piper --samples
+
+      - name: Tüm cümleleri kaydet
+        run: python3 tools/voice/synthesize.py --engine piper --voice "$VOICE"
+
+      - name: Zamanlamayı gerçek sürelerle yeniden kur
+        run: python3 tools/voice/make_voice.py
+
+      - name: Depoya ekle
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/src/main/assets/voice tools/voice/samples
+          if git diff --cached --quiet; then echo "değişiklik yok"; exit 0; fi
+          git commit -q -m "Koç sesleri: Piper $VOICE ile kaydedildi" \
+            -m "Rauntlara özel 1.285 cümle açık kaynak Türkçe Piper sesiyle kaydedildi; ses planları ölçülen sürelerle yeniden zamanlandı." \
+            -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+          Claude-Session: https://claude.ai/code/session_01FceEYgLZqAF66iDC6JL2ut"
+          for i in 1 2 3; do
+            git pull -q --rebase origin "$GITHUB_REF_NAME" && git push -q origin "HEAD:$GITHUB_REF_NAME" && break
+            sleep $((i * 5))
+          done
