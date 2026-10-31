@@ -304,7 +304,11 @@ def block_intro(sport, b):
 
 def join(items):
     items = list(dict.fromkeys(items))
-    return items[0] if len(items) == 1 else ", ".join(items[:-1]) + " ve " + items[-1]
+    if len(items) == 1:
+        return items[0]
+    # adında "ve" geçen hareket varsa ("Savuşturma ve Blok") ikinci bir "ve" karışıklık yaratır
+    last = ", ardından " if any(" ve " in f" {x} " for x in items) else " ve "
+    return ", ".join(items[:-1]) + last + items[-1]
 
 
 def block_summary(b):

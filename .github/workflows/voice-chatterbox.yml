@@ -4,14 +4,15 @@ name: Koç sesleri (Chatterbox, ticari serbest)
 # mode=samples: yalnız örnek cümleler (tools/voice/samples). mode=full: tüm cümleler, paralel parçalarla;
 # her klip faster-whisper ile yazıya dökülüp metinle karşılaştırılır, bozuk çıkanlar yeniden üretilir.
 # mode=audit: kayıtlı klipleri yeniden dinler; bozuk/tekrarlı olanları yeni tohumlarla kaydeder (yalnız onlar
-# değişir). İkisi de tools/voice/qa_report.md raporunu yazar.
+# değişir). İkisi de tools/voice/qa_report.md raporunu yazar. mode=missing: yalnız dosyası olmayan (metni
+# yeni değişmiş) klipleri kaydeder.
 on:
   workflow_dispatch:
     inputs:
       mode:
         description: "samples ya da full"
         type: choice
-        options: [samples, full, audit]
+        options: [samples, full, audit, missing]
         default: samples
       voice:
         description: "builtin (Chatterbox'ın hazır sesi) ya da depodaki referans kayıt yolu (ör. tools/voice/reference/koc.wav)"
@@ -107,7 +108,7 @@ jobs:
           SHARD: ${{ matrix.shard }}/${{ inputs.shards }}
           MODE: ${{ inputs.mode }}
         run: |
-          if [ "$MODE" = audit ]; then extra=--audit; else extra=; fi
+          case "$MODE" in audit) extra=--audit ;; missing) extra=--missing ;; *) extra= ;; esac
           python3 tools/voice/synthesize.py --engine chatterbox --voice "$VOICE" --shard "$SHARD" --out shard_out $extra
       - uses: actions/upload-artifact@v4
         with:
@@ -137,9 +138,9 @@ jobs:
           MODE: ${{ inputs.mode }}
         run: |
           set -euo pipefail
-          python3 tools/voice/synthesize.py --report shard_out
+          if [ "$MODE" != missing ]; then python3 tools/voice/synthesize.py --report shard_out; fi
           mkdir -p app/src/main/assets/voice/clips shard_out
-          # full: tüm klipler yenilenir; audit: yalnız yeniden kaydedilenler üzerine yazılır
+          # full: tüm klipler yenilenir; audit/missing: yalnız yeni kaydedilenler eklenir ya da üzerine yazılır
           if [ "$MODE" = full ]; then rm -f app/src/main/assets/voice/clips/*.ogg; fi
           find shard_out -maxdepth 1 -name '*.ogg' -exec cp {} app/src/main/assets/voice/clips/ \;
           python3 tools/voice/synthesize.py --engine chatterbox --voice "$VOICE" --finalize
@@ -153,7 +154,10 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A app/src/main/assets/voice tools/voice/qa_report.md
           if git diff --cached --quiet; then echo "değişiklik yok"; exit 0; fi
-          if [ "$MODE" = audit ]; then
+          if [ "$MODE" = missing ]; then
+            title="Koç sesleri: değişen cümleler kaydedildi ($VOICE)"
+            body="Metni değişen cümleler Chatterbox ile kaydedildi; ses planları ölçülen sürelerle yeniden zamanlandı."
+          elif [ "$MODE" = audit ]; then
             title="Koç sesleri: ASR denetimi, bozuk klipler yeniden kaydedildi ($VOICE)"
             body="Kayıtlı klipler faster-whisper ile yeniden dinlendi; eşiği aşan ya da tekrarlı olanlar yeni tohumlarla kaydedildi, daha iyi çıkanlar yerine kondu. Rapor: tools/voice/qa_report.md."
           else

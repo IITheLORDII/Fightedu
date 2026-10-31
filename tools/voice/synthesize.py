@@ -482,6 +482,8 @@ def main():
     ap.add_argument("--redo", action="store_true", help="var olan klipleri de yeniden kaydet (ses değişince)")
     ap.add_argument("--audit", action="store_true",
                     help="kayıtlı klipleri dinle; bozuk olanları yeniden kaydet (--out klasörüne yalnız değişenler)")
+    ap.add_argument("--missing", action="store_true",
+                    help="yalnız uygulamada dosyası olmayan klipleri kaydet (metin değişince; --shard ile de)")
     ap.add_argument("--report", default=None, metavar="KLASÖR", help="parçaların qa_*.json dosyalarından rapor yaz")
     args = ap.parse_args()
     if args.samples:
@@ -504,9 +506,10 @@ def main():
     raw_dir = os.path.join(RAW, eng.name.replace(":", "_"))
     os.makedirs(raw_dir, exist_ok=True)
     ids, _ = shard_of(sorted(manifest["clips"]), args.shard)
-    if args.shard:
+    if args.shard and not args.missing:
         args.redo = True
-    todo = [cid for cid in ids if args.redo or not os.path.exists(os.path.join(out_dir, f"{cid}.ogg"))]
+    have = CLIPS if args.missing else out_dir
+    todo = [cid for cid in ids if args.redo or not os.path.exists(os.path.join(have, f"{cid}.ogg"))]
     if args.limit:
         todo = todo[:args.limit]
     print(f"{len(todo)} klip kaydedilecek ({len(ids) - len(todo)} hazır)", flush=True)
