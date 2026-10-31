@@ -518,16 +518,28 @@ async function loadVoice(sport) {
     if (!VOICE.sheets[sport]) VOICE.sheets[sport] = await (await fetch(`voice/cues_${sport}.json`)).json();
   } catch (e) { /* ses planı yoksa kısa anonslar */ }
 }
-let aq = [], audio = null;
+let aq = [], audio = null, clipTimer = null;
+const SPR = DATA.voiceSprite, sprites = SPR ? SPR.files.map(f => { const a = new Audio(f); a.preload = "auto"; return a; }) : [];
 function nextClip() {
+  clearTimeout(clipTimer);
   const id = aq.shift(); if (!id) { audio = null; return; }
+  if (SPR && SPR.map[id]) {
+    const [si, start, dur] = SPR.map[id], a = sprites[si], token = {};
+    audio = a; a.__token = token;
+    const play = () => { if (a.__token !== token) return;
+      a.play().then(() => { clipTimer = setTimeout(() => { a.pause(); nextClip(); }, dur * 1000); }).catch(nextClip); };
+    const seek = () => { if (a.__token !== token) return;
+      a.addEventListener("seeked", play, {once: true}); a.currentTime = start; };
+    if (a.readyState >= 1) seek(); else a.addEventListener("loadedmetadata", seek, {once: true});
+    return;
+  }
   audio = new Audio(`voice/clips/${id}.${VOICE.ext}`); audio.onended = nextClip; audio.onerror = nextClip;
   audio.play().catch(nextClip);
 }
 function sayClips(ids, flush) {
   if (!ids || !ids.length || !VOICE.manifest) return;
   if (VOICE.recorded) {
-    if (flush) { aq = []; if (audio) { audio.onended = null; audio.pause(); } audio = null; }
+    if (flush) { aq = []; clearTimeout(clipTimer); if (audio) { audio.onended = null; audio.pause(); } audio = null; }
     aq.push(...ids); if (!audio) nextClip();
   } else {
     try { if (flush) speechSynthesis.cancel();
@@ -535,7 +547,7 @@ function sayClips(ids, flush) {
         const u = new SpeechSynthesisUtterance(c.say); u.lang = "tr-TR"; u.rate = 1.05; speechSynthesis.speak(u); }); } catch (e) {}
   }
 }
-function hush() { aq = []; if (audio) { audio.onended = null; audio.pause(); } audio = null; try { speechSynthesis.cancel(); } catch (e) {} }
+function hush() { aq = []; clearTimeout(clipTimer); if (audio) { audio.onended = null; audio.pause(); } audio = null; try { speechSynthesis.cancel(); } catch (e) {} }
 
 // ---- oynatıcı ----
 let P = null, timer = null, actx = null;
