@@ -44,12 +44,6 @@
 "ms": 3856,
 "measured": true
 },
-"0106447b57ae": {
-"text": "Teknik çalışma: Ayak Oyunu ve Açı Değiştirme ve Kombinasyon: Sol Direk – Sağ Direk – Sol Kroşe – Orta Tekme. Yavaş ve doğru; hız sonra gelir.",
-"say": "Teknik çalışma: Ayak Oyunu ve Açı Değiştirme ve Kombinasyon: Sol Direk, Sağ Direk, Sol Kroşe, Orta Tekme. Yavaş ve doğru; hız sonra gelir.",
-"ms": 7657,
-"measured": true
-},
 "01184372a7d7": {
 "text": "Tebrikler! Gün yedi tamamlandı.",
 "say": "Tebrikler! Gün yedi tamamlandı.",
@@ -552,12 +546,6 @@
 "text": "Sıradaki: Gölge. İki raunt, ikişer dakika.",
 "say": "Sıradaki: Gölge. İki raunt, ikişer dakika.",
 "ms": 3037,
-"measured": true
-},
-"10ed75041be7": {
-"text": "Teknik çalışma: Savuşturma ve Blok ve Kafa Kaçırma. Yavaş ve doğru; hız sonra gelir.",
-"say": "Teknik çalışma: Savuşturma ve Blok ve Kafa Kaçırma. Yavaş ve doğru; hız sonra gelir.",
-"ms": 5656,
 "measured": true
 },
 "110d667595b4": {
@@ -1218,12 +1206,6 @@
 "text": "Sıradaki: Torba. Altı raunt, üçer dakika.",
 "say": "Sıradaki: Torba. Altı raunt, üçer dakika.",
 "ms": 4556,
-"measured": true
-},
-"26701f51251b": {
-"text": "Teknik çalışma: Ayak Oyunu ve Açı Değiştirme ve Ön Tekme. Yavaş ve doğru; hız sonra gelir.",
-"say": "Teknik çalışma: Ayak Oyunu ve Açı Değiştirme ve Ön Tekme. Yavaş ve doğru; hız sonra gelir.",
-"ms": 6356,
 "measured": true
 },
 "26809ff6678d": {
@@ -2102,6 +2084,12 @@
 "ms": 3856,
 "measured": true
 },
+"40cd4b9199a7": {
+"text": "Teknik çalışma: Ayak Oyunu ve Açı Değiştirme, ardından Kombinasyon: Sol Direk – Sağ Direk – Sol Kroşe – Orta Tekme. Yavaş ve doğru; hız sonra gelir.",
+"say": "Teknik çalışma: Ayak Oyunu ve Açı Değiştirme, ardından Kombinasyon: Sol Direk, Sağ Direk, Sol Kroşe, Orta Tekme. Yavaş ve doğru; hız sonra gelir.",
+"ms": 10707,
+"measured": false
+},
 "4122e75ec0ec": {
 "text": "Sık yapılan hata: savuşturmak için eli fazla uzatmak. Buna dikkat et.",
 "say": "Sık yapılan hata: savuşturmak için eli fazla uzatmak. Buna dikkat et.",
@@ -2905,6 +2893,12 @@
 "say": "Sol direk, sağ direk, sol kroşe at.",
 "ms": 2849,
 "measured": true
+},
+"5ed159b539c0": {
+"text": "Teknik çalışma: Sol–Sağ Direk–Sol Kroşe, ardından Savuşturma ve Blok. Yavaş ve doğru; hız sonra gelir.",
+"say": "Teknik çalışma: Sol, Sağ Direk, Sol Kroşe, ardından Savuşturma ve Blok. Yavaş ve doğru; hız sonra gelir.",
+"ms": 7778,
+"measured": false
 },
 "5f7e27e18eb6": {
 "text": "Gard yukarıda!",
@@ -4082,12 +4076,6 @@
 "ms": 4556,
 "measured": true
 },
-"86edea5ad868": {
-"text": "Teknik çalışma: Sol–Sağ Direk–Sol Kroşe ve Savuşturma ve Blok. Yavaş ve doğru; hız sonra gelir.",
-"say": "Teknik çalışma: Sol, Sağ Direk, Sol Kroşe ve Savuşturma ve Blok. Yavaş ve doğru; hız sonra gelir.",
-"ms": 6256,
-"measured": true
-},
 "86f2725561dc": {
 "text": "En yüksek nabız günü; son turda her şeyini ver.",
 "say": "En yüksek nabız günü; son turda her şeyini ver.",
@@ -5072,6 +5060,12 @@
 "ms": 5256,
 "measured": true
 },
+"a6bb50a8f96b": {
+"text": "Teknik çalışma: Savuşturma ve Blok, ardından Kafa Kaçırma. Yavaş ve doğru; hız sonra gelir.",
+"say": "Teknik çalışma: Savuşturma ve Blok, ardından Kafa Kaçırma. Yavaş ve doğru; hız sonra gelir.",
+"ms": 6850,
+"measured": false
+},
 "a6eef3f93628": {
 "text": "Düz Diz: arka dizi yukarı ve ileri sür, kalçayı öne it.",
 "say": "Düz Diz: arka dizi yukarı ve ileri sür, kalçayı öne it.",
@@ -6032,6 +6026,12 @@
 "ms": 4257,
 "measured": true
 },
+"c3f4037c3ba1": {
+"text": "Teknik çalışma: Savuşturma ve Blok, ardından Boks Duruşu. Yavaş ve doğru; hız sonra gelir.",
+"say": "Teknik çalışma: Savuşturma ve Blok, ardından Boks Duruşu. Yavaş ve doğru; hız sonra gelir.",
+"ms": 6778,
+"measured": false
+},
 "c3f8301bffe6": {
 "text": "Yarın gün yirmi bir: Patlayıcı Güç. Dinç gel!",
 "say": "Yarın gün yirmi bir: Patlayıcı Güç. Dinç gel!",
@@ -6126,12 +6126,6 @@
 "text": "Bugünün konusu: orta blok.",
 "say": "Bugünün konusu: orta blok.",
 "ms": 2448,
-"measured": true
-},
-"c60cf942170a": {
-"text": "Teknik çalışma: Savuşturma ve Blok ve Boks Duruşu. Yavaş ve doğru; hız sonra gelir.",
-"say": "Teknik çalışma: Savuşturma ve Blok ve Boks Duruşu. Yavaş ve doğru; hız sonra gelir.",
-"ms": 4956,
 "measured": true
 },
 "c69c03d28fc4": {
@@ -6643,6 +6637,12 @@
 "say": "Sağ direkte arka ayak döner, kalça ve omuz birlikte; yumruk dönerken gard yüze.",
 "ms": 4056,
 "measured": true
+},
+"d96c8941e871": {
+"text": "Teknik çalışma: Ayak Oyunu ve Açı Değiştirme, ardından Ön Tekme. Yavaş ve doğru; hız sonra gelir.",
+"say": "Teknik çalışma: Ayak Oyunu ve Açı Değiştirme, ardından Ön Tekme. Yavaş ve doğru; hız sonra gelir.",
+"ms": 7278,
+"measured": false
 },
 "d974e8ad8633": {
 "text": "Yarın gün yirmi altı: Güç ve Patlayıcılık. Dinç gel!",
