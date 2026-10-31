@@ -6,10 +6,10 @@ on:
   workflow_dispatch:
     inputs:
       voice:
-        description: "Piper sesi (tr_TR-fahrettin-medium, tr_TR-dfki-medium, tr_TR-fettah-medium)"
+        description: "Piper sesi (ör. tr_TR-dfki-medium); yoksa ilk Türkçe ses"
         default: tr_TR-fahrettin-medium
       samples:
-        description: "Üç sesten karşılaştırma örnekleri de üretilsin"
+        description: "Tüm Türkçe seslerden karşılaştırma örnekleri de üretilsin"
         type: boolean
         default: true
 
@@ -40,25 +40,21 @@ jobs:
 
       - name: Türkçe Piper sesleri (HuggingFace rhasspy/piper-voices)
         run: |
-          set -euo pipefail
-          case "$VOICE" in tr_TR-fahrettin-medium|tr_TR-dfki-medium|tr_TR-fettah-medium) ;; *) echo "bilinmeyen ses: $VOICE"; exit 1;; esac
-          mkdir -p tools/voice/build/piper tools/voice/samples
-          base=https://huggingface.co/rhasspy/piper-voices/resolve/main/tr/tr_TR
-          for v in tr_TR-fahrettin-medium tr_TR-dfki-medium tr_TR-fettah-medium; do
-            n=${v#tr_TR-}; name=${n%-*}; q=${n##*-}
-            curl -sSfL "$base/$name/$q/$v.onnx?download=true" -o "tools/voice/build/piper/$v.onnx"
-            curl -sSfL "$base/$name/$q/$v.onnx.json?download=true" -o "tools/voice/build/piper/$v.onnx.json"
-            curl -sSfL "$base/$name/$q/MODEL_CARD?download=true" -o "tools/voice/samples/$v.MODEL_CARD.md" || true
-            ls -la "tools/voice/build/piper/$v.onnx"
-          done
-          cat tools/voice/samples/*.MODEL_CARD.md || true
+          python3 tools/voice/fetch_piper_voices.py
+          for f in tools/voice/samples/*.MODEL_CARD.md; do echo "== $f"; cat "$f"; done
+          V="$VOICE"
+          if [ ! -f "tools/voice/build/piper/$V.onnx" ]; then
+            V=$(ls tools/voice/build/piper/*.onnx | head -1 | xargs basename | sed 's/\.onnx$//')
+            echo "İstenen ses ($VOICE) yok, kullanılan: $V"
+          fi
+          echo "PIPER_VOICE=$V" >> "$GITHUB_ENV"
 
       - name: Örnek sesler
         if: env.SAMPLES == 'true'
         run: python3 tools/voice/synthesize.py --engine piper --samples
 
       - name: Tüm cümleleri kaydet
-        run: python3 tools/voice/synthesize.py --engine piper --voice "$VOICE"
+        run: python3 tools/voice/synthesize.py --engine piper --voice "$PIPER_VOICE"
 
       - name: Zamanlamayı gerçek sürelerle yeniden kur
         run: python3 tools/voice/make_voice.py
@@ -70,7 +66,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add app/src/main/assets/voice tools/voice/samples
           if git diff --cached --quiet; then echo "değişiklik yok"; exit 0; fi
-          git commit -q -m "Koç sesleri: Piper $VOICE ile kaydedildi" \
+          git commit -q -m "Koç sesleri: Piper $PIPER_VOICE ile kaydedildi" \
             -m "Rauntlara özel 1.285 cümle açık kaynak Türkçe Piper sesiyle kaydedildi; ses planları ölçülen sürelerle yeniden zamanlandı." \
             -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
           Claude-Session: https://claude.ai/code/session_01FceEYgLZqAF66iDC6JL2ut"

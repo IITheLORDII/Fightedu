@@ -34,7 +34,7 @@ CLIPS = os.path.join(VOICE_DIR, "clips")
 RAW = os.path.join(HERE, "build", "raw")
 SAMPLES = os.path.join(HERE, "samples")
 PIPER_DIR = os.path.join(HERE, "build", "piper")
-PIPER_VOICES = ["tr_TR-fahrettin-medium", "tr_TR-dfki-medium", "tr_TR-fettah-medium"]
+PIPER_VOICES = sorted(f[:-5] for f in os.listdir(PIPER_DIR) if f.endswith(".onnx")) if os.path.isdir(PIPER_DIR) else []
 ENDPOINT = "https://texttospeech.googleapis.com/v1/text:synthesize"
 
 # enerjik erkek koç sesi; ilki reddedilirse sıradakiler denenir
