@@ -357,6 +357,9 @@ LICENSES = """## Lisanslar
 - `piper-tr_TR-dfki-medium`: Piper (GPL-3 motor); ses modeli DFKI veri setiyle eğitildi, CC BY-NC-SA 4.0
   (ticari olmayan kullanım).
 - `chatterbox-*`: Resemble AI Chatterbox Multilingual, MIT lisansı (ticari kullanım serbest).
+
+Uygulamadaki kayıtlar Chatterbox'ın hazır sesiyle yapıldı (`app/src/main/assets/voice/manifest.json` -> `voice`);
+otomatik dinleme raporu: `tools/voice/qa_report.md`.
 """
 
 
