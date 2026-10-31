@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -213,10 +214,15 @@ private fun Header(
     onChangeSport: () -> Unit,
 ) {
     val bg = MaterialTheme.colorScheme.background
-    Box(Modifier.fillMaxWidth().height(300.dp)) {
-        HeroImage(sport.id, Modifier.fillMaxSize(), alignment = Alignment.TopCenter)
-        Box(Modifier.matchParentSize().background(Color.Black.copy(alpha = 0.25f)))
-        Scrim(from = 0.45f, color = bg, strength = 1f)
+    // görsel üst kısımda; başlık ve halka görselin tamamen solduğu zeminde (açık/koyu temada okunur)
+    Box(Modifier.fillMaxWidth().height(330.dp)) {
+        HeroImage(sport.id, Modifier.fillMaxWidth().fillMaxHeight(0.8f))
+        Box(
+            Modifier.matchParentSize().background(
+                Brush.verticalGradient(0f to Color.Black.copy(alpha = 0.35f), 0.28f to Color.Transparent),
+            ),
+        )
+        Scrim(from = 0.38f, color = bg, strength = 1f, full = 0.72f)
         Row(
             Modifier.statusBarsPadding().padding(horizontal = 16.dp, vertical = 8.dp).fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,

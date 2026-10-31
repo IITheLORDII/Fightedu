@@ -16,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -58,12 +59,24 @@ fun Wordmark(size: TextUnit = 44.sp, modifier: Modifier = Modifier, color: Color
     )
 }
 
+/** Kahraman görsellerinde sporcunun dikey odak noktası (0 = üst, 1 = alt); kırpmada sporcu kadrajda kalsın. */
+private val HERO_FOCUS = mapOf(
+    "boxing" to 0.35f,
+    "kickboxing" to 0.25f,
+    "wrestling" to 0.55f,
+    "taekwondo" to 0.28f,
+    "general" to 0.72f,
+)
+
+/** Dalın görseli için kırpma hizası (yatayda orta, dikeyde sporcunun odak noktası). */
+fun heroAlignment(sportId: String): Alignment = BiasAlignment(0f, (HERO_FOCUS[sportId] ?: 0.4f) * 2f - 1f)
+
 /** Dalın koyu fonlu kahraman görseli (assets/hero/<dal>.webp); yüklenene kadar boş. */
 @Composable
 fun HeroImage(
     sportId: String,
     modifier: Modifier = Modifier,
-    alignment: Alignment = Alignment.Center,
+    alignment: Alignment = heroAlignment(sportId),
     contentScale: ContentScale = ContentScale.Crop,
 ) {
     val context = LocalContext.current
@@ -77,15 +90,16 @@ fun HeroImage(
     }
 }
 
-/** Görselin üstüne alttan koyulaşan geçiş (yazı okunabilsin). */
+/** Görselin üstüne alttan koyulaşan geçiş (yazı okunabilsin): [from]'da saydam, [full]'dan itibaren tam renk. */
 @Composable
-fun BoxScope.Scrim(from: Float = 0.35f, color: Color = Color.Black, strength: Float = 0.92f) {
+fun BoxScope.Scrim(from: Float = 0.35f, color: Color = Color.Black, strength: Float = 0.92f, full: Float = 1f) {
     Box(
         Modifier
             .matchParentSize()
             .background(
                 Brush.verticalGradient(
                     from to Color.Transparent,
+                    full to color.copy(alpha = strength),
                     1f to color.copy(alpha = strength),
                 ),
             ),

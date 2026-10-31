@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FightEdu Antrenman Koçu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* FightEdu uygulamasının yeni akışının önizlemesi: açılış -> hoş geldin -> kayıt/giriş -> dal seçimi -> 30 günlük meydan okuma */
+:root {
+  --stage: #E4E6EA; --bg: #F4F5F7; --surface: #FFFFFF; --surface2: #ECEEF1; --ink: #14171C; --muted: #5E6672; --line: #DADDE2;
+  --accent: #D32F2F; --accent-ink: #FFFFFF; --ok: #2E9E4F; --gold: #FFB300;
+  --brand-dark: #0E1116; --brand-surface: #181B22; --brand-red: #FF5A3C; --brand-ink: #F2F3F5; --brand-muted: #A9AEB8;
+  --rest-bg: #14171C; --rest-ink: #F2F3F5; --rest-accent: #7FD1AE;
+  --f-display: "Barlow Condensed", "Arial Narrow", Arial, sans-serif;
+  --f-body: "Source Sans 3", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  --k-warmup: #E39B00; --k-technique: #3D7BD9; --k-shadow: #7A5AF8; --k-bag: #D9412B; --k-drill: #D9412B;
+  --k-form: #0F9D8A; --k-conditioning: #2E9E4F; --k-cooldown: #5E8CA6;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --stage: #07080A; --bg: #0F1114; --surface: #1A1D22; --surface2: #23272E; --ink: #ECEEF1; --muted: #9AA2AE; --line: #2B2F36; color-scheme: dark } }
+:root[data-theme="dark"] { --stage: #07080A; --bg: #0F1114; --surface: #1A1D22; --surface2: #23272E; --ink: #ECEEF1; --muted: #9AA2AE; --line: #2B2F36; color-scheme: dark }
+* { box-sizing: border-box }
+html, body { margin: 0 }
+body { background: var(--stage); color: var(--ink); font: 15px/1.45 var(--f-body); -webkit-tap-highlight-color: transparent }
+button { font: inherit; color: inherit }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+h1, h2, h3 { font-family: var(--f-display); margin: 0; letter-spacing: .01em; text-wrap: balance }
+.stage { min-height: 100dvh; display: flex; justify-content: center }
+.app { position: relative; width: 100%; max-width: 440px; min-height: 100dvh; background: var(--bg); overflow-x: hidden; display: flex; flex-direction: column }
+@media (min-width: 560px) { .stage { padding: 24px 0 } .app { min-height: calc(100dvh - 48px); border-radius: 30px; box-shadow: 0 20px 60px rgba(0,0,0,.25); overflow: hidden } }
+.view { flex: 1; display: flex; flex-direction: column; min-height: 0 }
+.pad { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+.muted { color: var(--muted) }
+.label { font: 700 12px var(--f-body); text-transform: uppercase; letter-spacing: .08em; color: var(--muted) }
+.disp { font-family: var(--f-display); font-weight: 800; text-transform: uppercase; line-height: 1 }
+/* koyu marka ekranları */
+.brand { background: radial-gradient(120% 70% at 50% 30%, rgba(176,18,28,.33), transparent 70%), var(--brand-dark); color: var(--brand-ink) }
+.brand .muted { color: var(--brand-muted) }
+.wordmark { font: 800 44px/1 var(--f-display); letter-spacing: .09em }
+.wordmark b { color: var(--brand-red); font-weight: 800 }
+.tag { font: 700 15px var(--f-display); letter-spacing: .22em; color: #C9CCD3 }
+.btn { display: block; width: 100%; border: 0; border-radius: 16px; padding: 15px 16px; font: 700 17px var(--f-body); cursor: pointer; background: var(--accent); color: var(--accent-ink) }
+.brand .btn { background: var(--brand-red) }
+.btn.ghost { background: transparent; border: 1.5px solid currentColor; color: inherit }
+.btn.text { background: none; color: var(--muted); font-weight: 600; padding: 10px }
+.btn:disabled { opacity: .45; cursor: not-allowed }
+.notice { font-size: 12px; color: var(--brand-muted); text-align: center }
+/* açılış */
+.intro { flex: 1; display: grid; place-items: center; text-align: center; position: relative; overflow: hidden }
+.intro .em { width: 170px; height: 170px; animation: pop .7s cubic-bezier(.2,.8,.2,1) both }
+.intro .fade { animation: fade .6s .35s both }
+.intro .heroes { position: absolute; left: 0; right: 0; bottom: 0; height: 34%; display: flex; opacity: .55; animation: fade 1s .2s both }
+.intro .heroes img { flex: 1; min-width: 0; object-fit: cover; height: 100% }
+.intro .heroes::after { content: ""; position: absolute; inset: 0; background: linear-gradient(var(--brand-dark), transparent 60%) }
+@keyframes pop { from { transform: scale(.7); opacity: 0 } to { transform: scale(1); opacity: 1 } }
+@keyframes fade { from { opacity: 0 } }
+/* hoş geldin */
+.welcome { flex: 1; position: relative; display: flex; flex-direction: column; justify-content: flex-end }
+.welcome .bgimg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: opacity .9s }
+.welcome::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(transparent 20%, rgba(14,17,22,.85) 55%, var(--brand-dark) 75%) }
+.welcome .body { position: relative; z-index: 2; padding-top: 20px; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 18px); display: grid; gap: 12px }
+.pill { display: inline-block; border-radius: 999px; padding: 4px 12px; font: 700 15px var(--f-display); letter-spacing: .08em; color: #fff }
+.dots { display: flex; gap: 6px; justify-content: center }
+.dots i { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.3) }
+.dots i.on { width: 8px; height: 8px; background: #fff }
+/* formlar */
+.form { padding-top: calc(env(safe-area-inset-top, 0px) + 8px); padding-bottom: 24px; display: grid; gap: 12px }
+.back { border: 0; background: none; font-size: 24px; width: 44px; height: 44px; cursor: pointer; color: inherit; margin-left: -8px }
+.field { display: grid; gap: 4px }
+.field label { font-size: 13px; color: var(--brand-muted) }
+.field .in { display: flex; align-items: center; border: 1.5px solid #4A505C; border-radius: 14px; background: var(--brand-surface) }
+.field .in:focus-within { border-color: var(--brand-red) }
+.field input { flex: 1; min-width: 0; border: 0; background: none; color: var(--brand-ink); font: 16px var(--f-body); padding: 13px 14px; outline: none }
+.field .show { border: 0; background: none; color: var(--brand-red); font-weight: 700; padding: 0 12px; cursor: pointer }
+.field.err .in { border-color: #FF6B6B }
+.field .msg { font-size: 12px; color: #FF6B6B; min-height: 0 }
+.link { border: 0; background: none; color: var(--brand-red); font-weight: 700; cursor: pointer; padding: 6px }
+/* dal seçimi */
+.scard { position: relative; display: block; width: 100%; aspect-ratio: 1.9; border: 0; padding: 0; border-radius: 22px; overflow: hidden; background: var(--brand-surface); cursor: pointer; text-align: left; color: #fff }
+.scard img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover }
+.scard::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(14,17,22,.95), rgba(14,17,22,.6) 55%, transparent) }
+.scard .t { position: absolute; z-index: 2; left: 18px; top: 50%; transform: translateY(-50%); width: 62%; display: grid; gap: 4px }
+.scard .t h3 { font-size: 28px; line-height: 1; font-weight: 800; text-transform: uppercase }
+.scard .bar { height: 5px; border-radius: 3px; background: rgba(255,255,255,.2); overflow: hidden; margin-top: 4px }
+.scard .bar b { display: block; height: 100% }
+.scard.cur { outline: 2px solid var(--c); outline-offset: -2px }
+.badge { display: inline-block; width: max-content; border-radius: 8px; padding: 1px 8px; font: 700 13px var(--f-display); letter-spacing: .06em }
+.facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px }
+.fact { background: var(--brand-surface); border-radius: 14px; padding: 10px 4px; text-align: center }
+.fact b { display: block; font: 800 26px var(--f-display) }
+.fact span { font-size: 12px; color: var(--brand-muted) }
+.road { display: grid; grid-template-columns: 30px 1fr; gap: 4px 12px; align-items: start }
+.road .n { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 800 }
+.box { background: var(--brand-surface); border-radius: 16px; padding: 14px 16px }
+.row { display: flex; align-items: center; gap: 10px }
+.sw { width: 46px; height: 28px; border-radius: 999px; border: 0; background: #4A505C; position: relative; cursor: pointer; flex: none }
+.sw::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; transition: .2s }
+.sw[aria-checked="true"] { background: var(--accent) }
+.sw[aria-checked="true"]::after { left: 21px }
+.hours { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px }
+.hours button { border: 1px solid #4A505C; background: none; border-radius: 10px; padding: 5px 10px; cursor: pointer }
+.hours button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff }
+.check { display: flex; gap: 10px; align-items: flex-start; background: rgba(255,107,107,.15); border-radius: 16px; padding: 12px; cursor: pointer; font-size: 13px }
+.check input { width: 20px; height: 20px; accent-color: var(--accent); flex: none; margin: 0 }
+/* meydan okuma */
+.head { position: relative; height: 330px; color: #fff }
+.head img { position: absolute; left: 0; top: 0; width: 100%; height: 80%; object-fit: cover; object-position: top center; z-index: 0 }
+.head::after { content: ""; position: absolute; inset: 0; z-index: 0; background: linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,0) 28%, transparent 38%, var(--bg) 72%) }
+.head > * { position: relative; z-index: 1 }
+.head .topb { display: flex; align-items: center; gap: 10px; padding-top: calc(env(safe-area-inset-top, 0px) + 12px) }
+.ava { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; background: var(--accent); color: #fff; border: 0; cursor: pointer; flex: none }
+.chg { border: 0; border-radius: 999px; background: rgba(0,0,0,.45); color: #fff; padding: 7px 12px; font-size: 13px; cursor: pointer }
+.head .ttl { position: absolute; left: 16px; right: 16px; bottom: 4px; display: flex; align-items: flex-end; gap: 8px }
+.head .ttl h1 { font-size: 42px; line-height: 1; font-weight: 800; text-transform: uppercase; color: var(--ink) }
+.ringw { position: relative; width: 104px; height: 104px; flex: none }
+.ringw svg { width: 100%; height: 100%; transform: rotate(-90deg) }
+.ringw .c { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; color: var(--ink) }
+.ringw .c b { font: 800 32px/1 var(--f-display) }
+.ringw .c span { font-size: 11px; color: var(--muted) }
+.tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px }
+.tile { background: var(--surface2); border-radius: 16px; padding: 10px 4px; text-align: center }
+.tile b { display: block; font: 800 24px/1.1 var(--f-display) }
+.tile span { font-size: 11px; color: var(--muted) }
+.today { background: color-mix(in srgb, var(--accent) 13%, var(--surface)); border-radius: 22px; padding: 18px; display: grid; gap: 6px }
+.today .big { font: 800 44px/1 var(--f-display); color: var(--accent) }
+.today .big span { font-size: 22px; color: var(--ink) }
+.today h2 { font-size: 26px; font-weight: 700 }
+.chips { display: flex; flex-wrap: wrap; gap: 6px }
+.chip { display: inline-flex; align-items: center; gap: 6px; background: var(--surface); border-radius: 10px; padding: 4px 9px; font-weight: 600; font-size: 13px }
+.chip i { width: 4px; height: 14px; border-radius: 2px }
+.restcard { background: #1E3A5F; color: #fff; border-radius: 22px; padding: 18px; display: flex; gap: 10px; align-items: center }
+.week { background: color-mix(in srgb, var(--surface2) 70%, transparent); border-radius: 18px; padding: 10px 12px }
+.wdays { display: grid; grid-template-columns: repeat(7, 1fr) 30px; align-items: center; margin-top: 8px; justify-items: center }
+.dc { width: 40px; height: 40px; border-radius: 50%; border: 0; display: grid; place-items: center; font: 800 17px var(--f-display); background: var(--surface); color: var(--muted); cursor: pointer; padding: 0 }
+.dc.open { color: var(--ink) }
+.dc.done { background: var(--accent); color: #fff }
+.dc.done.rest { background: var(--ok) }
+.dc.cur { background: color-mix(in srgb, var(--accent) 16%, var(--surface)); box-shadow: inset 0 0 0 2.5px var(--accent); color: var(--accent); animation: pulse 1.4s ease-in-out infinite }
+@keyframes pulse { 50% { transform: scale(1.1) } }
+.trophy { font-size: 20px; opacity: .25 }
+.trophy.on { opacity: 1; transform: scale(1.15) }
+.phasec { background: var(--surface2); border-radius: 16px; padding: 14px }
+.phasec.on { background: color-mix(in srgb, var(--accent) 14%, var(--surface)) }
+.pbar2 { height: 6px; border-radius: 3px; background: color-mix(in srgb, var(--accent) 18%, transparent); overflow: hidden; margin-top: 6px }
+.pbar2 b { display: block; height: 100%; background: var(--accent) }
+.sec { display: grid; gap: 14px; padding-bottom: 20px }
+.nav { position: sticky; bottom: 0; z-index: 5; display: grid; grid-template-columns: repeat(3, 1fr); background: var(--surface); border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom, 0px); margin-top: auto }
+.nav button { border: 0; background: none; padding: 8px 4px 10px; display: grid; justify-items: center; gap: 2px; font-size: 12px; color: var(--muted); cursor: pointer }
+.nav button span { font-size: 20px; width: 56px; border-radius: 999px; line-height: 30px }
+.nav button[aria-current="true"] { color: var(--ink); font-weight: 700 }
+.nav button[aria-current="true"] span { background: color-mix(in srgb, var(--accent) 18%, transparent) }
+.topbar { display: flex; align-items: center; gap: 6px; padding-top: calc(env(safe-area-inset-top, 0px) + 6px); padding-bottom: 6px; position: sticky; top: 0; background: var(--bg); z-index: 4 }
+.topbar h2 { font-size: 24px; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px }
+.note { background: color-mix(in srgb, var(--accent) 10%, var(--surface)); border-radius: 12px; padding: 10px 12px }
+.tli { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px }
+.dot { width: 26px; height: 26px; border-radius: 50%; color: #fff; font-weight: 800; display: grid; place-items: center }
+.rail { display: flex; flex-direction: column; align-items: center }
+.rail .ln { flex: 1; width: 2px; opacity: .35 }
+.blk { padding-bottom: 14px; min-width: 0 }
+.blk h3 { font-size: 20px; text-transform: uppercase; display: flex; justify-content: space-between; gap: 8px; align-items: center }
+.kind { font: 700 12px var(--f-body); letter-spacing: .06em; padding: 2px 8px; border-radius: 999px; text-transform: none }
+.thumbs { display: flex; gap: 6px; overflow-x: auto; padding: 4px 0 }
+.thumbs button { border: 0; padding: 0; background: none; cursor: pointer; flex: none }
+.thumbs img { width: 76px; height: 61px; object-fit: cover; border-radius: 8px; background: var(--surface2); display: block }
+.bottombar { position: sticky; bottom: 0; display: flex; gap: 10px; padding-top: 12px; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); background: var(--bg); margin-top: auto }
+.bottombar .btn { padding: 13px 10px; font-size: 15px }
+.bottombar .btn.ghost { color: var(--ink) }
+.schips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px }
+.schips button { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 12px; white-space: nowrap; cursor: pointer }
+.schips button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff }
+.mgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px }
+.mcard { border: 0; padding: 0; background: var(--surface); border-radius: 14px; overflow: hidden; text-align: left; cursor: pointer }
+.mcard img { width: 100%; aspect-ratio: 5 / 4; object-fit: cover; display: block; background: var(--surface2) }
+.mcard div { padding: 8px 10px; font-weight: 600; font-size: 13px }
+.sheet { position: fixed; inset: 0; z-index: 30; background: rgba(0,0,0,.55); display: flex; align-items: flex-end; justify-content: center }
+.sheet[hidden] { display: none }
+.sheet .in { background: var(--surface); width: 100%; max-width: 440px; max-height: 92dvh; overflow: auto; border-radius: 22px 22px 0 0; padding: 14px 16px calc(env(safe-area-inset-bottom, 0px) + 16px) }
+.sheet video { width: 100%; aspect-ratio: 5 / 4; object-fit: cover; border-radius: 14px; background: var(--surface2); display: block }
+.dlg { position: fixed; inset: 0; z-index: 40; background: rgba(0,0,0,.55); display: grid; place-items: center; padding: 20px }
+.dlg[hidden] { display: none }
+.dlg .in { background: var(--surface); color: var(--ink); max-width: 360px; border-radius: 22px; padding: 20px; display: grid; gap: 10px }
+.dlg .acts { display: flex; justify-content: flex-end; gap: 6px }
+.dlg .acts button { border: 0; background: none; color: var(--accent); font-weight: 700; padding: 8px 10px; cursor: pointer }
+.prof { display: flex; align-items: center; gap: 14px; padding-top: calc(env(safe-area-inset-top, 0px) + 16px) }
+.prof .ava { width: 64px; height: 64px; font-size: 24px; cursor: default }
+.stat4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px }
+.toast { position: fixed; left: 50%; bottom: 90px; transform: translateX(-50%); background: #14171C; color: #fff; padding: 10px 16px; border-radius: 12px; z-index: 50; font-size: 14px; max-width: 90vw }
+.toast[hidden] { display: none }
+/* oynatıcı */
+#player[hidden] { display: none }
+#player { position: fixed; inset: 0; z-index: 20; background: var(--bg); color: var(--ink); display: flex; flex-direction: column;
+  padding: calc(env(safe-area-inset-top, 0px) + 10px) max(16px, env(safe-area-inset-right, 0px)) calc(env(safe-area-inset-bottom, 0px) + 10px) max(16px, env(safe-area-inset-left, 0px)) }
+#player.rest { background: var(--rest-bg); color: var(--rest-ink) }
+.pbar { display: flex; gap: 3px; margin: 6px auto; max-width: 560px; width: 100% }
+.pbar div { height: 4px; border-radius: 2px; overflow: hidden }
+.pbar div b { display: block; height: 4px }
+.ptop { display: flex; align-items: center; gap: 10px; max-width: 560px; width: 100%; margin: 0 auto }
+.ptop .tt { flex: 1; min-width: 0 }
+.ptop .tt b { font: 800 20px var(--f-display); text-transform: uppercase; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.x { border: 0; background: none; color: inherit; font-size: 26px; cursor: pointer; width: 40px; height: 40px }
+.pmain { flex: 1; overflow: auto; display: flex; flex-direction: column; align-items: center; gap: 10px; max-width: 560px; width: 100%; margin: 0 auto }
+.rl { display: flex; justify-content: space-between; width: 100%; align-items: center }
+.rl .r { font: 800 22px var(--f-display) }
+.vid { position: relative; width: 100%; aspect-ratio: 5 / 4; border-radius: 16px; overflow: hidden; background: var(--surface2) }
+.vid video { width: 100%; height: 100%; object-fit: cover; display: block }
+.call { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%) scale(.9); opacity: 0; transition: .2s; color: #fff; font: 800 30px var(--f-display); padding: 6px 18px; border-radius: 12px; white-space: nowrap }
+.call.on { opacity: 1; transform: translateX(-50%) scale(1) }
+.mname { font: 800 24px var(--f-display); text-transform: uppercase; text-align: center }
+.ring { position: relative; width: 180px; height: 180px }
+.ring svg { width: 100%; height: 100%; transform: rotate(-90deg) }
+.ring .tm { position: absolute; inset: 0; display: grid; place-items: center; font: 700 44px var(--f-mono); font-variant-numeric: tabular-nums }
+.reps { font: 800 48px var(--f-display) }
+.ctrl { display: flex; justify-content: space-between; align-items: center; max-width: 560px; width: 100%; margin: 6px auto 0 }
+.ctrl button { border: 0; background: none; color: inherit; font: 700 16px var(--f-body); cursor: pointer; padding: 10px }
+.ctrl .pp { width: 70px; height: 70px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-size: 26px }
+.nextcard { display: flex; gap: 12px; align-items: center; background: rgba(255,255,255,.08); border-radius: 14px; padding: 10px; width: 100% }
+.nextcard img { width: 110px; aspect-ratio: 5 / 4; object-fit: cover; border-radius: 10px; flex: none }
+.speed { font: 600 12px var(--f-body); border: 1px solid currentColor; border-radius: 999px; padding: 3px 8px; background: none; color: inherit; cursor: pointer; opacity: .8 }
+.done { text-align: center; display: grid; gap: 10px; justify-items: center; padding-top: 20px }
+.stats { display: flex; gap: 26px }
+.stats b { display: block; font: 800 30px var(--f-display); color: var(--accent) }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important } }
+</style>
+</head>
+<body>
+<div class="stage"><main class="app" id="app"></main></div>
+<div id="player" hidden></div>
+<div class="sheet" id="sheet" hidden></div>
+<div class="dlg" id="dlg" hidden></div>
+<div class="toast" id="toast" hidden></div>
+<script>
+const DATA = /*__DATA__*/{};
+const KIND = {warmup:"Isınma",technique:"Teknik",shadow:"Gölge",bag:"Torba",drill:"Drill",form:"Form",conditioning:"Kondisyon",cooldown:"Esneme"};
+const CALLS = {box_combo_12:"Bir iki",box_combo_123:"Bir iki üç",box_footwork:"Ayak oyunu",box_parry_block:"Blok",box_slip:"Slip",
+  box_roll:"Roll",box_lead_hook:"Sol kroşe",box_rear_hook:"Sağ kroşe",box_lead_uppercut:"Sol aparkat",box_rear_uppercut:"Sağ aparkat",
+  box_cross:"Cross",kb_combo_jcl:"Jab cross low kick",kb_combo_jcm:"Jab cross kroşe middle",kb_jab_cross:"Jab cross",kb_footwork:"Açı değiştir",
+  kb_knee:"Diz",wr_level_change:"Seviye",wr_penetration:"Penetrasyon",wr_double_leg:"Çift bacak",wr_single_leg:"Tek bacak",
+  wr_hand_fight:"El mücadelesi",wr_sit_out:"Sit out",wr_stand_up:"Kalk",tkd_footwork:"Ayak oyunu",tkd_taegeuk1:"Taegeuk"};
+const EMBLEM = '<img src="emblem.svg" alt="FightEdu" style="width:100%;height:100%;display:block">';
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const kc = k => `var(--k-${k})`;
+const mv = id => DATA.moves[id];
+const short = n => n.split(" (")[0];
+const callName = id => CALLS[id] || short(mv(id).name).split(": ").pop().replace(/–/g, " ");
+const fmt = s => s < 60 ? `${s} sn` : s % 60 ? `${Math.floor(s/60)} dk ${s%60} sn` : `${s/60} dk`;
+const clock = s => `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
+const sportOf = id => DATA.sports.find(s => s.id === id);
+const FOCUS = {boxing: 35, kickboxing: 25, wrestling: 55, taekwondo: 28, general: 72};
+const fpos = id => `object-position:center ${FOCUS[id] ?? 40}%`;
+const initials = n => (n || "").trim().split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0].toLocaleUpperCase("tr-TR")).join("") || "?";
+const today = () => Math.floor((Date.now() - new Date().getTimezoneOffset() * 60000) / 86400000);
+
+// ---- durum (yalnızca bu tarayıcıda; şifre hiçbir yerde saklanmaz) ----
+const st = {view: "intro", user: null, accounts: [], sport: null, pick: null, tab: "challenge", day: null, done: {}, activity: [], reminder: {on: true, hour: 18}, libSport: null, form: {}};
+try { const s = JSON.parse(localStorage.getItem("fe-app2") || "{}"); for (const k of ["user", "accounts", "sport", "done", "activity", "reminder"]) if (s[k] !== undefined) st[k] = s[k]; } catch (e) {}
+const save = () => { try { localStorage.setItem("fe-app2", JSON.stringify({user: st.user, accounts: st.accounts, sport: st.sport, done: st.done, activity: st.activity, reminder: st.reminder})); } catch (e) {} };
+
+// ---- 30 günlük takvim (uygulamadaki ChallengeCalendar'ın aynısı) ----
+const LEN = 30, REST = [5, 10, 15, 20, 25, 28];
+const isRest = n => REST.includes(n);
+const workoutOf = n => isRest(n) ? null : n - REST.filter(r => r < n).length;
+const dayOfWorkout = w => { for (let n = 1; n <= LEN; n++) if (workoutOf(n) === w) return n; };
+const keyOf = n => isRest(n) ? `rest_${n}` : `day_${workoutOf(n)}`;
+const doneKeys = () => st.done[st.sport] || [];
+const isDone = n => doneKeys().includes(keyOf(n));
+const isUnlocked = n => n <= 1 || isDone(n) || isDone(n - 1);
+const current = () => { for (let n = 1; n <= LEN; n++) if (!isDone(n)) return n; return null; };
+const prog = () => DATA.programs[st.sport];
+const phaseOf = n => { let w = null; for (let k = n; k >= 1 && w === null; k--) w = workoutOf(k); return prog().phases.find(p => (w || 1) >= p.from && (w || 1) <= p.to); };
+function streak() {
+  const set = new Set(st.activity), t = today();
+  let d = set.has(t) ? t : set.has(t - 1) ? t - 1 : null; if (d === null) return 0;
+  let n = 0; while (set.has(d)) { n++; d--; } return n;
+}
+function bestStreak() { const a = [...new Set(st.activity)].sort((x, y) => x - y); let best = 0, run = 0; a.forEach((d, i) => { run = i && d === a[i - 1] + 1 ? run + 1 : 1; best = Math.max(best, run); }); return best; }
+function markDone(n) {
+  const arr = st.done[st.sport] = st.done[st.sport] || []; const k = keyOf(n);
+  if (!arr.includes(k)) arr.push(k);
+  if (!st.activity.includes(today())) st.activity.push(today()); save();
+}
+
+// ---- uygulamadaki TrainingPlanner'ın aynısı ----
+const T = {START: 8, INTERVAL: 15, GAP: 8, TRANS: 30, REP: 3};
+function works(bi, b) {
+  const out = [];
+  if (b.mode === "round") for (let r = 1; r <= b.rounds; r++) {
+    const calls = [];
+    if (b.calls && b.calls.length) for (let t = T.START, k = r - 1; t <= b.work - T.GAP; t += T.INTERVAL, k++) calls.push({at: t, move: b.calls[k % b.calls.length]});
+    out.push({type: "work", bi, b, round: r, total: b.rounds, move: b.moves[(r - 1) % b.moves.length], station: 1, stations: 1, sec: b.work, calls});
+  } else for (let r = 1; r <= b.rounds; r++) b.moves.forEach((m, i) =>
+    out.push({type: "work", bi, b, round: r, total: b.rounds, move: m, station: i + 1, stations: b.moves.length,
+      sec: b.mode === "circuit" ? b.work : null, reps: b.mode === "reps" ? b.reps : null, calls: []}));
+  return out;
+}
+function steps(day) {
+  const out = [];
+  day.blocks.forEach((b, bi) => {
+    const w = works(bi, b);
+    if (out.length && w.length) out.push({type: "rest", bi, sec: Math.max(b.rest, T.TRANS), next: w[0], between: true});
+    w.forEach((x, i) => { out.push(x); if (w[i + 1] && b.rest > 0) out.push({type: "rest", bi, sec: b.rest, next: w[i + 1], between: false}); });
+  });
+  return out;
+}
+const minutes = day => Math.ceil(steps(day).reduce((a, s) => a + (s.sec ?? (s.reps || 0) * T.REP), 0) / 60);
+const summary = b => b.mode === "round" ? `${b.rounds} raunt × ${fmt(b.work)}` : b.mode === "circuit" ? `${b.rounds} tur × ${b.moves.length} hareket` : `${b.rounds} set × ${b.reps} tekrar`;
+const roundLabel = s => s.b.mode === "round" ? `RAUNT ${s.round} / ${s.total}` : `${s.b.mode === "circuit" ? "TUR" : "SET"} ${s.round}/${s.total} · ${s.station}/${s.stations}`;
+const totalMinutes = () => doneKeys().filter(k => k.startsWith("day_")).reduce((a, k) => a + minutes(prog().days.find(d => d.day === +k.slice(4))), 0);
+const chips = day => `<div class="chips">${day.blocks.map(b => `<span class="chip"><i style="background:${kc(b.kind)}"></i>${esc(b.title)}</span>`).join("")}</div>`;
+
+// ---- görünümler ----
+function go(view, extra = {}) { Object.assign(st, {view}, extra); render(); $("app").scrollTop = 0; window.scrollTo(0, 0); }
+function home() { go(!st.user ? "welcome" : !st.sport ? "sports" : "tab", {tab: "challenge"}); }
+function setAccent() {
+  const s = st.sport && sportOf(st.sport); const brandView = ["intro", "welcome", "register", "login", "sports", "sport"].includes(st.view);
+  const c = brandView ? "#FF5A3C" : s ? s.colorHex : "#D32F2F";
+  document.documentElement.style.setProperty("--accent", c);
+}
+function render() {
+  setAccent();
+  const v = st.view, app = $("app");
+  const html = v === "intro" ? vIntro() : v === "welcome" ? vWelcome() : v === "register" ? vRegister() : v === "login" ? vLogin()
+    : v === "sports" ? vSports() : v === "sport" ? vSport() : v === "day" ? vDay() : v === "rest" ? vRest() : vTabs();
+  app.innerHTML = html;
+  if (v === "intro") setTimeout(() => { if (st.view === "intro") home(); }, 1700);
+  if (v === "welcome") startWelcome();
+}
+function vIntro() {
+  return `<div class="view brand"><div class="intro"><div class="heroes">${DATA.sports.map(s => `<img src="hero/${s.id}.webp" alt="">`).join("")}</div>
+    <div style="position:relative;z-index:1;display:grid;justify-items:center;gap:14px;margin-bottom:22%"><div class="em">${EMBLEM}</div>
+    <div class="fade"><div class="wordmark">FIGHT<b>EDU</b></div><div class="tag">30 GÜNDE DÖVÜŞ SPORU</div></div></div></div></div>`;
+}
+let wTimer = null, wIndex = 0;
+function vWelcome() {
+  const s = DATA.sports[wIndex % DATA.sports.length];
+  return `<div class="view brand"><div class="welcome">${DATA.sports.map((x, i) => `<img class="bgimg" data-i="${i}" src="hero/${x.id}.webp" alt="" style="opacity:${i === wIndex ? 1 : 0}">`).join("")}
+    <div class="body pad"><div style="text-align:center"><span class="pill" id="wpill" style="background:${s.colorHex}">${s.emoji} ${esc(s.name.toLocaleUpperCase("tr-TR"))}</span>
+    <div class="dots" id="wdots" style="margin-top:10px">${DATA.sports.map((_, i) => `<i class="${i === wIndex ? "on" : ""}"></i>`).join("")}</div></div>
+    <div class="row" style="margin-top:10px"><div style="width:64px;height:64px;flex:none">${EMBLEM}</div><div><div class="wordmark" style="font-size:36px">FIGHT<b>EDU</b></div><div class="tag" style="font-size:13px">30 GÜNDE DÖVÜŞ SPORU</div></div></div>
+    <div class="muted">Boks, kick boks, güreş, tekvando ya da kondisyon: dalını seç, sesli koç eşliğinde 30 günlük meydan okumayı adım adım tamamla.</div>
+    <button class="btn" data-go="register">Hesap oluştur</button><button class="btn ghost" data-go="login">Giriş yap</button>
+    <button class="btn text" data-act="guest">Misafir olarak devam et</button>
+    <div class="notice">Önizleme: hesap bilgileri yalnızca bu tarayıcıda tutulur, şifre hiçbir yere kaydedilmez.</div></div></div></div>`;
+}
+function startWelcome() {
+  clearInterval(wTimer);
+  wTimer = setInterval(() => {
+    if (st.view !== "welcome") return clearInterval(wTimer);
+    wIndex = (wIndex + 1) % DATA.sports.length; const s = DATA.sports[wIndex];
+    document.querySelectorAll(".bgimg").forEach(img => img.style.opacity = +img.dataset.i === wIndex ? 1 : 0);
+    const p = $("wpill"); if (p) { p.style.background = s.colorHex; p.textContent = `${s.emoji} ${s.name.toLocaleUpperCase("tr-TR")}`; }
+    const d = $("wdots"); if (d) d.innerHTML = DATA.sports.map((_, i) => `<i class="${i === wIndex ? "on" : ""}"></i>`).join("");
+  }, 3200);
+}
+const field = (id, label, type, err, val = "") => `<div class="field ${err ? "err" : ""}"><label for="${id}">${label}</label><div class="in"><input id="${id}" type="${type}" value="${esc(val)}" ${type === "email" ? 'autocomplete="email" inputmode="email"' : type === "password" ? 'autocomplete="new-password"' : 'autocomplete="name"'}>${type === "password" ? `<button type="button" class="show" data-show="${id}">Göster</button>` : ""}</div>${err ? `<div class="msg">${esc(err)}</div>` : ""}</div>`;
+function vRegister() {
+  const e = st.form.err || {}, upgrading = st.user && st.user.guest;
+  return `<div class="view brand"><form class="form pad" id="regform" novalidate><button type="button" class="back" data-back aria-label="Geri">←</button>
+    <div style="width:72px;height:72px">${EMBLEM}</div><h1 style="font-size:40px;font-weight:800">${upgrading ? "Hesabını oluştur" : "Hesap oluştur"}</h1>
+    <div class="muted">${upgrading ? "Misafir olarak yaptığın ilerleme bu hesaba aktarılır." : "İlerlemen, serin ve seçtiğin dal hesabına kaydedilir."}</div>
+    ${field("fname", "Adın", "text", e.name, st.form.name)}${field("femail", "E-posta", "email", e.email, st.form.email)}
+    ${field("fpass", "Şifre (en az 6 karakter)", "password", e.password)}${field("fpass2", "Şifre tekrar", "password", e.confirm)}
+    <div class="notice" style="text-align:left">🔒 Uygulamada hesap bu telefonda saklanır; şifre PBKDF2 ile özetlenir.</div>
+    <button class="btn" type="submit">${upgrading ? "Hesabı oluştur" : "Kayıt ol"}</button>
+    <div style="text-align:center" class="muted">Zaten hesabın var mı? <button type="button" class="link" data-go="login">Giriş yap</button></div></form></div>`;
+}
+function vLogin() {
+  const e = st.form.err || {};
+  return `<div class="view brand"><form class="form pad" id="loginform" novalidate><button type="button" class="back" data-back aria-label="Geri">←</button>
+    <div style="width:72px;height:72px">${EMBLEM}</div><h1 style="font-size:40px;font-weight:800">Tekrar hoş geldin</h1><div class="muted">Kaldığın günden devam et.</div>
+    ${field("lemail", "E-posta", "email", e.email, st.form.email)}${field("lpass", "Şifre", "password", e.password)}
+    ${e.general ? `<div class="msg" style="color:#FF6B6B">${esc(e.general)}</div>` : ""}
+    <div style="text-align:right"><button type="button" class="link" data-act="forgot">Şifremi unuttum</button></div>
+    <button class="btn" type="submit">Giriş yap</button>
+    <div style="text-align:center" class="muted">Hesabın yok mu? <button type="button" class="link" data-go="register">Hesap oluştur</button></div></form></div>`;
+}
+function vSports() {
+  return `<div class="view brand"><div class="pad sec" style="padding-top:calc(env(safe-area-inset-top,0px) + 14px)">
+    ${st.sport ? `<button class="back" data-go="tab" aria-label="Geri">←</button>` : ""}
+    <div><div class="muted">Merhaba ${esc(st.user ? st.user.name : "")} 👋</div><h1 style="font-size:38px;font-weight:800;line-height:1.05">Hangi dalda çalışmak istiyorsun?</h1>
+    <div class="muted" style="margin-top:6px">Her dal 30 günlük bir meydan okuma: 24 antrenman + 6 dinlenme günü. Dalını istediğin zaman değiştirebilirsin; her dalın ilerlemesi ayrı saklanır.</div></div>
+    ${DATA.sports.map(s => { const d = (st.done[s.id] || []).length;
+      return `<button class="scard ${s.id === st.sport ? "cur" : ""}" style="--c:${s.colorHex}" data-pick="${s.id}"><img src="hero/${s.id}.webp" alt="" loading="lazy" style="${fpos(s.id)}">
+      <div class="t"><span class="badge" style="background:${s.colorHex}">30 GÜN</span><h3>${s.emoji} ${esc(s.name.toLocaleUpperCase("tr-TR"))}</h3>
+      <div style="font-size:13px;color:#C9CCD3;line-height:1.25">${esc(s.tagline)}</div>
+      ${d ? `<div class="bar"><b style="width:${d / LEN * 100}%;background:${s.colorHex}"></b></div><div style="font-size:12px">${d >= LEN ? "🏆 Tamamlandı" : `${d} / ${LEN} gün`}</div>` : `<div style="font-size:12px;color:#8A909C">Başlangıç seviyesi</div>`}</div></button>`; }).join("")}
+  </div></div>`;
+}
+function vSport() {
+  const s = sportOf(st.pick), p = DATA.programs[s.id], mins = p.days.map(minutes), d = (st.done[s.id] || []).length;
+  return `<div class="view brand"><div style="position:relative;height:320px"><img src="hero/${s.id}.webp" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;${fpos(s.id)}">
+    <div style="position:absolute;inset:0;background:linear-gradient(transparent 35%, var(--brand-dark))"></div>
+    <button class="back pad" data-go="sports" aria-label="Geri" style="position:relative;margin-top:calc(env(safe-area-inset-top,0px) + 8px);margin-left:8px;color:#fff">←</button>
+    <div class="pad" style="position:absolute;left:0;bottom:0"><div class="label" style="color:${s.colorHex}">30 günlük meydan okuma</div><h1 style="font-size:44px;font-weight:800">${s.emoji} ${esc(s.name)}</h1></div></div>
+    <div class="pad sec" style="padding-top:14px">
+    <div class="facts"><div class="fact"><b>24</b><span>antrenman</span></div><div class="fact"><b>6</b><span>dinlenme</span></div><div class="fact"><b>${Math.min(...mins)}–${Math.max(...mins)}</b><span>dk / gün</span></div></div>
+    <div style="color:#D5D8DE">${esc(s.description)}</div>
+    <h2 style="font-size:24px">Yol haritası</h2>
+    <div class="road">${p.phases.map((ph, i) => { const from = dayOfWorkout(ph.from), to = i === p.phases.length - 1 ? LEN : dayOfWorkout(p.phases[i + 1].from) - 1;
+      return `<div class="n" style="background:color-mix(in srgb, ${s.colorHex} 20%, transparent);color:${s.colorHex}">${i + 1}</div><div><b>${esc(ph.title)} · Gün ${from}–${to}</b><div class="muted" style="font-size:13px">${esc(ph.goal)}</div></div>`; }).join("")}</div>
+    <div class="box"><div class="row"><div style="flex:1"><b>Günlük hatırlatıcı</b><div class="muted" style="font-size:13px">O gün çalışmadıysan sıradaki günü hatırlatır.</div></div>
+      <button class="sw" role="switch" aria-checked="${st.reminder.on}" data-act="remind" aria-label="Günlük hatırlatıcı"></button></div>
+      ${st.reminder.on ? `<div class="hours">${[7, 9, 12, 17, 18, 19, 20].map(h => `<button aria-pressed="${st.reminder.hour === h}" data-hour="${h}">${String(h).padStart(2, "0")}:00</button>`).join("")}</div>` : ""}</div>
+    <label class="check"><input type="checkbox" id="safe"><span>Isınmadan başlamayacağım; keskin ağrıda duracağım. Sağlık sorunum varsa önce doktoruma danışacağım.</span></label>
+    <button class="btn" id="startc" data-act="startc" disabled>${d ? `Kaldığın yerden devam et (Gün ${Math.min(d + 1, LEN)})` : "Meydan okumaya başla"}</button></div></div>`;
+}
+function vTabs() {
+  const body = st.tab === "library" ? vLibrary() : st.tab === "profile" ? vProfile() : vChallenge();
+  return `<div class="view">${body}<nav class="nav">${[["challenge", "★", "Meydan Okuma"], ["library", "☰", "Hareketler"], ["profile", "●", "Profil"]]
+    .map(([id, ic, l]) => `<button data-tab="${id}" aria-current="${st.tab === id}"><span>${ic}</span>${l}</button>`).join("")}</nav></div>`;
+}
+function ringSvg(done, size = 104) {
+  const r = 46, c = 2 * Math.PI * r;
+  return `<div class="ringw" style="width:${size}px;height:${size}px"><svg viewBox="0 0 104 104"><circle cx="52" cy="52" r="${r}" fill="none" stroke="var(--surface2)" stroke-width="10"/>
+    <circle cx="52" cy="52" r="${r}" fill="none" stroke="var(--accent)" stroke-width="10" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c * (1 - done / LEN)}"/></svg>
+    <div class="c"><b>${done}</b><span>/ ${LEN} gün</span></div></div>`;
+}
+function vChallenge() {
+  const s = sportOf(st.sport), p = prog(), cur = current(), done = Array.from({length: LEN}, (_, i) => i + 1).filter(isDone).length;
+  const trainedToday = st.activity.includes(today());
+  let todayCard;
+  if (cur === null) todayCard = `<div class="today" style="text-align:center;justify-items:center"><div style="font-size:56px">🏆</div><h2>MEYDAN OKUMA TAMAMLANDI!</h2><div>${esc(s.name)} için 30 günü bitirdin. Yeni bir dal dene ya da tekrar ederek tekniğini pekiştir.</div>
+    <div class="row"><button class="btn ghost" data-act="restart" style="color:var(--ink)">Baştan başla</button><button class="btn" data-go="sports">Yeni dal seç</button></div></div>`;
+  else if (isRest(cur)) todayCard = `<div class="restcard"><div style="flex:1;display:grid;gap:4px"><div class="label" style="color:#9CC9FF">Gün ${cur} · Dinlenme</div><h2 style="font-size:26px">Kasların toparlanıyor</h2>
+    <div style="color:#D7E6F7">İstersen 8 dakikalık hafif esneme yap, sonra günü tamamla.</div><button class="btn" data-open="${cur}" style="width:max-content;margin-top:6px">Dinlenme gününe git</button></div><div style="font-size:56px">😴</div></div>`;
+  else { const t = p.days.find(d => d.day === workoutOf(cur));
+    todayCard = `<div class="today"><div class="row"><span class="label" style="color:var(--accent);flex:1">${trainedToday ? "Sıradaki" : "Bugün"}</span>${cur === LEN ? `<b class="disp" style="color:var(--gold)">🏆 FİNAL</b>` : ""}</div>
+    <div class="big">GÜN ${cur}<span> / 30</span></div><h2>${esc(t.title)}</h2><div>${esc(t.focus)}</div>${chips(t)}
+    <div class="label" style="text-transform:none;letter-spacing:0">≈ ${minutes(t)} dakika · ${t.blocks.length} blok</div>
+    <button class="btn" data-play="${cur}">▶ Antrenmanı başlat</button><button class="btn text" data-open="${cur}">Günün detayları ve hareketler</button></div>`; }
+  const weeks = [1, 2, 3, 4, 5].map(w => { const days = []; for (let n = (w - 1) * 7 + 1; n <= Math.min(w * 7, LEN); n++) days.push(n);
+    const wd = days.every(isDone);
+    return `<div class="week"><div class="row"><b class="disp" style="font-size:16px;flex:1;letter-spacing:.04em">Hafta ${w}</b><span class="muted" style="font-size:12px">${days.filter(isDone).length}/${days.length}</span></div>
+      <div class="wdays">${Array.from({length: 7}, (_, i) => { const n = days[i]; if (!n) return "<span></span>";
+        const cls = ["dc", isDone(n) ? "done" : "", isRest(n) ? "rest" : "", n === cur ? "cur" : "", isUnlocked(n) ? "open" : ""].join(" ");
+        return `<button class="${cls}" data-open="${n}" aria-label="Gün ${n}${isRest(n) ? " dinlenme" : ""}${isDone(n) ? " tamamlandı" : ""}">${isDone(n) ? "✓" : isRest(n) ? "😴" : n}</button>`; }).join("")}
+      <span class="trophy ${wd ? "on" : ""}">🏆</span></div></div>`; }).join("");
+  const phases = p.phases.map((ph, i) => { const days = []; for (let n = 1; n <= LEN; n++) if (phaseOf(n) === ph) days.push(n);
+    const dn = days.filter(isDone).length, on = cur !== null && phaseOf(cur) === ph;
+    return `<div class="phasec ${on ? "on" : ""}"><div class="row"><b style="flex:1">${i + 1}. ${esc(ph.title)}</b><span class="label" style="text-transform:none;letter-spacing:0">Gün ${days[0]}–${days[days.length - 1]}</span></div>
+      <div class="muted" style="font-size:13px">${esc(ph.goal)}</div><div class="pbar2"><b style="width:${dn / days.length * 100}%;${dn === days.length ? "background:var(--ok)" : ""}"></b></div></div>`; }).join("");
+  return `<div class="head"><img src="hero/${s.id}.webp" alt="" style="${fpos(s.id)}"><div class="topb pad"><button class="ava" data-tab="profile" aria-label="Profil">${esc(initials(st.user.name))}</button>
+      <div style="flex:1;min-width:0"><div style="font-size:12px;opacity:.8">Merhaba</div><b>${esc(st.user.name)}</b></div><button class="chg" data-go="sports">${s.emoji} Dalı değiştir</button></div>
+      <div class="ttl"><div style="flex:1"><h1>${esc(s.name.toLocaleUpperCase("tr-TR"))}</h1><div class="disp" style="color:var(--accent);font-size:17px;letter-spacing:.12em">30 günlük meydan okuma</div>
+      ${cur !== null ? `<div class="muted" style="font-size:12px">Evre: ${esc(phaseOf(cur).title)}</div>` : ""}</div>${ringSvg(done)}</div></div>
+    <div class="pad sec" style="padding-top:14px">
+      <div class="tiles"><div class="tile">🔥<b>${streak()}</b><span>günlük seri</span></div><div class="tile">💪<b>${doneKeys().filter(k => k.startsWith("day_")).length}</b><span>antrenman</span></div><div class="tile">⏱<b>${totalMinutes()}</b><span>dakika</span></div></div>
+      ${todayCard}
+      <div class="row"><h2 style="font-size:24px;flex:1">30 GÜNLÜK PLAN</h2><span class="muted" style="font-size:11px">😴 dinlenme · 🏆 hafta</span></div>
+      ${weeks}<h2 style="font-size:24px">EVRELER</h2>${phases}</div>`;
+}
+function vDay() {
+  const n = st.day, p = prog(), d = p.days.find(x => x.day === workoutOf(n)), ph = phaseOf(n), done = isDone(n);
+  return `<div class="view"><div class="topbar pad"><button class="back" data-go="tab" aria-label="Geri">←</button><h2>Gün ${n} / ${LEN}</h2></div>
+    <div class="pad sec"><div><div class="label">${esc(ph.title)} · ~${minutes(d)} dk${done ? " · Tamamlandı ✓" : ""}</div><h1 style="font-size:34px;font-weight:800;text-transform:uppercase">${esc(d.title)}</h1></div>
+    <div class="note"><div class="label">Koçun notu</div>${esc(d.focus)}</div>
+    <div>${d.blocks.map((b, i) => `<div class="tli"><div class="rail"><div class="dot" style="background:${kc(b.kind)}">${i + 1}</div>${i < d.blocks.length - 1 ? `<div class="ln" style="background:${kc(b.kind)}"></div>` : ""}</div>
+      <div class="blk"><h3>${esc(b.title)} <span class="kind" style="color:${kc(b.kind)};background:color-mix(in srgb, ${kc(b.kind)} 14%, transparent)">${KIND[b.kind]}</span></h3>
+      <div style="font-weight:700">${summary(b)}${b.mode !== "reps" && b.rest ? ` · ${fmt(b.rest)} dinlenme` : ""}</div>
+      <div class="thumbs">${[...new Set(b.moves.concat(b.calls || []))].map(m => `<button data-move="${m}"><img src="poster/${m}.webp" alt="${esc(mv(m).name)}" title="${esc(mv(m).name)}" loading="lazy"></button>`).join("")}</div>
+      ${b.calls && b.calls.length ? `<div class="muted" style="font-size:13px">Koç komutları: ${b.calls.map(c => esc(callName(c))).join(", ")}</div>` : ""}</div></div>`).join("")}</div></div>
+    <div class="bottombar pad"><button class="btn ghost" data-act="toggle" style="flex:1">${done ? "Tamamlandı ✓" : "Yapıldı işaretle"}</button><button class="btn" data-play="${n}" style="flex:1.4">▶ Başlat</button></div></div>`;
+}
+function vRest() {
+  const n = st.day, r = DATA.rest, done = isDone(n);
+  const tips = ["Bol su iç; idrar rengin açık olsun.", "7-9 saat uyu: kaslar en çok uykuda onarılır.", "Hafif yürüyüş ya da esneme kan dolaşımını hızlandırır, ağrıyı azaltır.", "Proteinli beslen (yumurta, yoğurt, baklagil, et).", "Ağrıyan bir yer varsa bugün onu zorlama; keskin ağrı sürerse dinlenmeyi uzat."];
+  return `<div class="view"><div class="topbar pad"><button class="back" data-go="tab" aria-label="Geri">←</button><h2>Gün ${n} · Dinlenme</h2></div>
+    <div class="pad sec" style="text-align:center;justify-items:center"><div style="font-size:72px">😴</div><h1 style="font-size:34px;font-weight:800">DİNLENME GÜNÜ</h1>
+    <div>Güç antrenman sırasında değil, dinlenirken gelişir. Bugün ağır antrenman yok; istersen kısa bir esneme seansı yap ve günü tamamla. Serin devam eder.</div>
+    <div class="card" style="text-align:left;width:100%"><h2 style="font-size:22px">${esc(r.title)}</h2><div class="muted">${esc(r.focus)}</div>${chips(r)}</div>
+    <div class="card" style="text-align:left;width:100%"><h2 style="font-size:22px">Toparlanma ipuçları</h2><ul style="margin:6px 0 0;padding-left:18px">${tips.map(t => `<li>${t}</li>`).join("")}</ul></div></div>
+    <div class="bottombar pad"><button class="btn ghost" data-act="stretch" style="flex:1">▶ ${minutes(r)} dk esneme</button><button class="btn" data-act="restdone" style="flex:1.3">${done ? "Tamamlandı ✓" : "Dinlendim, günü tamamla"}</button></div></div>`;
+}
+function vLibrary() {
+  const sid = st.libSport || st.sport; const list = Object.entries(DATA.moves).filter(([, m]) => m.sport === sid);
+  return `<div class="topbar pad"><h2>Hareketler</h2></div><div class="pad sec"><div class="schips">${DATA.sports.map(s => `<button aria-pressed="${s.id === sid}" data-lib="${s.id}">${s.emoji} ${esc(s.name)}</button>`).join("")}</div>
+    <div class="mgrid">${list.map(([id, m]) => `<button class="mcard" data-move="${id}"><img src="poster/${id}.webp" alt="" loading="lazy"><div>${esc(m.name)}</div></button>`).join("")}</div></div>`;
+}
+function vProfile() {
+  const s = sportOf(st.sport), done = Array.from({length: LEN}, (_, i) => i + 1).filter(isDone).length;
+  return `<div class="pad sec"><div class="prof"><div class="ava">${esc(initials(st.user.name))}</div><div style="flex:1;min-width:0"><h2 style="font-size:28px">${esc(st.user.name)}</h2>
+    <div class="muted" style="font-size:13px">${st.user.guest ? "Misafir hesabı · ilerlemen bu cihazda" : esc(st.user.email)}</div></div></div>
+    ${st.user.guest ? `<div class="card"><b>İlerlemeni kaybetme</b><div class="muted" style="font-size:13px;margin:4px 0 10px">Bir hesap oluştur; şimdiye kadarki günlerin ve serin hesabına aktarılsın.</div><button class="btn" data-go="register">Hesap oluştur</button></div>` : ""}
+    <h2 style="font-size:22px">İstatistikler</h2>
+    <div class="stat4"><div class="tile"><b>${done}/${LEN}</b><span>gün</span></div><div class="tile"><b>${streak()}</b><span>seri 🔥</span></div><div class="tile"><b>${bestStreak()}</b><span>en iyi seri</span></div><div class="tile"><b>${totalMinutes()}</b><span>dakika</span></div></div>
+    <h2 style="font-size:22px">Dalım</h2><div class="card"><h3 style="font-size:24px">${s.emoji} ${esc(s.name)}</h3><div class="muted">30 günlük meydan okuma · ${done} gün tamamlandı</div>
+    <div class="row" style="margin-top:10px"><button class="btn" data-go="sports">Dalı değiştir</button><button class="btn ghost" data-act="restart" style="color:var(--ink)">Baştan başla</button></div></div>
+    <h2 style="font-size:22px">Hatırlatıcı</h2><div class="card"><div class="row"><div style="flex:1"><b>Günlük hatırlatıcı</b><div class="muted" style="font-size:13px">O gün henüz çalışmadıysan ${String(st.reminder.hour).padStart(2, "0")}:00'de sıradaki günü hatırlatır.</div></div>
+      <button class="sw" role="switch" aria-checked="${st.reminder.on}" data-act="remind" aria-label="Günlük hatırlatıcı"></button></div></div>
+    <h2 style="font-size:22px">Güvenli antrenman</h2><div class="card"><ul style="margin:0;padding-left:18px"><li>Her antrenmana ısınmayla başla, soğumayla bitir.</li><li>Keskin ağrı hissedersen dur.</li><li>Torba ve partner çalışmasında el sargısı ve eldiven kullan.</li><li>Sparring ve atışları antrenör gözetiminde yap.</li></ul></div>
+    <button class="btn ghost" data-act="logout" style="color:#D32F2F">Çıkış yap</button>
+    <div class="muted" style="font-size:12px">Bu sayfa FightEdu uygulamasının önizlemesidir; uygulamada hesap ve ilerleme telefonda saklanır.</div></div>`;
+}
+
+// ---- pencereler ----
+function dialog(title, text, actions) {
+  const d = $("dlg"); d.hidden = false;
+  d.innerHTML = `<div class="in" role="dialog" aria-modal="true"><h2 style="font-size:24px">${esc(title)}</h2><div>${esc(text)}</div><div class="acts">${actions.map((a, i) => `<button data-dlg="${i}">${esc(a[0])}</button>`).join("")}</div></div>`;
+  d.onclick = e => { const b = e.target.closest("[data-dlg]"); if (e.target === d || b) { d.hidden = true; if (b) actions[+b.dataset.dlg][1] && actions[+b.dataset.dlg][1](); } };
+}
+function toast(t) { const el = $("toast"); el.textContent = t; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 2600); }
+function moveSheet(id) {
+  const m = mv(id), sh = $("sheet"); sh.hidden = false;
+  sh.innerHTML = `<div class="in"><div class="row" style="margin-bottom:8px"><h2 style="font-size:24px;flex:1">${esc(m.name)}</h2><button class="x" data-closesheet aria-label="Kapat">×</button></div>
+    <video src="video/${id}.mp4" poster="poster/${id}.webp" autoplay muted loop playsinline></video>
+    <p>${esc(m.description || "")}</p><ol style="padding-left:20px">${(m.steps || []).map(x => `<li>${esc(x)}</li>`).join("")}</ol>${m.tip ? `<div class="note"><b>İpucu:</b> ${esc(m.tip)}</div>` : ""}</div>`;
+}
+
+// ---- oynatıcı ----
+let P = null, timer = null, actx = null;
+function speak(t) { try { const u = new SpeechSynthesisUtterance(t); u.lang = "tr-TR"; u.rate = 1.05; speechSynthesis.cancel(); speechSynthesis.speak(u); } catch (e) {} }
+function beep(f = 880, ms = 150) { try { actx = actx || new AudioContext(); const o = actx.createOscillator(), g = actx.createGain();
+  o.frequency.value = f; o.connect(g); g.connect(actx.destination); g.gain.setValueAtTime(.15, actx.currentTime); o.start(); o.stop(actx.currentTime + ms / 1000); } catch (e) {} }
+function announce(s) {
+  if (s.type === "work") { beep(660, 400); const first = s.round === 1 && s.station === 1;
+    speak((first && s.b.cue ? s.b.cue + " " : "") + (s.b.mode === "round" ? (s.total > 1 ? `Raunt ${s.round}. Başla!` : "Başla!") : s.b.mode === "circuit" ? `${short(mv(s.move).name)}. ${s.sec} saniye. Başla!` : `${short(mv(s.move).name)}. ${s.reps} tekrar.`)); }
+  else { beep(520, 300); const n = s.next; speak(`Dinlen. ${s.sec} saniye. ${s.between ? "Sıradaki: " + n.b.title : n.b.mode === "round" ? "Sıradaki raunt " + n.round : "Sıradaki: " + short(mv(n.move).name)}.`); }
+}
+function start(day, label, n) {
+  P = {day, label, n, steps: steps(day), i: 0, rem: 0, el: 0, tot: 0, paused: false, fin: false, call: null, callUntil: 0, speed: 1};
+  P.rem = P.steps[0].sec || 0; announce(P.steps[0]); $("player").hidden = false; document.body.style.overflow = "hidden"; draw(); loop();
+}
+function loop() { clearTimeout(timer); if (!P) return; timer = setTimeout(() => { tick(); loop(); }, 1000 / P.speed); }
+function step(i) {
+  if (i >= P.steps.length) { P.fin = true; beep(660, 900); speak("Antrenman bitti. Harika iş çıkardın!"); markDone(P.n); draw(); return; }
+  P.i = Math.max(0, i); P.rem = P.steps[P.i].sec || 0; P.el = 0; P.call = null; announce(P.steps[P.i]); draw();
+}
+function tick() {
+  if (!P || P.paused || P.fin) return; P.tot++; const s = P.steps[P.i]; if (!s.sec) { draw(); return; }
+  P.rem--; P.el++;
+  if (s.type === "work") { s.calls.filter(c => c.at === P.el).forEach(c => { P.call = c.move; P.callUntil = P.tot + 4; speak(callName(c.move) + "!"); });
+    if (P.rem === 10 && s.sec >= 30) speak("Son on saniye!"); }
+  if (P.rem > 0 && P.rem <= 3) beep(990, 100);
+  if (P.call && P.tot >= P.callUntil) P.call = null;
+  if (P.rem <= 0) step(P.i + 1); else draw();
+}
+function prev() { let t = P.el > 2 ? P.i : P.i - 1; while (t > 0 && P.steps[t].type === "rest") t--; step(Math.max(0, t)); }
+function closePlayer() { clearTimeout(timer); try { speechSynthesis.cancel(); } catch (e) {} const fin = P && P.fin; P = null; $("player").hidden = true; document.body.style.overflow = ""; if (fin) go("tab", {tab: "challenge"}); else render(); }
+function ring(rem, total, color) {
+  const r = 80, c = 2 * Math.PI * r, f = total ? rem / total : 0;
+  return `<div class="ring"><svg viewBox="0 0 180 180"><circle cx="90" cy="90" r="${r}" fill="none" stroke="${color}" stroke-opacity=".18" stroke-width="14"/>
+    <circle cx="90" cy="90" r="${r}" fill="none" stroke="${color}" stroke-width="14" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c * (1 - f)}"/></svg>
+    <div class="tm">${clock(Math.max(0, rem))}</div></div>`;
+}
+function draw() {
+  const el = $("player"), s = P.steps[P.i], d = P.day;
+  const rest = s.type === "rest" && !P.fin; el.classList.toggle("rest", rest);
+  const per = d.blocks.map((_, b) => P.steps.filter(x => x.bi === b).length);
+  const bar = d.blocks.map((b, bi) => { const first = P.steps.findIndex(x => x.bi === bi);
+    const f = P.fin || s.bi > bi ? 1 : s.bi === bi ? (P.i - first) / per[bi] : 0;
+    return `<div style="flex:${per[bi]};background:color-mix(in srgb, ${kc(b.kind)} 25%, transparent)"><b style="width:${f * 100}%;background:${kc(b.kind)}"></b></div>`; }).join("");
+  let body;
+  if (P.fin) {
+    const rounds = P.steps.filter(x => x.type === "work" && x.b.mode === "round").length;
+    body = `<div class="done"><div style="font-size:60px">🏆</div><h2 style="font-size:32px">${esc(P.label)} TAMAMLANDI</h2><div>${esc(d.title)}</div>
+      <div class="stats"><div><b>${clock(P.tot)}</b>süre</div><div><b>${rounds}</b>raunt</div><div><b>${streak()}🔥</b>seri</div></div>
+      <button class="btn" data-close>Meydan okumaya dön</button></div>`;
+  } else if (s.type === "work") {
+    const shown = P.call || s.move, m = mv(shown), color = kc(s.b.kind);
+    body = `<div class="rl"><span class="kind" style="color:${color};background:color-mix(in srgb, ${color} 14%, transparent)">${KIND[s.b.kind]}</span><span class="r" style="color:${color}">${roundLabel(s)}</span></div>
+      <div class="vid"><video src="video/${shown}.mp4" poster="poster/${shown}.webp" autoplay muted loop playsinline></video>
+      <div class="call ${P.call ? "on" : ""}" style="background:${color}">${P.call ? esc(callName(P.call)).toUpperCase() + "!" : ""}</div></div>
+      <div class="mname">${esc(m.name)}</div>
+      ${s.sec ? ring(P.rem, s.sec, color) : `<div class="reps" style="color:${color}">${s.reps} TEKRAR</div><button class="btn" data-next style="width:100%">Bitti ✓</button>`}
+      ${s.round === 1 && s.station === 1 && s.b.cue ? `<div style="text-align:center">${esc(s.b.cue)}</div>` : ""}`;
+  } else {
+    const n = s.next;
+    body = `<h2 style="font-size:28px">${s.between ? "BLOK BİTTİ · DİNLEN" : "DİNLEN"}</h2>${ring(P.rem, s.sec, "var(--rest-accent)")}
+      <div style="opacity:.8;text-align:center">Burnundan nefes al, ağzından ver. Omuzlarını gevşet.</div>
+      <button class="speed" data-add style="font-size:14px;padding:6px 12px">+15 sn dinlenme</button>
+      <div class="nextcard"><img src="poster/${n.move}.webp" alt=""><div><div class="label" style="color:${kc(n.b.kind)}">Sıradaki</div>
+      <b>${esc(n.b.title)}</b><div style="font-size:13px;opacity:.8">${roundLabel(n)} · ${esc(mv(n.move).name)}</div></div></div>`;
+  }
+  const oldV = el.querySelector("video"), keep = oldV && s.type === "work" && !P.fin && oldV.getAttribute("src") === `video/${P.call || s.move}.mp4`;
+  if (keep) {
+    el.querySelector(".r") && (el.querySelector(".r").textContent = roundLabel(s));
+    const ringEl = el.querySelector(".ring"); if (ringEl && s.sec) ringEl.outerHTML = ring(P.rem, s.sec, kc(s.b.kind));
+    const c = el.querySelector(".call"); c.classList.toggle("on", !!P.call); c.textContent = P.call ? callName(P.call).toUpperCase() + "!" : "";
+    el.querySelector(".clk").textContent = clock(P.tot); el.querySelector(".pbar").innerHTML = bar;
+    const pp = el.querySelector(".pp"); if (pp) pp.textContent = P.paused ? "▶" : "❚❚";
+    return;
+  }
+  el.innerHTML = `<div class="ptop"><div class="tt"><span class="label" style="color:inherit;opacity:.7">${esc(P.label)} · ${esc(d.blocks[s.bi].title)}</span><b>${esc(d.title)}</b></div>
+    <span class="clk" style="font:700 18px var(--f-mono)">${clock(P.tot)}</span><button class="speed" data-speed>×${P.speed} hız</button><button class="x" data-close aria-label="Kapat">×</button></div>
+    <div class="pbar">${bar}</div><div class="pmain">${body}</div>
+    ${P.fin ? "" : `<div class="ctrl"><button data-prev>◀ Önceki</button>${s.sec ? `<button class="pp" data-pause>${P.paused ? "▶" : "❚❚"}</button>` : "<span></span>"}<button data-next>${s.type === "rest" ? "Atla ▶" : "Sonraki ▶"}</button></div>`}`;
+}
+
+// ---- olaylar ----
+const EMAIL = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/;
+function submitRegister() {
+  const name = $("fname").value.trim().replace(/\s+/g, " "), email = $("femail").value.trim().toLowerCase(), p1 = $("fpass").value, p2 = $("fpass2").value;
+  const err = {};
+  if (!name) err.name = "Adını yaz."; else if (name.length > 40) err.name = "Ad en fazla 40 karakter olabilir.";
+  if (!email) err.email = "E-posta adresini yaz."; else if (!EMAIL.test(email)) err.email = "Geçerli bir e-posta adresi yaz (ör. ad@ornek.com).";
+  else if (st.accounts.some(a => a.email === email) && !(st.user && st.user.email === email)) err.email = "Bu e-posta ile zaten bir hesap var. Giriş yapmayı dene.";
+  if (!p1) err.password = "Şifre belirle."; else if (p1.length < 6) err.password = "Şifre en az 6 karakter olmalı.";
+  if (p2 !== p1) err.confirm = "Şifreler aynı değil.";
+  st.form = {name, email, err};
+  if (Object.keys(err).length) return render();
+  const upgrading = st.user && st.user.guest;
+  st.user = {name, email, guest: false}; st.accounts = st.accounts.filter(a => a.email !== email).concat([{name, email}]); st.form = {}; save();
+  if (upgrading) { go("tab", {tab: "profile"}); toast("Hesabın oluşturuldu; ilerlemen aktarıldı."); } else home();
+}
+function submitLogin() {
+  const email = $("lemail").value.trim().toLowerCase(), pass = $("lpass").value, err = {};
+  if (!EMAIL.test(email)) err.email = "Geçerli bir e-posta adresi yaz (ör. ad@ornek.com).";
+  if (!pass) err.password = "Şifreni yaz.";
+  const acc = st.accounts.find(a => a.email === email);
+  if (!Object.keys(err).length && !acc) err.general = "Bu e-postayla kayıtlı hesap yok. (Önizlemede şifre denetlenmez.)";
+  st.form = {email, err};
+  if (Object.keys(err).length) return render();
+  st.user = {name: acc.name, email, guest: false}; st.form = {}; save(); home();
+}
+document.addEventListener("submit", e => { e.preventDefault(); if (e.target.id === "regform") submitRegister(); else if (e.target.id === "loginform") submitLogin(); });
+document.addEventListener("change", e => { if (e.target.id === "safe") $("startc").disabled = !e.target.checked; });
+document.addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  const ds = b.dataset;
+  if (P && $("player").contains(b)) {
+    if ("close" in ds) closePlayer();
+    else if ("next" in ds) step(P.i + 1);
+    else if ("prev" in ds) prev();
+    else if ("pause" in ds) { P.paused = !P.paused; if (P.paused) try { speechSynthesis.cancel(); } catch (x) {} draw(); }
+    else if ("add" in ds) { P.rem += 15; draw(); }
+    else if ("speed" in ds) { P.speed = P.speed === 1 ? 5 : P.speed === 5 ? 20 : 1; draw(); loop(); }
+    return;
+  }
+  if ("closesheet" in ds) { $("sheet").hidden = true; $("sheet").innerHTML = ""; return; }
+  if (ds.show) { const i = $(ds.show); i.type = i.type === "password" ? "text" : "password"; b.textContent = i.type === "password" ? "Göster" : "Gizle"; return; }
+  if (ds.go) { st.form = {}; if (ds.go === "tab") go("tab"); else go(ds.go); return; }
+  if ("back" in ds) { st.form = {}; go(st.user ? "tab" : "welcome"); return; }
+  if (ds.pick) { go("sport", {pick: ds.pick}); return; }
+  if (ds.tab) { go("tab", {tab: ds.tab}); return; }
+  if (ds.lib) { st.libSport = ds.lib; render(); return; }
+  if (ds.move) { moveSheet(ds.move); return; }
+  if (ds.hour) { st.reminder.hour = +ds.hour; save(); render(); return; }
+  if (ds.open) { const n = +ds.open;
+    const open = () => go(isRest(n) ? "rest" : "day", {day: n});
+    if (isUnlocked(n)) open(); else dialog(`Gün ${n} henüz kilitli`, `Önce Gün ${n - 1}'i tamamla. Günler sırayla açılır; vücudunun her güne hazır olması için böylesi daha güvenli.`, [["Yine de göz at", open], ["Tamam"]]);
+    return; }
+  if (ds.play) { const n = +ds.play; start(prog().days.find(d => d.day === workoutOf(n)), `GÜN ${n} / ${LEN}`, n); return; }
+  switch (ds.act) {
+    case "guest": st.user = {name: "Sporcu", email: null, guest: true}; save(); home(); break;
+    case "forgot": dialog("Şifremi unuttum", "FightEdu hesapları yalnızca telefonda saklanır; bu yüzden e-postayla şifre sıfırlama yok. Şifreni hatırlayamıyorsan yeni bir hesap oluşturabilir ya da misafir olarak devam edebilirsin.", [["Tamam"]]); break;
+    case "remind": st.reminder.on = !st.reminder.on; save(); render(); break;
+    case "startc": st.sport = st.pick; save(); go("tab", {tab: "challenge"}); break;
+    case "toggle": { const arr = st.done[st.sport] = st.done[st.sport] || [], k = keyOf(st.day);
+      if (arr.includes(k)) arr.splice(arr.indexOf(k), 1); else markDone(st.day); save(); render(); break; }
+    case "restdone": { const arr = st.done[st.sport] = st.done[st.sport] || [], k = keyOf(st.day);
+      if (arr.includes(k)) { arr.splice(arr.indexOf(k), 1); save(); render(); } else { markDone(st.day); go("tab", {tab: "challenge"}); toast("Dinlenme günü tamamlandı. Serin devam ediyor 🔥"); } break; }
+    case "stretch": start(DATA.rest, `GÜN ${st.day} · DİNLENME`, st.day); break;
+    case "restart": dialog("Meydan okuma baştan başlasın mı?", `${sportOf(st.sport).name} için tamamladığın günler sıfırlanır. Serin ve diğer dallardaki ilerlemen korunur.`,
+      [["Vazgeç"], ["Baştan başlat", () => { st.done[st.sport] = []; save(); render(); }]]); break;
+    case "logout": dialog("Çıkış yapılsın mı?", st.user.guest ? "Misafir olarak yaptığın ilerleme silinecek. Saklamak için önce hesap oluştur." : "İlerlemen hesabında saklı; tekrar giriş yaptığında kaldığın yerden devam edersin.",
+      [["Vazgeç"], ["Çıkış yap", () => { if (st.user.guest) { st.done = {}; st.activity = []; st.sport = null; } st.user = null; save(); go("welcome"); }]]); break;
+  }
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape") { if (P) closePlayer(); else if (!$("sheet").hidden) { $("sheet").hidden = true; $("sheet").innerHTML = ""; } else $("dlg").hidden = true; } });
+if (st.sport && !DATA.programs[st.sport]) st.sport = null;
+render();
+</script>
+</body>
+</html>

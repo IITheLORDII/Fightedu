@@ -134,7 +134,7 @@ private fun SportCard(sport: Sport, done: Int, current: Boolean, onClick: () -> 
             .then(if (current) Modifier.border(2.dp, color, RoundedCornerShape(22.dp)) else Modifier)
             .clickable(onClick = onClick),
     ) {
-        HeroImage(sport.id, Modifier.fillMaxSize(), alignment = Alignment.Center)
+        HeroImage(sport.id, Modifier.fillMaxSize())
         // soldan koyulaşan geçiş: yazı solda okunur
         Box(
             Modifier
@@ -225,7 +225,7 @@ fun SportConfirmScreen(
                 .verticalScroll(rememberScrollState()),
         ) {
             Box(Modifier.fillMaxWidth().height(340.dp)) {
-                HeroImage(sport.id, Modifier.fillMaxSize(), alignment = Alignment.TopCenter)
+                HeroImage(sport.id, Modifier.fillMaxSize())
                 Scrim(from = 0.35f, color = Color(0xFF0E1116), strength = 1f)
                 IconButton(onClick = onBack, modifier = Modifier.statusBarsPadding().padding(8.dp)) {
                     Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Geri", tint = Color.White)

@@ -66,7 +66,7 @@ fun WelcomeScreen(
     BrandBackground {
         Crossfade(targetState = sport?.id, animationSpec = tween(900), label = "hero") { id ->
             Box(Modifier.fillMaxSize()) {
-                if (id != null) HeroImage(id, Modifier.fillMaxSize(), alignment = Alignment.TopCenter)
+                if (id != null) HeroImage(id, Modifier.fillMaxSize())
                 Scrim(from = 0.25f, color = BrandDark, strength = 1f)
             }
         }
