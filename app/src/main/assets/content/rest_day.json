@@ -1,0 +1,34 @@
+{
+ "day": 0,
+ "title": "Aktif Dinlenme",
+ "focus": "Bugün kaslarının toparlanma günü. İstersen bu kısa esneme seansıyla vücudunu gevşet.",
+ "blocks": [
+  {
+   "kind": "warmup",
+   "title": "Hafif hareket",
+   "mode": "circuit",
+   "rounds": 1,
+   "work": 45,
+   "rest": 15,
+   "moves": [
+    "gen_jog",
+    "gen_arm_circles"
+   ],
+   "cue": "Hafif tempo; terlemek yok, kan dolaşsın."
+  },
+  {
+   "kind": "cooldown",
+   "title": "Esneme",
+   "mode": "circuit",
+   "rounds": 2,
+   "work": 45,
+   "rest": 15,
+   "moves": [
+    "gen_stretch_shoulder",
+    "gen_stretch_hamstring",
+    "gen_stretch_quad"
+   ],
+   "cue": "Her esnemede derin nefes; acı değil, gerilme hissi."
+  }
+ ]
+}

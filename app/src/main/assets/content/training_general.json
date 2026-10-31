@@ -1,0 +1,1763 @@
+{
+ "sport": "general",
+ "phases": [
+  {
+   "title": "Temel Kondisyon",
+   "from": 1,
+   "to": 6,
+   "goal": "Doğru form, nefes ritmi ve temel dayanıklılık."
+  },
+  {
+   "title": "Güç ve Dayanıklılık",
+   "from": 7,
+   "to": 12,
+   "goal": "Daha uzun çalışma, daha kısa dinlenme; burpee devreye girer."
+  },
+  {
+   "title": "Yüksek Tempo",
+   "from": 13,
+   "to": 18,
+   "goal": "45/15 aralıklarla tempo ve hızlı toparlanma."
+  },
+  {
+   "title": "Zirve",
+   "from": 19,
+   "to": 24,
+   "goal": "50/10 aralıklar: dövüşçü dayanıklılığı ve final testi."
+  }
+ ],
+ "days": [
+  {
+   "day": 1,
+   "title": "Başlangıç",
+   "focus": "Her harekette temiz form; hız değil kontrol.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Form",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_squat",
+      "gen_pushup"
+     ],
+     "cue": "Form devresi: Her harekette temiz form; hız değil kontrol."
+    },
+    {
+     "kind": "conditioning",
+     "title": "HIIT devresi",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 30,
+     "rest": 30,
+     "moves": [
+      "gen_squat",
+      "gen_pushup",
+      "gen_jog",
+      "gen_plank"
+     ],
+     "cue": "3 tur: her istasyonda 30 sn çalış, 30 sn dinlen."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Bitirici",
+     "mode": "round",
+     "rounds": 1,
+     "work": 60,
+     "rest": 0,
+     "moves": [
+      "gen_jog"
+     ],
+     "calls": [],
+     "cue": "Bitirici: son bir dakika, tempoyu koru."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 2,
+   "title": "Gövde Gücü",
+   "focus": "Karın sıkı, bel düz; plank'te kalçayı düşürme.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Form",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_plank",
+      "gen_situp"
+     ],
+     "cue": "Form devresi: Karın sıkı, bel düz; plank'te kalçayı düşürme."
+    },
+    {
+     "kind": "conditioning",
+     "title": "HIIT devresi",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 30,
+     "rest": 30,
+     "moves": [
+      "gen_situp",
+      "gen_plank",
+      "gen_squat",
+      "gen_jog"
+     ],
+     "cue": "3 tur: her istasyonda 30 sn çalış, 30 sn dinlen."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Bitirici",
+     "mode": "round",
+     "rounds": 1,
+     "work": 60,
+     "rest": 0,
+     "moves": [
+      "gen_jog"
+     ],
+     "calls": [],
+     "cue": "Bitirici: son bir dakika, tempoyu koru."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 3,
+   "title": "Bacak Günü",
+   "focus": "Squat'ta dizler parmak yönünde, topuklar yerde.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Form",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_squat",
+      "gen_jog"
+     ],
+     "cue": "Form devresi: Squat'ta dizler parmak yönünde, topuklar yerde."
+    },
+    {
+     "kind": "conditioning",
+     "title": "HIIT devresi",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 30,
+     "rest": 30,
+     "moves": [
+      "gen_squat",
+      "gen_jump_rope",
+      "gen_situp",
+      "gen_plank"
+     ],
+     "cue": "3 tur: her istasyonda 30 sn çalış, 30 sn dinlen."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Bitirici",
+     "mode": "round",
+     "rounds": 1,
+     "work": 60,
+     "rest": 0,
+     "moves": [
+      "gen_jog"
+     ],
+     "calls": [],
+     "cue": "Bitirici: son bir dakika, tempoyu koru."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 4,
+   "title": "Üst Vücut",
+   "focus": "Şınavda dirsekler 45°, gövde tek parça.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Form",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_plank"
+     ],
+     "cue": "Form devresi: Şınavda dirsekler 45°, gövde tek parça."
+    },
+    {
+     "kind": "conditioning",
+     "title": "HIIT devresi",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 30,
+     "rest": 30,
+     "moves": [
+      "gen_pushup",
+      "gen_plank",
+      "gen_jog",
+      "gen_situp"
+     ],
+     "cue": "3 tur: her istasyonda 30 sn çalış, 30 sn dinlen."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Bitirici",
+     "mode": "round",
+     "rounds": 1,
+     "work": 60,
+     "rest": 0,
+     "moves": [
+      "gen_jog"
+     ],
+     "calls": [],
+     "cue": "Bitirici: son bir dakika, tempoyu koru."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 5,
+   "title": "İp ve Ritim",
+   "focus": "İpi bilekten çevir, ayak uçlarında hafif zıpla.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Form",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_jump_rope",
+      "gen_jog"
+     ],
+     "cue": "Form devresi: İpi bilekten çevir, ayak uçlarında hafif zıpla."
+    },
+    {
+     "kind": "conditioning",
+     "title": "HIIT devresi",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 30,
+     "rest": 30,
+     "moves": [
+      "gen_jump_rope",
+      "gen_squat",
+      "gen_pushup",
+      "gen_plank"
+     ],
+     "cue": "3 tur: her istasyonda 30 sn çalış, 30 sn dinlen."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Bitirici",
+     "mode": "round",
+     "rounds": 1,
+     "work": 60,
+     "rest": 0,
+     "moves": [
+      "gen_jog"
+     ],
+     "calls": [],
+     "cue": "Bitirici: son bir dakika, tempoyu koru."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 6,
+   "title": "Test 1",
+   "focus": "Her istasyonda temiz tekrar sayını aklında tut; bir sonraki testte geçeceksin.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Test devresi",
+     "mode": "circuit",
+     "rounds": 4,
+     "work": 30,
+     "rest": 30,
+     "moves": [
+      "gen_squat",
+      "gen_pushup",
+      "gen_situp",
+      "gen_plank",
+      "gen_jog"
+     ],
+     "cue": "4 tur: her istasyonda 30 sn çalış, 30 sn dinlen."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 7,
+   "title": "Burpee'ye Giriş",
+   "focus": "Burpee'de önce form: çömel, ayakları geri at, göğüs yere, patlayarak kalk.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Form",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_squat"
+     ],
+     "cue": "Form devresi: Burpee'de önce form: çömel, ayakları geri at, göğüs yere, patlayarak kalk."
+    },
+    {
+     "kind": "conditioning",
+     "title": "HIIT devresi",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_squat",
+      "gen_plank",
+      "gen_jog"
+     ],
+     "cue": "3 tur: her istasyonda 40 sn çalış, 20 sn dinlen."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Bitirici",
+     "mode": "round",
+     "rounds": 1,
+     "work": 75,
+     "rest": 0,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Bitirici: son bir dakika, tempoyu koru."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 8,
+   "title": "Gövde Devresi",
+   "focus": "Mekikte boynu çekme; gücü karından al.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Form",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_situp",
+      "gen_plank"
+     ],
+     "cue": "Form devresi: Mekikte boynu çekme; gücü karından al."
+    },
+    {
+     "kind": "conditioning",
+     "title": "HIIT devresi",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_situp",
+      "gen_plank",
+      "gen_burpee",
+      "gen_jump_rope"
+     ],
+     "cue": "3 tur: her istasyonda 40 sn çalış, 20 sn dinlen."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Bitirici",
+     "mode": "round",
+     "rounds": 1,
+     "work": 75,
+     "rest": 0,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Bitirici: son bir dakika, tempoyu koru."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 9,
+   "title": "Tam Vücut",
+   "focus": "Üst ve alt vücut sırayla: biri çalışırken diğeri dinlenir.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Form",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat"
+     ],
+     "cue": "Form devresi: Üst ve alt vücut sırayla: biri çalışırken diğeri dinlenir."
+    },
+    {
+     "kind": "conditioning",
+     "title": "HIIT devresi",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_squat",
+      "gen_burpee",
+      "gen_situp"
+     ],
+     "cue": "3 tur: her istasyonda 40 sn çalış, 20 sn dinlen."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Bitirici",
+     "mode": "round",
+     "rounds": 1,
+     "work": 75,
+     "rest": 0,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Bitirici: son bir dakika, tempoyu koru."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 10,
+   "title": "Kardiyo Patlaması",
+   "focus": "Nabız yüksek; dinlenmede burnundan nefes al.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Form",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_jog",
+      "gen_jump_rope"
+     ],
+     "cue": "Form devresi: Nabız yüksek; dinlenmede burnundan nefes al."
+    },
+    {
+     "kind": "conditioning",
+     "title": "HIIT devresi",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_jog",
+      "gen_jump_rope",
+      "gen_burpee",
+      "gen_squat"
+     ],
+     "cue": "3 tur: her istasyonda 40 sn çalış, 20 sn dinlen."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Bitirici",
+     "mode": "round",
+     "rounds": 1,
+     "work": 75,
+     "rest": 0,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Bitirici: son bir dakika, tempoyu koru."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 11,
+   "title": "Kuvvet Dayanıklılığı",
+   "focus": "Son 10 saniyede tempoyu düşürme.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Form",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_plank"
+     ],
+     "cue": "Form devresi: Son 10 saniyede tempoyu düşürme."
+    },
+    {
+     "kind": "conditioning",
+     "title": "HIIT devresi",
+     "mode": "circuit",
+     "rounds": 3,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_plank",
+      "gen_squat",
+      "gen_situp",
+      "gen_jog"
+     ],
+     "cue": "3 tur: her istasyonda 40 sn çalış, 20 sn dinlen."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Bitirici",
+     "mode": "round",
+     "rounds": 1,
+     "work": 75,
+     "rest": 0,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Bitirici: son bir dakika, tempoyu koru."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 12,
+   "title": "Test 2",
+   "focus": "Test 1'deki sayılarını geç: aynı form, daha çok tekrar.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Test devresi",
+     "mode": "circuit",
+     "rounds": 4,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_pushup",
+      "gen_squat",
+      "gen_situp",
+      "gen_jump_rope"
+     ],
+     "cue": "4 tur: her istasyonda 40 sn çalış, 20 sn dinlen."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 13,
+   "title": "Tempo Squat",
+   "focus": "İnişte 2 saniye, çıkışta patlayıcı.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Form",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_squat",
+      "gen_burpee"
+     ],
+     "cue": "Form devresi: İnişte 2 saniye, çıkışta patlayıcı."
+    },
+    {
+     "kind": "conditioning",
+     "title": "HIIT devresi",
+     "mode": "circuit",
+     "rounds": 4,
+     "work": 45,
+     "rest": 15,
+     "moves": [
+      "gen_squat",
+      "gen_burpee",
+      "gen_jump_rope",
+      "gen_plank"
+     ],
+     "cue": "4 tur: her istasyonda 45 sn çalış, 15 sn dinlen."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Bitirici",
+     "mode": "round",
+     "rounds": 1,
+     "work": 90,
+     "rest": 0,
+     "moves": [
+      "gen_jog"
+     ],
+     "calls": [],
+     "cue": "Bitirici: son bir dakika, tempoyu koru."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 14,
+   "title": "Şınav Merdiveni",
+   "focus": "Yorulunca dizden şınava geç ama durma.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Form",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_pushup",
+      "gen_situp"
+     ],
+     "cue": "Form devresi: Yorulunca dizden şınava geç ama durma."
+    },
+    {
+     "kind": "conditioning",
+     "title": "HIIT devresi",
+     "mode": "circuit",
+     "rounds": 4,
+     "work": 45,
+     "rest": 15,
+     "moves": [
+      "gen_pushup",
+      "gen_situp",
+      "gen_jog",
+      "gen_burpee"
+     ],
+     "cue": "4 tur: her istasyonda 45 sn çalış, 15 sn dinlen."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Bitirici",
+     "mode": "round",
+     "rounds": 1,
+     "work": 90,
+     "rest": 0,
+     "moves": [
+      "gen_jog"
+     ],
+     "calls": [],
+     "cue": "Bitirici: son bir dakika, tempoyu koru."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 15,
+   "title": "Dövüşçü Kondisyonu",
+   "focus": "İp ve burpee: dövüşçülerin klasik ikilisi.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Form",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_jump_rope",
+      "gen_burpee"
+     ],
+     "cue": "Form devresi: İp ve burpee: dövüşçülerin klasik ikilisi."
+    },
+    {
+     "kind": "conditioning",
+     "title": "HIIT devresi",
+     "mode": "circuit",
+     "rounds": 4,
+     "work": 45,
+     "rest": 15,
+     "moves": [
+      "gen_jump_rope",
+      "gen_burpee",
+      "gen_pushup",
+      "gen_squat",
+      "gen_plank"
+     ],
+     "cue": "4 tur: her istasyonda 45 sn çalış, 15 sn dinlen."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Bitirici",
+     "mode": "round",
+     "rounds": 1,
+     "work": 90,
+     "rest": 0,
+     "moves": [
+      "gen_jog"
+     ],
+     "calls": [],
+     "cue": "Bitirici: son bir dakika, tempoyu koru."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 16,
+   "title": "Gövde Kalkanı",
+   "focus": "Gövde sert, nefes kontrollü; darbe almaya hazır bir karın.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Form",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_plank",
+      "gen_situp"
+     ],
+     "cue": "Form devresi: Gövde sert, nefes kontrollü; darbe almaya hazır bir karın."
+    },
+    {
+     "kind": "conditioning",
+     "title": "HIIT devresi",
+     "mode": "circuit",
+     "rounds": 4,
+     "work": 45,
+     "rest": 15,
+     "moves": [
+      "gen_plank",
+      "gen_situp",
+      "gen_burpee",
+      "gen_jog"
+     ],
+     "cue": "4 tur: her istasyonda 45 sn çalış, 15 sn dinlen."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Bitirici",
+     "mode": "round",
+     "rounds": 1,
+     "work": 90,
+     "rest": 0,
+     "moves": [
+      "gen_jog"
+     ],
+     "calls": [],
+     "cue": "Bitirici: son bir dakika, tempoyu koru."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 17,
+   "title": "Patlayıcı Güç",
+   "focus": "Her tekrar maksimum hız, tam hareket açıklığı.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Form",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_squat"
+     ],
+     "cue": "Form devresi: Her tekrar maksimum hız, tam hareket açıklığı."
+    },
+    {
+     "kind": "conditioning",
+     "title": "HIIT devresi",
+     "mode": "circuit",
+     "rounds": 4,
+     "work": 45,
+     "rest": 15,
+     "moves": [
+      "gen_burpee",
+      "gen_squat",
+      "gen_pushup",
+      "gen_jump_rope"
+     ],
+     "cue": "4 tur: her istasyonda 45 sn çalış, 15 sn dinlen."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Bitirici",
+     "mode": "round",
+     "rounds": 1,
+     "work": 90,
+     "rest": 0,
+     "moves": [
+      "gen_jog"
+     ],
+     "calls": [],
+     "cue": "Bitirici: son bir dakika, tempoyu koru."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 18,
+   "title": "Test 3",
+   "focus": "45/15 temposunda tüm istasyonlar; formu bozma.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Test devresi",
+     "mode": "circuit",
+     "rounds": 5,
+     "work": 45,
+     "rest": 15,
+     "moves": [
+      "gen_burpee",
+      "gen_squat",
+      "gen_pushup",
+      "gen_situp",
+      "gen_plank"
+     ],
+     "cue": "5 tur: her istasyonda 45 sn çalış, 15 sn dinlen."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 19,
+   "title": "Zirve Devresi",
+   "focus": "50/10: dinlenme kısa, nefesini hareket sırasında düzenle.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Form",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_burpee",
+      "gen_pushup"
+     ],
+     "cue": "Form devresi: 50/10: dinlenme kısa, nefesini hareket sırasında düzenle."
+    },
+    {
+     "kind": "conditioning",
+     "title": "HIIT devresi",
+     "mode": "circuit",
+     "rounds": 4,
+     "work": 50,
+     "rest": 10,
+     "moves": [
+      "gen_burpee",
+      "gen_pushup",
+      "gen_squat",
+      "gen_jog",
+      "gen_plank"
+     ],
+     "cue": "4 tur: her istasyonda 50 sn çalış, 10 sn dinlen."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Bitirici",
+     "mode": "round",
+     "rounds": 1,
+     "work": 105,
+     "rest": 0,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Bitirici: son bir dakika, tempoyu koru."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 20,
+   "title": "Uzun Raunt",
+   "focus": "Kardiyo ağırlıklı uzun devre; tempoyu eşit dağıt.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Form",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_jump_rope",
+      "gen_jog"
+     ],
+     "cue": "Form devresi: Kardiyo ağırlıklı uzun devre; tempoyu eşit dağıt."
+    },
+    {
+     "kind": "conditioning",
+     "title": "HIIT devresi",
+     "mode": "circuit",
+     "rounds": 4,
+     "work": 50,
+     "rest": 10,
+     "moves": [
+      "gen_jump_rope",
+      "gen_jog",
+      "gen_burpee",
+      "gen_situp",
+      "gen_squat"
+     ],
+     "cue": "4 tur: her istasyonda 50 sn çalış, 10 sn dinlen."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Bitirici",
+     "mode": "round",
+     "rounds": 1,
+     "work": 105,
+     "rest": 0,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Bitirici: son bir dakika, tempoyu koru."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 21,
+   "title": "Güç Zinciri",
+   "focus": "Squat, şınav, burpee zinciri: kas dayanıklılığı.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Form",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_squat",
+      "gen_pushup"
+     ],
+     "cue": "Form devresi: Squat, şınav, burpee zinciri: kas dayanıklılığı."
+    },
+    {
+     "kind": "conditioning",
+     "title": "HIIT devresi",
+     "mode": "circuit",
+     "rounds": 4,
+     "work": 50,
+     "rest": 10,
+     "moves": [
+      "gen_squat",
+      "gen_pushup",
+      "gen_burpee",
+      "gen_plank",
+      "gen_situp"
+     ],
+     "cue": "4 tur: her istasyonda 50 sn çalış, 10 sn dinlen."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Bitirici",
+     "mode": "round",
+     "rounds": 1,
+     "work": 105,
+     "rest": 0,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Bitirici: son bir dakika, tempoyu koru."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 22,
+   "title": "Kardiyo Fırtınası",
+   "focus": "En yüksek nabız günü; son turda her şeyini ver.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Form",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_jog",
+      "gen_burpee"
+     ],
+     "cue": "Form devresi: En yüksek nabız günü; son turda her şeyini ver."
+    },
+    {
+     "kind": "conditioning",
+     "title": "HIIT devresi",
+     "mode": "circuit",
+     "rounds": 4,
+     "work": 50,
+     "rest": 10,
+     "moves": [
+      "gen_jog",
+      "gen_burpee",
+      "gen_jump_rope",
+      "gen_squat",
+      "gen_pushup"
+     ],
+     "cue": "4 tur: her istasyonda 50 sn çalış, 10 sn dinlen."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Bitirici",
+     "mode": "round",
+     "rounds": 1,
+     "work": 105,
+     "rest": 0,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Bitirici: son bir dakika, tempoyu koru."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 23,
+   "title": "Son Hazırlık",
+   "focus": "Finalden önce temiz ve kontrollü bir devre.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "technique",
+     "title": "Form",
+     "mode": "circuit",
+     "rounds": 2,
+     "work": 40,
+     "rest": 20,
+     "moves": [
+      "gen_plank",
+      "gen_situp"
+     ],
+     "cue": "Form devresi: Finalden önce temiz ve kontrollü bir devre."
+    },
+    {
+     "kind": "conditioning",
+     "title": "HIIT devresi",
+     "mode": "circuit",
+     "rounds": 4,
+     "work": 50,
+     "rest": 10,
+     "moves": [
+      "gen_plank",
+      "gen_situp",
+      "gen_pushup",
+      "gen_squat",
+      "gen_burpee"
+     ],
+     "cue": "4 tur: her istasyonda 50 sn çalış, 10 sn dinlen."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Bitirici",
+     "mode": "round",
+     "rounds": 1,
+     "work": 105,
+     "rest": 0,
+     "moves": [
+      "gen_jump_rope"
+     ],
+     "calls": [],
+     "cue": "Bitirici: son bir dakika, tempoyu koru."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  },
+  {
+   "day": 24,
+   "title": "Final",
+   "focus": "30 günün sonu: tüm istasyonlar, en iyi formun ve en çok tekrarın.",
+   "blocks": [
+    {
+     "kind": "warmup",
+     "title": "Isınma",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 60,
+     "rest": 15,
+     "moves": [
+      "gen_jog",
+      "gen_arm_circles",
+      "gen_jump_rope"
+     ],
+     "cue": "Isınma: yerinde koşu, kol çevirme ve ip."
+    },
+    {
+     "kind": "conditioning",
+     "title": "Test devresi",
+     "mode": "circuit",
+     "rounds": 5,
+     "work": 50,
+     "rest": 10,
+     "moves": [
+      "gen_burpee",
+      "gen_squat",
+      "gen_pushup",
+      "gen_situp",
+      "gen_plank",
+      "gen_jump_rope"
+     ],
+     "cue": "5 tur: her istasyonda 50 sn çalış, 10 sn dinlen."
+    },
+    {
+     "kind": "cooldown",
+     "title": "Esneme",
+     "mode": "circuit",
+     "rounds": 1,
+     "work": 40,
+     "rest": 10,
+     "moves": [
+      "gen_stretch_shoulder",
+      "gen_stretch_hamstring",
+      "gen_stretch_quad"
+     ],
+     "cue": "Nefesini yavaşlat, esnemeleri zorlamadan yap."
+    }
+   ]
+  }
+ ]
+}

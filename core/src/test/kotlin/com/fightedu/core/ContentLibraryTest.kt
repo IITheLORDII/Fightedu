@@ -10,8 +10,8 @@ class ContentLibraryTest {
     private val library = TestContent.library
 
     @Test
-    fun `dört spor yüklenir`() {
-        assertEquals(listOf("boxing", "kickboxing", "wrestling", "taekwondo"), library.sports.map { it.id })
+    fun `beş dal yüklenir`() {
+        assertEquals(listOf("boxing", "kickboxing", "wrestling", "taekwondo", "general"), library.sports.map { it.id })
     }
 
     @Test
@@ -21,12 +21,20 @@ class ContentLibraryTest {
     }
 
     @Test
-    fun `her sporun 24 günlük programı ve yeterli hareketi var`() {
+    fun `her dalın 24 antrenman günlük programı ve yeterli hareketi var`() {
         for (sport in library.sports) {
             val program = library.program(sport.id)!!
             assertEquals(ContentLibrary.TOTAL_DAYS, program.totalDays)
             assertEquals(4, program.phases.size)
-            assertTrue("${sport.id} hareket sayısı", library.movesForSport(sport.id).size >= 12)
+            assertTrue("${sport.id} hareket sayısı", library.movesForSport(sport.id).size >= 11)
         }
+    }
+
+    @Test
+    fun `genel hareketler bir kez yüklenir ve dinlenme günü kısa`() {
+        assertEquals(11, library.movesForSport(ContentLibrary.GENERAL).size)
+        val rest = library.restDay!!
+        val min = com.fightedu.core.domain.TrainingPlanner(library).estimatedMinutes(rest)
+        assertTrue("dinlenme $min dk", min in ContentLibrary.REST_MIN_MINUTES..ContentLibrary.REST_MAX_MINUTES)
     }
 }

@@ -5,7 +5,7 @@
     "emoji": "🥊",
     "colorHex": "#D32F2F",
     "tagline": "Yumruk teknikleri, ayak oyunu ve savunma",
-    "description": "Boks; duruş, ayak oyunu, dört temel yumruk (jab, cross, kroşe, aparkat) ve kafa hareketiyle savunma üzerine kuruludur. 8 haftalık program sonunda temel kombinasyonları akıcı şekilde uygulayabilir ve 3 dakikalık rauntlarda gölge boksu yapabilir hale gelirsin."
+    "description": "Boks; duruş, ayak oyunu, dört temel yumruk (jab, cross, kroşe, aparkat) ve kafa hareketiyle savunma üzerine kuruludur. 30 günlük meydan okumanın sonunda temel kombinasyonları akıcı şekilde uygulayabilir ve 3 dakikalık rauntlarda gölge boksu yapabilir hale gelirsin."
   },
   {
     "id": "kickboxing",
@@ -30,5 +30,13 @@
     "colorHex": "#6A1B9A",
     "tagline": "Duruşlar, bloklar ve tekme teknikleri",
     "description": "Tekvando; temel duruşlar (seogi), bloklar (makgi), yumruk (jireugi) ve hızlı, yüksek tekmelerle (chagi) öne çıkar. Program sonunda Taegeuk 1 (Il Jang) formunun parçalarını ve beş temel tekmeyi uygulayabilirsin."
+  },
+  {
+    "id": "general",
+    "name": "Genel Kondisyon",
+    "emoji": "💪",
+    "colorHex": "#EF6C00",
+    "tagline": "Güç, dayanıklılık ve kardiyo – ekipmansız",
+    "description": "Dövüş sporlarının temeli olan kondisyon için ekipmansız bir program: squat, şınav, mekik, plank, burpee ve ip. 30 günün sonunda 50 saniye çalışma / 10 saniye dinlenme temposunda tüm vücut devrelerini tamamlayabilir hale gelirsin."
   }
 ]

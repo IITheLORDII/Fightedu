@@ -1,17 +1,23 @@
 package com.fightedu.core.content
 
+import com.fightedu.core.domain.ChallengeCalendar
 import com.fightedu.core.domain.TrainingPlanner
 import com.fightedu.core.model.BlockMode
 import com.fightedu.core.model.Move
 import com.fightedu.core.model.Sport
+import com.fightedu.core.model.TrainingDay
 import com.fightedu.core.model.TrainingProgram
 import kotlinx.serialization.json.Json
 
-/** Uygulamanın tüm statik içeriği (sporlar, hareketler, günlük antrenman programları). */
+/**
+ * Uygulamanın tüm statik içeriği (dallar, hareketler, günlük antrenman programları ve 30 günlük meydan okumanın
+ * dinlenme günlerinde önerilen kısa aktif dinlenme seansı).
+ */
 class ContentLibrary(
     val sports: List<Sport>,
     moves: List<Move>,
     programs: List<TrainingProgram>,
+    val restDay: TrainingDay? = null,
 ) {
     val moves: Map<String, Move> = moves.associateBy { it.id }
     val programs: Map<String, TrainingProgram> = programs.associateBy { it.sport }
@@ -73,12 +79,33 @@ class ContentLibrary(
             val unused = movesForSport(sport.id).map { it.id }.filter { it !in used }
             if (unused.isNotEmpty()) errors += "${sport.id}: programda kullanılmayan hareketler $unused"
         }
+        if (restDay != null) errors += validateRestDay(restDay, planner)
+        return errors
+    }
+
+    private fun validateRestDay(day: TrainingDay, planner: TrainingPlanner): List<String> {
+        val errors = mutableListOf<String>()
+        if (day.blocks.isEmpty()) errors += "dinlenme günü: blok yok"
+        for (b in day.blocks) {
+            if (b.moves.isEmpty()) errors += "dinlenme günü/${b.title}: hareket yok"
+            for (m in b.moves) if (m !in moves) errors += "dinlenme günü/${b.title}: bilinmeyen hareket $m"
+            if (b.mode == BlockMode.REPS || b.work <= 0) errors += "dinlenme günü/${b.title}: süreli olmalı"
+        }
+        if (errors.isEmpty()) {
+            val min = planner.estimatedMinutes(day)
+            if (min !in REST_MIN_MINUTES..REST_MAX_MINUTES) {
+                errors += "dinlenme günü: süre $min dk ($REST_MIN_MINUTES-$REST_MAX_MINUTES olmalı)"
+            }
+        }
         return errors
     }
 
     companion object {
         const val GENERAL = "general"
-        const val TOTAL_DAYS = 24
+        /** Her dalın antrenman günü sayısı; meydan okumada bunlara 6 dinlenme günü eklenir (30 gün). */
+        const val TOTAL_DAYS = ChallengeCalendar.WORKOUTS
+        const val REST_MIN_MINUTES = 5
+        const val REST_MAX_MINUTES = 15
         const val MIN_MINUTES = 20
         const val MAX_MINUTES = 60
         const val MIN_DAYS_PER_WEEK = 3
@@ -89,10 +116,12 @@ class ContentLibrary(
         /** [readAsset] assets köküne göre bir yol alır ve dosya içeriğini döndürür. */
         fun load(readAsset: (String) -> String): ContentLibrary {
             val sports = json.decodeFromString<List<Sport>>(readAsset("content/sports.json"))
-            val moveFiles = listOf(GENERAL) + sports.map { it.id }
+            // "general" hem ortak ısınma/kondisyon havuzu hem de seçilebilir bir dal
+            val moveFiles = (listOf(GENERAL) + sports.map { it.id }).distinct()
             val moves = moveFiles.flatMap { json.decodeFromString<List<Move>>(readAsset("content/moves_$it.json")) }
             val programs = sports.map { json.decodeFromString<TrainingProgram>(readAsset("content/training_${it.id}.json")) }
-            return ContentLibrary(sports, moves, programs)
+            val restDay = json.decodeFromString<TrainingDay>(readAsset("content/rest_day.json"))
+            return ContentLibrary(sports, moves, programs, restDay)
         }
     }
 }

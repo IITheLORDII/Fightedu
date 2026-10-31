@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Günlük antrenman programlarını üretir: app/src/main/assets/content/training_<spor>.json
 
-Her spor 24 gün, 4 evre (6'şar gün). Bir gün: ısınma -> teknik raundu -> gölge -> ana raundlar
+Her spor 24 antrenman günü, 4 evre (6'şar gün); uygulama bunları 6 dinlenme günüyle 30 günlük meydan okumaya
+yerleştirir (dinlenme seansı: rest_day.json). Bir gün: ısınma -> teknik raundu -> gölge -> ana raundlar
 (torba / drill / tekme) -> kondisyon devresi -> esneme. Evre ilerledikçe raunt süresi ve sayısı artar.
 Günlerin tema, koç notu ve hareket/komut listeleri aşağıda elle yazılmıştır; bu betik yalnızca blokları
 kurar ve süreyi kontrol eder. Kullanım: python3 tools/content/make_training.py
@@ -334,7 +335,97 @@ SPORTS = {
 }
 
 
+# ---------------------------------------------------------------------------------------------
+# Genel Kondisyon: dövüş tekniği yok; ısınma -> form devresi -> HIIT devresi -> bitirici -> esneme.
+# Evre ilerledikçe çalışma/dinlenme oranı artar (30/30 -> 40/20 -> 45/15 -> 50/10) ve tur sayısı çoğalır.
+# ---------------------------------------------------------------------------------------------
+GEN_PHASE = [
+    dict(work=30, rest=30, rounds=3),
+    dict(work=40, rest=20, rounds=3),
+    dict(work=45, rest=15, rounds=4),
+    dict(work=50, rest=10, rounds=4),
+]
+
+PHASE_INFO["general"] = [
+    ("Temel Kondisyon", "Doğru form, nefes ritmi ve temel dayanıklılık."),
+    ("Güç ve Dayanıklılık", "Daha uzun çalışma, daha kısa dinlenme; burpee devreye girer."),
+    ("Yüksek Tempo", "45/15 aralıklarla tempo ve hızlı toparlanma."),
+    ("Zirve", "50/10 aralıklar: dövüşçü dayanıklılığı ve final testi."),
+]
+
+S, P, PL, SU, B, J, JO = ("gen_squat", "gen_pushup", "gen_plank", "gen_situp", "gen_burpee", "gen_jump_rope",
+                          "gen_jog")
+# (başlık, koç notu, form hareketleri, HIIT hareketleri, değerlendirme?)
+GENERAL = [
+    ("Başlangıç", "Her harekette temiz form; hız değil kontrol.", [S, P], [S, P, JO, PL]),
+    ("Gövde Gücü", "Karın sıkı, bel düz; plank'te kalçayı düşürme.", [PL, SU], [SU, PL, S, JO]),
+    ("Bacak Günü", "Squat'ta dizler parmak yönünde, topuklar yerde.", [S, JO], [S, J, SU, PL]),
+    ("Üst Vücut", "Şınavda dirsekler 45°, gövde tek parça.", [P, PL], [P, PL, JO, SU]),
+    ("İp ve Ritim", "İpi bilekten çevir, ayak uçlarında hafif zıpla.", [J, JO], [J, S, P, PL]),
+    ("Test 1", "Her istasyonda temiz tekrar sayını aklında tut; bir sonraki testte geçeceksin.",
+     None, [S, P, SU, PL, JO], True),
+    ("Burpee'ye Giriş", "Burpee'de önce form: çömel, ayakları geri at, göğüs yere, patlayarak kalk.", [B, S],
+     [B, S, PL, JO]),
+    ("Gövde Devresi", "Mekikte boynu çekme; gücü karından al.", [SU, PL], [SU, PL, B, J]),
+    ("Tam Vücut", "Üst ve alt vücut sırayla: biri çalışırken diğeri dinlenir.", [P, S], [P, S, B, SU]),
+    ("Kardiyo Patlaması", "Nabız yüksek; dinlenmede burnundan nefes al.", [JO, J], [JO, J, B, S]),
+    ("Kuvvet Dayanıklılığı", "Son 10 saniyede tempoyu düşürme.", [P, PL], [P, PL, S, SU, JO]),
+    ("Test 2", "Test 1'deki sayılarını geç: aynı form, daha çok tekrar.", None, [B, P, S, SU, J], True),
+    ("Tempo Squat", "İnişte 2 saniye, çıkışta patlayıcı.", [S, B], [S, B, J, PL]),
+    ("Şınav Merdiveni", "Yorulunca dizden şınava geç ama durma.", [P, SU], [P, SU, JO, B]),
+    ("Dövüşçü Kondisyonu", "İp ve burpee: dövüşçülerin klasik ikilisi.", [J, B], [J, B, P, S, PL]),
+    ("Gövde Kalkanı", "Gövde sert, nefes kontrollü; darbe almaya hazır bir karın.", [PL, SU], [PL, SU, B, JO]),
+    ("Patlayıcı Güç", "Her tekrar maksimum hız, tam hareket açıklığı.", [B, S], [B, S, P, J]),
+    ("Test 3", "45/15 temposunda tüm istasyonlar; formu bozma.", None, [B, S, P, SU, PL], True),
+    ("Zirve Devresi", "50/10: dinlenme kısa, nefesini hareket sırasında düzenle.", [B, P], [B, P, S, JO, PL]),
+    ("Uzun Raunt", "Kardiyo ağırlıklı uzun devre; tempoyu eşit dağıt.", [J, JO], [J, JO, B, SU, S]),
+    ("Güç Zinciri", "Squat, şınav, burpee zinciri: kas dayanıklılığı.", [S, P], [S, P, B, PL, SU]),
+    ("Kardiyo Fırtınası", "En yüksek nabız günü; son turda her şeyini ver.", [JO, B], [JO, B, J, S, P]),
+    ("Son Hazırlık", "Finalden önce temiz ve kontrollü bir devre.", [PL, SU], [PL, SU, P, S, B]),
+    ("Final", "30 günün sonu: tüm istasyonlar, en iyi formun ve en çok tekrarın.", None,
+     [B, S, P, SU, PL, J], True),
+]
+
+
+def general_day(d, title, focus, tech, mains, evaluate=False):
+    p = (d - 1) // 6
+    ph = GEN_PHASE[p]
+    blocks = [mobility_warm(p)]
+    if tech and not evaluate:
+        blocks.append(C("technique", "Form", 2, 40, 20, tech, cue=f"Form devresi: {focus}"))
+    rounds = ph["rounds"] + (1 if evaluate else 0)
+    blocks.append(C("conditioning", "Test devresi" if evaluate else "HIIT devresi", rounds, ph["work"], ph["rest"],
+                    mains, cue=f"{rounds} tur: her istasyonda {ph['work']} sn çalış, {ph['rest']} sn dinlen."))
+    if not evaluate:
+        blocks.append(R("conditioning", "Bitirici", 1, 60 + 15 * p, 0, [J if p % 2 else JO],
+                        cue="Bitirici: son bir dakika, tempoyu koru."))
+    blocks.append(C("cooldown", "Esneme", 1, 40, 10, STRETCH, cue="Nefesini yavaşlat, esnemeleri zorlamadan yap."))
+    m = minutes(blocks)
+    assert 20 <= m <= 60, ("general", d, m)
+    return dict(day=d, title=title, focus=focus, blocks=blocks)
+
+
+def rest_day():
+    """30 günlük meydan okumanın dinlenme günleri için ~8-10 dk aktif dinlenme."""
+    blocks = [
+        C("warmup", "Hafif hareket", 1, 45, 15, [JO, "gen_arm_circles"], cue="Hafif tempo; terlemek yok, kan dolaşsın."),
+        C("cooldown", "Esneme", 2, 45, 15, STRETCH, cue="Her esnemede derin nefes; acı değil, gerilme hissi."),
+    ]
+    m = minutes(blocks)
+    assert 5 <= m <= 15, m
+    return dict(day=0, title="Aktif Dinlenme",
+                focus="Bugün kaslarının toparlanma günü. İstersen bu kısa esneme seansıyla vücudunu gevşet.",
+                blocks=blocks)
+
+
 def main():
+    days = [general_day(i + 1, *spec) for i, spec in enumerate(GENERAL)]
+    assert len(days) == 24
+    write_program("general", days)
+    with open(os.path.join(OUT, "rest_day.json"), "w", encoding="utf-8") as fh:
+        json.dump(rest_day(), fh, ensure_ascii=False, indent=1)
+        fh.write("\n")
+    print(f"rest_day: {round(minutes(rest_day()['blocks']), 1)} dk")
     for sport, (days, warm, shadow, kind, main_title) in SPORTS.items():
         assert len(days) == 24, sport
         out = []
@@ -342,13 +433,17 @@ def main():
             title, focus, tech, calls, mains = spec[:5]
             ev = len(spec) > 5 and spec[5]
             out.append(day(sport, i + 1, title, focus, tech, calls, mains, kind, main_title, warm, shadow, ev))
-        phases = [dict(title=t, **{"from": 6 * k + 1, "to": 6 * k + 6}, goal=g) for k, (t, g) in enumerate(PHASE_INFO[sport])]
-        path = os.path.join(OUT, f"training_{sport}.json")
-        with open(path, "w", encoding="utf-8") as fh:
-            json.dump(dict(sport=sport, phases=phases, days=out), fh, ensure_ascii=False, indent=1)
-            fh.write("\n")
-        mins = [round(minutes(d["blocks"])) for d in out]
-        print(f"{sport}: {len(out)} gün, {min(mins)}-{max(mins)} dk")
+        write_program(sport, out)
+
+
+def write_program(sport, out):
+    phases = [dict(title=t, **{"from": 6 * k + 1, "to": 6 * k + 6}, goal=g) for k, (t, g) in enumerate(PHASE_INFO[sport])]
+    path = os.path.join(OUT, f"training_{sport}.json")
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(dict(sport=sport, phases=phases, days=out), fh, ensure_ascii=False, indent=1)
+        fh.write("\n")
+    mins = [round(minutes(d["blocks"])) for d in out]
+    print(f"{sport}: {len(out)} gün, {min(mins)}-{max(mins)} dk")
 
 
 if __name__ == "__main__":
