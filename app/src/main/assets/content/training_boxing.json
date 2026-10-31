@@ -5,7 +5,7 @@
    "title": "Temeller",
    "from": 1,
    "to": 6,
-   "goal": "Duruş, ayak oyunu, jab–cross ve temel savunma."
+   "goal": "Duruş, ayak oyunu, sol–sağ direk ve temel savunma."
   },
   {
    "title": "Kroşe ve Aparkat",
@@ -29,8 +29,8 @@
  "days": [
   {
    "day": 1,
-   "title": "Duruş ve Jab",
-   "focus": "Ağırlık ortada, çene içeride; jab omuzdan düz çıkar, aynı yoldan döner.",
+   "title": "Duruş ve Sol Direk",
+   "focus": "Ağırlık ortada, çene içeride; sol direk omuzdan düz çıkar, aynı yoldan döner.",
    "blocks": [
     {
      "kind": "warmup",
@@ -57,7 +57,7 @@
       "box_jab"
      ],
      "calls": [],
-     "cue": "Teknik raundu: Ağırlık ortada, çene içeride; jab omuzdan düz çıkar, aynı yoldan döner."
+     "cue": "Teknik raundu: Ağırlık ortada, çene içeride; sol direk omuzdan düz çıkar, aynı yoldan döner."
     },
     {
      "kind": "shadow",
@@ -123,8 +123,8 @@
   },
   {
    "day": 2,
-   "title": "Cross ve 1-2",
-   "focus": "Cross'ta arka ayak döner, kalça ve omuz birlikte; yumruk dönerken gard yüze.",
+   "title": "Sağ Direk ve 1-2",
+   "focus": "Sağ direkte arka ayak döner, kalça ve omuz birlikte; yumruk dönerken gard yüze.",
    "blocks": [
     {
      "kind": "warmup",
@@ -151,7 +151,7 @@
       "box_combo_12"
      ],
      "calls": [],
-     "cue": "Teknik raundu: Cross'ta arka ayak döner, kalça ve omuz birlikte; yumruk dönerken gard yüze."
+     "cue": "Teknik raundu: Sağ direkte arka ayak döner, kalça ve omuz birlikte; yumruk dönerken gard yüze."
     },
     {
      "kind": "shadow",
@@ -218,8 +218,8 @@
   },
   {
    "day": 3,
-   "title": "Blok ve Parry",
-   "focus": "Gelen jab'ı arka elle sektir; blokta dirsekler kaburgada.",
+   "title": "Blok ve Savuşturma",
+   "focus": "Gelen sol direği arka elle savuştur; blokta dirsekler kaburgada.",
    "blocks": [
     {
      "kind": "warmup",
@@ -246,7 +246,7 @@
       "box_stance"
      ],
      "calls": [],
-     "cue": "Teknik raundu: Gelen jab'ı arka elle sektir; blokta dirsekler kaburgada."
+     "cue": "Teknik raundu: Gelen sol direği arka elle savuştur; blokta dirsekler kaburgada."
     },
     {
      "kind": "shadow",
@@ -887,8 +887,8 @@
   },
   {
    "day": 10,
-   "title": "Slip ve Roll",
-   "focus": "Slip'te kafa gard çizgisinden az kayar; roll'da dizlerden in, belden değil.",
+   "title": "Kafa Kaçırma ve Eğilme",
+   "focus": "Kafa kaçırırken baş gard çizgisinden az kayar; eğilirken dizlerden in, belden değil.",
    "blocks": [
     {
      "kind": "warmup",
@@ -915,7 +915,7 @@
       "box_roll"
      ],
      "calls": [],
-     "cue": "Teknik raundu: Slip'te kafa gard çizgisinden az kayar; roll'da dizlerden in, belden değil."
+     "cue": "Teknik raundu: Kafa kaçırırken baş gard çizgisinden az kayar; eğilirken dizlerden in, belden değil."
     },
     {
      "kind": "shadow",
@@ -985,7 +985,7 @@
   {
    "day": 11,
    "title": "1-2-3",
-   "focus": "Cross'un dönüşü kroşeyi yükler; üç yumruk tek akış.",
+   "focus": "Sağ direğin dönüşü kroşeyi yükler; üç yumruk tek akış.",
    "blocks": [
     {
      "kind": "warmup",
@@ -1012,7 +1012,7 @@
       "box_lead_hook"
      ],
      "calls": [],
-     "cue": "Teknik raundu: Cross'un dönüşü kroşeyi yükler; üç yumruk tek akış."
+     "cue": "Teknik raundu: Sağ direğin dönüşü kroşeyi yükler; üç yumruk tek akış."
     },
     {
      "kind": "shadow",
@@ -1169,7 +1169,7 @@
   {
    "day": 13,
    "title": "Saldırı + Savunma",
-   "focus": "Her kombinasyondan sonra bir savunma: 1-2, slip, 1-2-3, roll.",
+   "focus": "Her kombinasyondan sonra bir savunma: 1-2, kafa kaçır, 1-2-3, eğil.",
    "blocks": [
     {
      "kind": "warmup",
@@ -1196,7 +1196,7 @@
       "box_slip"
      ],
      "calls": [],
-     "cue": "Teknik raundu: Her kombinasyondan sonra bir savunma: 1-2, slip, 1-2-3, roll."
+     "cue": "Teknik raundu: Her kombinasyondan sonra bir savunma: 1-2, kafa kaçır, 1-2-3, eğil."
     },
     {
      "kind": "shadow",
@@ -1367,7 +1367,7 @@
   {
    "day": 15,
    "title": "Açılar",
-   "focus": "Vur ve çık: kombinasyon sonrası yana adım, yeni açıdan jab.",
+   "focus": "Vur ve çık: kombinasyon sonrası yana adım, yeni açıdan sol direk.",
    "blocks": [
     {
      "kind": "warmup",
@@ -1394,7 +1394,7 @@
       "box_combo_12"
      ],
      "calls": [],
-     "cue": "Teknik raundu: Vur ve çık: kombinasyon sonrası yana adım, yeni açıdan jab."
+     "cue": "Teknik raundu: Vur ve çık: kombinasyon sonrası yana adım, yeni açıdan sol direk."
     },
     {
      "kind": "shadow",
@@ -1852,7 +1852,7 @@
   {
    "day": 20,
    "title": "Karşı Atak",
-   "focus": "Önce savun, hemen cevap ver: parry-1-2, slip-kroşe, roll-aparkat.",
+   "focus": "Önce savun, hemen cevap ver: savuştur ve 1-2, kafa kaçır ve kroşe, eğil ve aparkat.",
    "blocks": [
     {
      "kind": "warmup",
@@ -1879,7 +1879,7 @@
       "box_slip"
      ],
      "calls": [],
-     "cue": "Teknik raundu: Önce savun, hemen cevap ver: parry-1-2, slip-kroşe, roll-aparkat."
+     "cue": "Teknik raundu: Önce savun, hemen cevap ver: savuştur ve 1-2, kafa kaçır ve kroşe, eğil ve aparkat."
     },
     {
      "kind": "shadow",

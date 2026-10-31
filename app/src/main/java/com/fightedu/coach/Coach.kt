@@ -117,37 +117,9 @@ class Coach(context: Context) {
     }
 
     companion object {
-        /** Komut olarak söylenecek kısa ad ("Jab (1)" -> "Jab", "Kombinasyon 1-2 (Jab–Cross)" -> "Bir iki"). */
-        fun callName(move: Move): String = CALLS[move.id]
+        /** Komut olarak söylenecek kısa ad (içerikteki "call"; yoksa adın parantezsiz kısmı). */
+        fun callName(move: Move): String = move.call
             ?: move.name.substringBefore(" (").substringAfter(": ").replace("–", " ").trim()
-
-        private val CALLS = mapOf(
-            "box_combo_12" to "Bir iki",
-            "box_combo_123" to "Bir iki üç",
-            "box_footwork" to "Ayak oyunu",
-            "box_parry_block" to "Blok",
-            "box_slip" to "Slip",
-            "box_roll" to "Roll",
-            "box_lead_hook" to "Sol kroşe",
-            "box_rear_hook" to "Sağ kroşe",
-            "box_lead_uppercut" to "Sol aparkat",
-            "box_rear_uppercut" to "Sağ aparkat",
-            "box_cross" to "Cross",
-            "kb_combo_jcl" to "Jab cross low kick",
-            "kb_combo_jcm" to "Jab cross kroşe middle",
-            "kb_jab_cross" to "Jab cross",
-            "kb_footwork" to "Açı değiştir",
-            "kb_knee" to "Diz",
-            "wr_level_change" to "Seviye",
-            "wr_penetration" to "Penetrasyon",
-            "wr_double_leg" to "Çift bacak",
-            "wr_single_leg" to "Tek bacak",
-            "wr_hand_fight" to "El mücadelesi",
-            "wr_sit_out" to "Sit out",
-            "wr_stand_up" to "Kalk",
-            "tkd_footwork" to "Ayak oyunu",
-            "tkd_taegeuk1" to "Taegeuk",
-        )
 
         /** Ses planı olmayan seanslar için kısa anons (sayılar kelimeyle). */
         fun legacyAnnouncement(step: Step): String = when (step) {

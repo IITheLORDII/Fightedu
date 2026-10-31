@@ -2,7 +2,7 @@
   {
     "id": "tkd_ap_seogi",
     "sport": "taekwondo",
-    "name": "Ap Seogi (Yürüyüş Duruşu)",
+    "name": "Yürüyüş Duruşu (Ap Seogi)",
     "category": "stance",
     "level": 1,
     "description": "Normal bir yürüyüş adımı uzunluğunda, yüksek ve doğal ön duruş.",
@@ -12,14 +12,18 @@
       "Ön ayak düz ileri, arka ayak yaklaşık 30° dışa dönük.",
       "Gövde dik, eller belde veya gard pozisyonunda."
     ],
-    "mistakes": ["Adımı fazla uzun almak", "Gövdeyi öne eğmek"],
-    "tip": "Taegeuk 1'in büyük kısmı bu duruşla yapılır.",
-    "sec": 40
+    "mistakes": [
+      "Adımı fazla uzun almak",
+      "Gövdeyi öne eğmek"
+    ],
+    "tip": "Taegeuk 1 formunun büyük kısmı bu duruşla yapılır.",
+    "sec": 40,
+    "call": "Yürüyüş duruşu"
   },
   {
     "id": "tkd_ap_kubi",
     "sport": "taekwondo",
-    "name": "Ap Kubi (Ön Duruş)",
+    "name": "Ön Duruş (Ap Kubi)",
     "category": "stance",
     "level": 1,
     "description": "Uzun ve alçak ön duruş; ağırlığın büyük kısmı ön bacakta.",
@@ -29,14 +33,19 @@
       "Ağırlığın yaklaşık 2/3'ü ön bacakta.",
       "Kalça ve gövde öne dönük."
     ],
-    "mistakes": ["Ön dizin ayak ucunu geçmesi", "Arka dizin bükülmesi", "Arka topuğun kalkması"],
+    "mistakes": [
+      "Ön dizin ayak ucunu geçmesi",
+      "Arka dizin bükülmesi",
+      "Arka topuğun kalkması"
+    ],
     "tip": "Arka bacağı düz bir çubuk gibi düşün.",
-    "sec": 40
+    "sec": 40,
+    "call": "Ön duruş"
   },
   {
     "id": "tkd_dwit_kubi",
     "sport": "taekwondo",
-    "name": "Dwit Kubi (Arka Duruş)",
+    "name": "Arka Duruş (Dwit Kubi)",
     "category": "stance",
     "level": 2,
     "description": "Ağırlığın büyük kısmı arka bacakta olan savunma duruşu.",
@@ -46,14 +55,18 @@
       "Ön diz hafif bükülü, ön ayak hafif.",
       "Gövde yarı yana dönük."
     ],
-    "mistakes": ["Ağırlığı öne vermek", "Arka dizi yeterince bükmemek"],
+    "mistakes": [
+      "Ağırlığı öne vermek",
+      "Arka dizi yeterince bükmemek"
+    ],
     "tip": "Bu duruştan ön ayakla hızlı tekme atılabilir.",
-    "sec": 40
+    "sec": 40,
+    "call": "Arka duruş"
   },
   {
     "id": "tkd_jireugi",
     "sport": "taekwondo",
-    "name": "Jireugi (Düz Yumruk)",
+    "name": "Düz Yumruk (Jireugi)",
     "category": "strike",
     "level": 1,
     "description": "Belden başlayıp dönerek ileri giden düz yumruk; diğer el aynı anda bele çekilir.",
@@ -63,14 +76,19 @@
       "Diğer el aynı anda bele çekilir (zıt kuvvet).",
       "Hedef göğüs ortası (momtong)."
     ],
-    "mistakes": ["Omzu kaldırmak", "Diğer eli bele çekmemek", "Dirseği yana açmak"],
+    "mistakes": [
+      "Omzu kaldırmak",
+      "Diğer eli bele çekmemek",
+      "Dirseği yana açmak"
+    ],
     "tip": "Çeken el, vuran el kadar önemlidir.",
-    "reps": 20
+    "reps": 20,
+    "call": "Yumruk"
   },
   {
     "id": "tkd_arae_makgi",
     "sport": "taekwondo",
-    "name": "Arae Makgi (Alt Blok)",
+    "name": "Alt Blok (Arae Makgi)",
     "category": "defense",
     "level": 1,
     "description": "Alt seviyeye gelen tekme ve yumrukları ön kolun dışıyla aşağı süpürme.",
@@ -80,14 +98,18 @@
       "Bloklayan kolu çapraz aşağı indirerek uyluğun bir yumruk önünde bitir; diğer el bele çekilir.",
       "Blok bittiğinde kol hafif bükülü kalır."
     ],
-    "mistakes": ["Kolu dizin üstüne kadar indirmemek", "Diğer eli bele çekmemek"],
-    "tip": "Taegeuk 1'in ilk hareketi ap kubi + arae makgi'dir.",
-    "reps": 20
+    "mistakes": [
+      "Kolu dizin üstüne kadar indirmemek",
+      "Diğer eli bele çekmemek"
+    ],
+    "tip": "Taegeuk 1 formunun ilk hareketi ön duruşta alt bloktur.",
+    "reps": 20,
+    "call": "Alt blok"
   },
   {
     "id": "tkd_momtong_makgi",
     "sport": "taekwondo",
-    "name": "Momtong Makgi (Orta Blok)",
+    "name": "Orta Blok (Momtong Makgi)",
     "category": "defense",
     "level": 1,
     "description": "Gövdeye gelen saldırıyı ön kolla içten dışa veya dıştan içe karşılama.",
@@ -97,14 +119,18 @@
       "Yumruk omuz hizasında, dirsek yaklaşık 90°.",
       "Diğer el bele çekilir."
     ],
-    "mistakes": ["Kolu vücut hattının dışına taşırmak", "Dirseği fazla açmak"],
+    "mistakes": [
+      "Kolu vücut hattının dışına taşırmak",
+      "Dirseği fazla açmak"
+    ],
     "tip": "Bloğu gövde dönüşüyle destekle.",
-    "reps": 20
+    "reps": 20,
+    "call": "Orta blok"
   },
   {
     "id": "tkd_olgul_makgi",
     "sport": "taekwondo",
-    "name": "Olgul Makgi (Üst Blok)",
+    "name": "Üst Blok (Olgul Makgi)",
     "category": "defense",
     "level": 1,
     "description": "Başa gelen saldırıyı ön kolu alnın üstüne kaldırarak karşılama.",
@@ -114,14 +140,18 @@
       "Ön kol hafif açılı, dışa döner.",
       "Diğer el bele çekilir."
     ],
-    "mistakes": ["Kolu başın tam üstüne koymak (darbe başa iner)", "Omzu kaldırmak"],
+    "mistakes": [
+      "Kolu başın tam üstüne koymak (darbe başa iner)",
+      "Omzu kaldırmak"
+    ],
     "tip": "Ön kol bir çatı gibi hafif eğimli olmalı.",
-    "reps": 20
+    "reps": 20,
+    "call": "Üst blok"
   },
   {
     "id": "tkd_ap_chagi",
     "sport": "taekwondo",
-    "name": "Ap Chagi (Ön Tekme)",
+    "name": "Ön Tekme (Ap Chagi)",
     "category": "kick",
     "level": 1,
     "description": "Ayak tabanının ön kısmıyla (ap chuk) düz ileri atılan temel tekme.",
@@ -131,14 +161,19 @@
       "Hedef: karın veya yüz.",
       "Ayağı hızla geri çek (kat), sonra yere bas."
     ],
-    "mistakes": ["Ayak parmaklarıyla vurmak", "Dizi kaldırmadan sallamak", "Geri çekmeyi unutmak"],
+    "mistakes": [
+      "Ayak parmaklarıyla vurmak",
+      "Dizi kaldırmadan sallamak",
+      "Geri çekmeyi unutmak"
+    ],
     "tip": "Kaldır – uzat – çek – bas: dört aşamayı ayrı ayrı say.",
-    "reps": 15
+    "reps": 15,
+    "call": "Ön tekme"
   },
   {
     "id": "tkd_dollyo_chagi",
     "sport": "taekwondo",
-    "name": "Dollyo Chagi (Yuvarlak Tekme)",
+    "name": "Yuvarlak Tekme (Dollyo Chagi)",
     "category": "kick",
     "level": 2,
     "description": "Tekvandonun en çok kullanılan tekmesi; ayak üstüyle yandan atılan hızlı tekme.",
@@ -148,14 +183,19 @@
       "Dizi hedefe doğrultup bacağı açarak ayak üstüyle vur.",
       "Bacağı geri katlayıp duruşa dön."
     ],
-    "mistakes": ["Destek ayağını döndürmemek", "Dizi hedefe doğrultmadan açmak", "Gövdeyi çok geriye atmak"],
+    "mistakes": [
+      "Destek ayağını döndürmemek",
+      "Dizi hedefe doğrultmadan açmak",
+      "Gövdeyi çok geriye atmak"
+    ],
     "tip": "Hız, dizin hızla açılıp kapanmasından gelir.",
-    "reps": 15
+    "reps": 15,
+    "call": "Yuvarlak tekme"
   },
   {
     "id": "tkd_yeop_chagi",
     "sport": "taekwondo",
-    "name": "Yeop Chagi (Yan Tekme)",
+    "name": "Yan Tekme (Yeop Chagi)",
     "category": "kick",
     "level": 2,
     "description": "Ayak topuğu ve dış kenarıyla yana doğru itme gücü yüksek tekme.",
@@ -165,14 +205,19 @@
       "Topuk önde, ayak dış kenarı yere paralel şekilde bacağı düz it.",
       "Bacağı geri katlayıp yere bas."
     ],
-    "mistakes": ["Ayak ucuyla vurmak", "Kalçayı döndürmemek", "Gövdeyi tamamen yere paralel yatırmak"],
+    "mistakes": [
+      "Ayak ucuyla vurmak",
+      "Kalçayı döndürmemek",
+      "Gövdeyi tamamen yere paralel yatırmak"
+    ],
     "tip": "Topuk, kalça ve omuz aynı çizgide olmalı.",
-    "reps": 12
+    "reps": 12,
+    "call": "Yan tekme"
   },
   {
     "id": "tkd_dwi_chagi",
     "sport": "taekwondo",
-    "name": "Dwi Chagi (Geri Tekme)",
+    "name": "Geri Tekme (Dwi Chagi)",
     "category": "kick",
     "level": 3,
     "description": "Dönerek topukla geriye atılan güçlü tekme.",
@@ -182,14 +227,18 @@
       "Arka bacağı katlayıp topukla düz geriye it.",
       "Dönüşü tamamlayarak duruşa dön."
     ],
-    "mistakes": ["Hedefe bakmadan tekme atmak", "Bacağı yandan savurmak (yuvarlak tekmeye dönüşür)"],
+    "mistakes": [
+      "Hedefe bakmadan tekme atmak",
+      "Bacağı yandan savurmak (yuvarlak tekmeye dönüşür)"
+    ],
     "tip": "Önce yavaş, dönüşü ve bakışı ayrı ayrı çalış.",
-    "reps": 10
+    "reps": 10,
+    "call": "Geri tekme"
   },
   {
     "id": "tkd_naeryo_chagi",
     "sport": "taekwondo",
-    "name": "Naeryo Chagi (Balta Tekmesi)",
+    "name": "Balta Tekmesi (Naeryo Chagi)",
     "category": "kick",
     "level": 3,
     "description": "Bacağı yukarı kaldırıp topukla aşağı indiren tekme.",
@@ -199,42 +248,55 @@
       "Topuğu hedefe doğru sertçe aşağı indir.",
       "Dengeli şekilde yere bas."
     ],
-    "mistakes": ["Esneklik yokken zorlamak", "İnişte dizi bükmek"],
+    "mistakes": [
+      "Esneklik yokken zorlamak",
+      "İnişte dizi bükmek"
+    ],
     "tip": "Arka bacak esnetmelerini düzenli yap.",
-    "reps": 10
+    "reps": 10,
+    "call": "Balta tekmesi"
   },
   {
     "id": "tkd_footwork",
     "sport": "taekwondo",
-    "name": "Tekvando Ayak Oyunu (Steps)",
+    "name": "Tekvando Ayak Oyunu",
     "category": "footwork",
     "level": 1,
-    "description": "Ayak uçlarında hafif sekerek ileri, geri ve yer değiştirme (switch) adımları.",
+    "description": "Ayak uçlarında hafif sekerek ileri, geri ve ayak değiştirme adımları.",
     "steps": [
-      "Yan duruşta (gyeorugi seogi) ayak uçlarında hafifçe sek.",
+      "Yan duruşta ayak uçlarında hafifçe sek.",
       "İleri ve geri kaydırarak adımla.",
-      "Switch: Bir sekişte ön ve arka ayağı yer değiştir.",
+      "Ayak değiştirme: Bir sekişte ön ve arka ayağı yer değiştir.",
       "Her adımdan sonra tekme atmaya hazır ol."
     ],
-    "mistakes": ["Topuklara basmak", "Çok yükseğe sekmek"],
+    "mistakes": [
+      "Topuklara basmak",
+      "Çok yükseğe sekmek"
+    ],
     "tip": "Ritim, tekmelerin zamanlamasını belirler.",
-    "sec": 60
+    "sec": 60,
+    "call": "Ayak oyunu"
   },
   {
     "id": "tkd_taegeuk1",
     "sport": "taekwondo",
-    "name": "Taegeuk Il Jang (Form 1) Parçaları",
+    "name": "Taegeuk 1 Formu Parçaları (Il Jang)",
     "category": "form",
     "level": 2,
     "description": "İlk resmi form (poomsae). 18 hareketten oluşur; duruş, blok, yumruk ve ön tekmeyi birleştirir.",
     "steps": [
       "Hazır (junbi) pozisyonu: Ayaklar paralel, yumruklar karın önünde.",
-      "Sola dön: Ap seogi + arae makgi, ardından adım + jireugi.",
-      "Sağa dön ve aynı ikiliyi tekrar et; sonra ap kubi + arae makgi + ters jireugi.",
-      "Orta ve üst bloklarla devam et; son bölümde ap chagi + jireugi kombinasyonu ve 'Kihap!'."
+      "Sola dön: Yürüyüş duruşunda alt blok, ardından adım ve düz yumruk.",
+      "Sağa dön ve aynı ikiliyi tekrar et; sonra ön duruşta alt blok ve ters yumruk.",
+      "Orta ve üst bloklarla devam et; son bölümde ön tekme ve düz yumruk kombinasyonu, ardından 'Kiyap!'."
     ],
-    "mistakes": ["Duruşları karıştırmak (ap seogi / ap kubi)", "Bakışı dönüşten önce çevirmemek", "Acele etmek"],
+    "mistakes": [
+      "Yürüyüş duruşuyla ön duruşu karıştırmak",
+      "Bakışı dönüşten önce çevirmemek",
+      "Acele etmek"
+    ],
     "tip": "Her hafta formun bir bölümünü ekle; sonunda baştan sona akıcı yap.",
-    "sec": 90
+    "sec": 90,
+    "call": "Form"
   }
 ]

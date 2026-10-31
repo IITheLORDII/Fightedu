@@ -45,9 +45,9 @@ ENDPOINT = "https://texttospeech.googleapis.com/v1/text:synthesize"
 VOICES = ["tr-TR-Chirp3-HD-Fenrir", "tr-TR-Chirp3-HD-Puck", "tr-TR-Chirp3-HD-Orus", "tr-TR-Chirp3-HD-Alnilam",
           "tr-TR-Wavenet-E", "tr-TR-Wavenet-B"]
 SAMPLE_LINES = [
-    "Gün on üç: Slip ve Roll. Kafa gard çizgisinden az kayar; roll'da dizlerden in, belden değil.",
+    "Bugünün konusu: kafa kaçırma ve eğilme. Kafa kaçırırken baş gard çizgisinden az kayar; eğilirken dizlerden in, belden değil.",
     "Üçüncü raunt, başla! Sol kroşe: kolun bir kanca gibi sabit kalır; dönüşü gövde yapar.",
-    "Bir iki! Sol kroşe! Son on saniye, her şeyini ver!",
+    "Sol direk! Sağ direk! Sol kroşe! Son on saniye, her şeyini ver!",
     "Dinlen, kırk beş saniye. Burnundan nefes al, ağzından ver. Hazırlan!",
 ]
 

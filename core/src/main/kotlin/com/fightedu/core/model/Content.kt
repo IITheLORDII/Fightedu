@@ -44,6 +44,8 @@ data class Move(
     val tip: String = "",
     val reps: Int? = null,
     val sec: Int? = null,
+    /** Raunt içinde koçun söylediği kısa komut ("Sol direk", "Orta tekme"); yoksa adından türetilir. */
+    val call: String? = null,
 ) {
     /** Hareket videosunun (döngüsel MP4) assets içindeki yolu. */
     val videoAsset: String get() = "video/$id.mp4"
