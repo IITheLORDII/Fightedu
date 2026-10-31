@@ -1,0 +1,158 @@
+name: Koç sesleri (Chatterbox, ticari serbest)
+
+# Sesli koçun cümlelerini Resemble AI Chatterbox Multilingual (MIT lisansı) ile Türkçe kaydeder.
+# mode=samples: yalnız örnek cümleler (tools/voice/samples). mode=full: tüm cümleler, paralel parçalarla;
+# her klip faster-whisper ile yazıya dökülüp metinle karşılaştırılır, bozuk çıkanlar yeniden üretilir.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "samples ya da full"
+        type: choice
+        options: [samples, full]
+        default: samples
+      voice:
+        description: "builtin (Chatterbox'ın hazır sesi) ya da depodaki referans kayıt yolu (ör. tools/voice/reference/koc.wav)"
+        default: builtin
+      shards:
+        description: "full modda paralel iş sayısı"
+        default: "8"
+
+permissions:
+  contents: write
+
+concurrency: voice
+
+env:
+  VOICE: ${{ inputs.voice }}
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      shards: ${{ steps.s.outputs.list }}
+    steps:
+      - id: s
+        env:
+          N: ${{ inputs.shards }}
+        run: python3 -c "import json,os; n=max(1,min(20,int(os.environ['N']))); print('list='+json.dumps(list(range(n))))" >> "$GITHUB_OUTPUT"
+
+  samples:
+    if: inputs.mode == 'samples'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.cache/huggingface
+          key: chatterbox-0.1.7-v1
+      - name: Araçlar
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          pip install -q torch==2.6.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          pip install -q chatterbox-tts==0.1.7 faster-whisper==1.2.1
+      - name: Örnek cümleler
+        run: python3 tools/voice/synthesize.py --engine chatterbox --voice "$VOICE" --samples
+      - name: Depoya ekle
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tools/voice/samples
+          if git diff --cached --quiet; then echo "değişiklik yok"; exit 0; fi
+          git commit -q -m "Koç sesi örnekleri: Chatterbox ($VOICE)" \
+            -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+          Claude-Session: https://claude.ai/code/session_01FceEYgLZqAF66iDC6JL2ut"
+          for i in 1 2 3; do
+            git pull -q --rebase origin "$GITHUB_REF_NAME" && git push -q origin "HEAD:$GITHUB_REF_NAME" && break
+            sleep $((i * 5))
+          done
+
+  shard:
+    if: inputs.mode == 'full'
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ${{ fromJson(needs.plan.outputs.shards) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.cache/huggingface
+          key: chatterbox-0.1.7-v1
+      - name: Araçlar
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          pip install -q torch==2.6.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          pip install -q chatterbox-tts==0.1.7 faster-whisper==1.2.1
+      - name: Parça ${{ matrix.shard }} / ${{ inputs.shards }}
+        run: python3 tools/voice/synthesize.py --engine chatterbox --voice "$VOICE" --shard "${{ matrix.shard }}/${{ inputs.shards }}" --out shard_out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: clips-${{ matrix.shard }}
+          path: shard_out
+          retention-days: 3
+
+  finalize:
+    if: inputs.mode == 'full'
+    needs: shard
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Araçlar
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: clips-*
+          path: shard_out
+          merge-multiple: true
+      - name: Klipleri yerleştir ve doğrula
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import glob, json
+          qa = {}
+          for f in glob.glob("shard_out/qa_*.json"):
+              qa.update(json.load(open(f, encoding="utf-8")))
+          vals = [q["cer"] for q in qa.values()]
+          print(f"ASR: {len(vals)} klip, ort. CER {sum(vals) / max(1, len(vals)):.3f}, eşiği aşan {sum(v > 0.3 for v in vals)}")
+          PY
+          rm -f app/src/main/assets/voice/clips/*.ogg
+          mkdir -p app/src/main/assets/voice/clips
+          cp shard_out/*.ogg app/src/main/assets/voice/clips/
+          python3 tools/voice/synthesize.py --engine chatterbox --voice "$VOICE" --finalize
+          python3 tools/voice/make_voice.py
+      - name: Depoya ekle
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A app/src/main/assets/voice
+          if git diff --cached --quiet; then echo "değişiklik yok"; exit 0; fi
+          git commit -q -m "Koç sesleri: Chatterbox (MIT, ticari serbest) ile yeniden kaydedildi ($VOICE)" \
+            -m "Rauntlara özel tüm cümleler Chatterbox Multilingual ile Türkçe kaydedildi; her klip ASR ile denetlendi, ses planları ölçülen sürelerle yeniden zamanlandı." \
+            -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+          Claude-Session: https://claude.ai/code/session_01FceEYgLZqAF66iDC6JL2ut"
+          for i in 1 2 3; do
+            git pull -q --rebase origin "$GITHUB_REF_NAME" && git push -q origin "HEAD:$GITHUB_REF_NAME" && break
+            sleep $((i * 5))
+          done

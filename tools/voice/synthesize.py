@@ -2,8 +2,11 @@
 """Koç cümlelerini Türkçe yapay zekâ sesiyle kaydeder (uygulama bunları çevrimdışı çalar).
 
 Önce make_voice.py çalışmış olmalı (assets/voice/manifest.json). İki motor:
-  piper  (varsayılan, ücretsiz): açık kaynak Piper, Türkçe sesler (tr_TR-fahrettin/-dfki/-fettah-medium).
-         Model dosyaları tools/voice/build/piper/<ses>.onnx(.json); .github/workflows/voice.yml indirir ve çalıştırır.
+  piper      (ücretsiz): açık kaynak Piper'ın Türkçe sesi (tr_TR-dfki-medium; ses lisansı ticari olmayan).
+             Model dosyaları tools/voice/build/piper; .github/workflows/voice.yml indirir ve çalıştırır.
+  chatterbox (ücretsiz, MIT, ticari serbest): Resemble AI Chatterbox Multilingual, Türkçe; hazır ses ya da
+             --voice <referans.wav>. Her klip faster-whisper ile yazıya dökülüp denetlenir.
+             .github/workflows/voice-chatterbox.yml paralel parçalarla çalıştırır.
   google (isteğe bağlı): Google Cloud TTS; anahtar yalnızca GOOGLE_TTS_API_KEY ortam değişkeninden okunur.
 
   python3 tools/voice/synthesize.py --samples      # aday seslerle örnek cümleler (tools/voice/samples)
@@ -15,6 +18,7 @@ mono Opus 24 kbps -> app/src/main/assets/voice/clips/<id>.ogg. Ham sesler tools/
 """
 import argparse
 import base64
+import hashlib
 import concurrent.futures as cf
 import json
 import os
@@ -139,17 +143,129 @@ class PiperEngine:
             self.voice.synthesize_wav(text, wf, syn_config=self.cfg)
 
 
+class ChatterboxEngine:
+    """Resemble AI Chatterbox Multilingual (MIT): hazır ses ya da bir referans kayıttan ses; enerjik koç tonu.
+    Kısa cümlelerde nadiren bozulabildiği için her klip ASR ile denetlenir ve gerekirse farklı tohumla yeniden üretilir."""
+    ext = ".wav"
+    asr = True
+
+    def __init__(self, voice):
+        import torch
+        from chatterbox.mtl_tts import ChatterboxMultilingualTTS
+        torch.set_num_threads(os.cpu_count() or 4)
+        self.torch = torch
+        self.voice = voice or "builtin"
+        self.name = voice_name("chatterbox", self.voice)
+        self.model = ChatterboxMultilingualTTS.from_pretrained(device="cpu")
+        if self.voice != "builtin":
+            if not os.path.exists(self.voice):
+                sys.exit(f"Referans ses yok: {self.voice}")
+            self.model.prepare_conditionals(self.voice, exaggeration=0.6)
+
+    def write(self, text, path, attempt=0):
+        import torchaudio
+        seed = int(hashlib.sha1(f"{text}|{attempt}".encode()).hexdigest()[:8], 16)
+        self.torch.manual_seed(seed)
+        random.seed(seed)
+        wav = self.model.generate(text, language_id="tr", exaggeration=0.6, cfg_weight=0.4, temperature=0.8)
+        torchaudio.save(path, wav, self.model.sr)
+
+
+def voice_name(kind, voice):
+    if kind == "chatterbox":
+        if not voice or voice == "builtin":
+            return "chatterbox:builtin"
+        with open(voice, "rb") as fh:
+            return "chatterbox:ref-" + hashlib.sha1(fh.read()).hexdigest()[:8]
+    return f"{kind}:{voice}"
+
+
 def make_engine(kind, voice):
     if kind == "google":
         key()
         return GoogleEngine(voice)
+    if kind == "chatterbox":
+        return ChatterboxEngine(voice)
     return PiperEngine(voice or PIPER_VOICES[0])
 
 
-def samples(kind):
+# --------------------------------------------------------------------------------------------
+# Otomatik dinleme kontrolü: klip yazıya dökülür, okunması istenen metinle karşılaştırılır
+# --------------------------------------------------------------------------------------------
+_TR = str.maketrans({"İ": "i", "I": "ı"})
+
+
+def norm(s):
+    s = s.translate(_TR).lower()
+    s = "".join(ch if ch.isalnum() or ch.isspace() else " " for ch in s)
+    return " ".join(s.split())
+
+
+def cer(ref, hyp):
+    a, b = norm(ref), norm(hyp)
+    if not a:
+        return 0.0
+    prev = list(range(len(b) + 1))
+    for i, ca in enumerate(a, 1):
+        cur = [i] + [0] * len(b)
+        for j, cb in enumerate(b, 1):
+            cur[j] = min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (ca != cb))
+        prev = cur
+    return prev[-1] / len(a)
+
+
+class Judge:
+    def __init__(self):
+        from faster_whisper import WhisperModel
+        self.model = WhisperModel("small", device="cpu", compute_type="int8")
+
+    def hear(self, path):
+        segs, _ = self.model.transcribe(path, language="tr", beam_size=1, vad_filter=False,
+                                        condition_on_previous_text=False)
+        return " ".join(s.text for s in segs).strip()
+
+
+def wav_seconds(path):
+    out = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", path],
+                         capture_output=True, text=True, check=True).stdout.strip()
+    return float(out or 0)
+
+
+def record(eng, judge, text, raw, attempts=4, limit=0.3):
+    """Klibi üretir; ASR varsa okunanla metni karşılaştırıp en iyi denemeyi tutar. Dönüş: (cer, duyulan)."""
+    tmp = raw[: -len(eng.ext)] + ".try{}" + eng.ext
+    best = None
+    est = max(0.6, len(text) / 14.0)
+    for k in range(attempts if judge else 1):
+        path = tmp.format(k)
+        if isinstance(eng, ChatterboxEngine):
+            eng.write(text, path, attempt=k)
+        else:
+            eng.write(text, path)
+        if not judge:
+            best = (0.0, "", path)
+            break
+        heard = judge.hear(path)
+        score = cer(text, heard)
+        d = wav_seconds(path)
+        if not (0.35 * est <= d <= 2.5 * est + 1.0):
+            score += 1.0  # aşırı kısa/uzun: büyük olasılıkla bozuk
+        if best is None or score < best[0]:
+            if best:
+                os.remove(best[2])
+            best = (score, heard, path)
+        else:
+            os.remove(path)
+        if score <= limit:
+            break
+    os.replace(best[2], raw)
+    return best[0], best[1]
+
+
+def samples(kind, voice=None):
     os.makedirs(SAMPLES, exist_ok=True)
     text = " ".join(SAMPLE_LINES)
-    voices = PIPER_VOICES if kind == "piper" else VOICES
+    voices = PIPER_VOICES if kind == "piper" else [voice or "builtin"] if kind == "chatterbox" else VOICES
     made = []
     for v in voices:
         try:
@@ -157,16 +273,37 @@ def samples(kind):
         except SystemExit as e:
             print(f"{v}: {e}", file=sys.stderr)
             continue
-        raw = os.path.join(SAMPLES, f"{v}.raw{eng.ext}")
-        eng.write(text, raw)
+        label = eng.name.replace(":", "-") if kind == "chatterbox" else v
+        raw = os.path.join(SAMPLES, f"{label}.raw{eng.ext}")
+        if kind == "chatterbox":
+            # uzun metinde kalite düşer: cümle cümle üret, araya kısa boşluk koyarak birleştir
+            judge = Judge()
+            parts = []
+            for i, line in enumerate(SAMPLE_LINES):
+                part = os.path.join(SAMPLES, f"{label}.part{i}{eng.ext}")
+                score, heard = record(eng, judge, say_line(line), part)
+                print(f"  cümle {i + 1}: CER {score:.2f} · duyulan: {heard}", flush=True)
+                parts.append(part)
+            inputs = sum((["-i", p] for p in parts), [])
+            n = len(parts)
+            graph = "".join(f"[{i}]apad=pad_dur=0.35[a{i}];" for i in range(n)) + "".join(f"[a{i}]" for i in range(n))
+            subprocess.run(["ffmpeg", "-v", "error", "-y", *inputs, "-filter_complex", graph + f"concat=n={n}:v=0:a=1",
+                            raw], check=True)
+            for p in parts:
+                os.remove(p)
+        else:
+            eng.write(text, raw)
+        v = label
         out = os.path.join(SAMPLES, f"{v}.m4a")
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", raw, "-af", "loudnorm=I=-16", "-ac", "1", "-c:a", "aac",
                         "-b:a", "64k", out], check=True)
         os.remove(raw)
         made.append(v)
         print("örnek:", v, flush=True)
+    listed = sorted(f for f in os.listdir(SAMPLES) if f.endswith(".m4a"))
     with open(os.path.join(SAMPLES, "README.md"), "w", encoding="utf-8") as fh:
-        fh.write("# Koç sesi örnekleri\n\n" + text + "\n\n" + "\n".join(f"- {v}.m4a" for v in made) + "\n")
+        fh.write("# Koç sesi örnekleri\n\n" + text + "\n\n" + "\n".join(f"- {f}" for f in listed) + "\n\n"
+                 + LICENSES)
 
 
 def mean_volume(path):
@@ -178,53 +315,20 @@ def mean_volume(path):
     return -99.0
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--engine", choices=["piper", "google"], default="piper")
-    ap.add_argument("--voice", default=None)
-    ap.add_argument("--samples", action="store_true")
-    ap.add_argument("--jobs", type=int, default=4)
-    ap.add_argument("--limit", type=int, default=0, help="en fazla bu kadar klip (deneme için)")
-    ap.add_argument("--redo", action="store_true", help="var olan klipleri de yeniden kaydet (ses değişince)")
-    args = ap.parse_args()
-    if args.samples:
-        return samples(args.engine)
-    mpath = os.path.join(VOICE_DIR, "manifest.json")
-    with open(mpath, encoding="utf-8") as fh:
-        manifest = json.load(fh)
-    eng = make_engine(args.engine, args.voice)
-    print("ses:", eng.name, flush=True)
-    if manifest.get("voice") and manifest["voice"] != eng.name:
-        args.redo = True  # başka bir sesle kaydedilmiş klipler karışmasın
-    os.makedirs(CLIPS, exist_ok=True)
-    raw_dir = os.path.join(RAW, eng.name.replace(":", "_"))
-    os.makedirs(raw_dir, exist_ok=True)
-    todo = [cid for cid in manifest["clips"] if args.redo or not os.path.exists(os.path.join(CLIPS, f"{cid}.ogg"))]
-    if args.limit:
-        todo = todo[:args.limit]
-    print(f"{len(todo)} klip kaydedilecek ({len(manifest['clips']) - len(todo)} hazır)", flush=True)
+LICENSES = """## Lisanslar
+- `piper-tr_TR-dfki-medium`: Piper (GPL-3 motor); ses modeli DFKI veri setiyle eğitildi, CC BY-NC-SA 4.0
+  (ticari olmayan kullanım).
+- `chatterbox-*`: Resemble AI Chatterbox Multilingual, MIT lisansı (ticari kullanım serbest).
+"""
 
-    # 1) ham ses (Piper tek süreçte sırayla; Google ağ çağrısı)
-    raws = {}
-    for i, cid in enumerate(todo, 1):
-        raw = os.path.join(raw_dir, cid + eng.ext)
-        if not os.path.exists(raw):
-            eng.write(manifest["clips"][cid]["say"], raw + ".tmp")
-            os.replace(raw + ".tmp", raw)
-        raws[cid] = raw
-        if i % 100 == 0 or i == len(todo):
-            print(f"  ses {i}/{len(todo)}", flush=True)
 
-    # 2) son işlem paralel
-    def one(cid):
-        out = os.path.join(CLIPS, f"{cid}.ogg")
-        post(raws[cid], out + ".tmp.ogg")
-        os.replace(out + ".tmp.ogg", out)
+def say_line(line):
+    sys.path.insert(0, HERE)
+    from make_voice import say_text
+    return say_text(line)
 
-    with cf.ThreadPoolExecutor(args.jobs) as ex:
-        list(ex.map(one, todo))
 
-    # 3) süreler ve kalite kontrolü
+def finalize(manifest, mpath, name):
     bad = []
     for cid, c in manifest["clips"].items():
         p = os.path.join(CLIPS, f"{cid}.ogg")
@@ -235,18 +339,98 @@ def main():
         if c["ms"] < 300:
             bad.append(f"{cid}: çok kısa ({c['ms']} ms) '{c['text']}'")
     for cid in random.Random(1).sample(sorted(manifest["clips"]), min(40, len(manifest["clips"]))):
-        v = mean_volume(os.path.join(CLIPS, f"{cid}.ogg"))
+        p = os.path.join(CLIPS, f"{cid}.ogg")
+        v = mean_volume(p) if os.path.exists(p) else -99
         if v < -45:
             bad.append(f"{cid}: sessiz ({v} dB)")
     if bad:
         sys.exit("Kalite kontrolü geçmedi:\n" + "\n".join(bad[:30]))
-    manifest["voice"] = eng.name
+    manifest["voice"] = name
     with open(mpath, "w", encoding="utf-8") as fh:
         json.dump(manifest, fh, ensure_ascii=False, indent=0)
         fh.write("\n")
     total = sum(c["ms"] for c in manifest["clips"].values()) / 60000
     size = sum(os.path.getsize(os.path.join(CLIPS, f)) for f in os.listdir(CLIPS)) / 1e6
     print(f"tamam: {len(manifest['clips'])} klip, {total:.1f} dk ses, {size:.1f} MB. Şimdi: make_voice.py", flush=True)
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--engine", choices=["piper", "google", "chatterbox"], default="piper")
+    ap.add_argument("--shard", default=None, help="i/N: yalnız i. parçayı kaydet (paralel işler için)")
+    ap.add_argument("--out", default=None, help="klipleri bu klasöre yaz (parça işleri)")
+    ap.add_argument("--finalize", action="store_true", help="kayıtlı kliplerin sürelerini ölç, manifesti yaz")
+    ap.add_argument("--asr", action="store_true", help="her klibi yazıya döküp metinle karşılaştır (chatterbox'ta hep açık)")
+    ap.add_argument("--voice", default=None)
+    ap.add_argument("--samples", action="store_true")
+    ap.add_argument("--jobs", type=int, default=4)
+    ap.add_argument("--limit", type=int, default=0, help="en fazla bu kadar klip (deneme için)")
+    ap.add_argument("--redo", action="store_true", help="var olan klipleri de yeniden kaydet (ses değişince)")
+    args = ap.parse_args()
+    if args.samples:
+        return samples(args.engine, args.voice)
+    mpath = os.path.join(VOICE_DIR, "manifest.json")
+    with open(mpath, encoding="utf-8") as fh:
+        manifest = json.load(fh)
+    if args.finalize:
+        return finalize(manifest, mpath, voice_name(args.engine, args.voice))
+    eng = make_engine(args.engine, args.voice)
+    print("ses:", eng.name, flush=True)
+    if manifest.get("voice") and manifest["voice"] != eng.name:
+        args.redo = True  # başka bir sesle kaydedilmiş klipler karışmasın
+    out_dir = args.out or CLIPS
+    os.makedirs(out_dir, exist_ok=True)
+    raw_dir = os.path.join(RAW, eng.name.replace(":", "_"))
+    os.makedirs(raw_dir, exist_ok=True)
+    ids = sorted(manifest["clips"])
+    if args.shard:
+        i, n = (int(x) for x in args.shard.split("/"))
+        ids = ids[i::n]
+        args.redo = True
+    todo = [cid for cid in ids if args.redo or not os.path.exists(os.path.join(out_dir, f"{cid}.ogg"))]
+    if args.limit:
+        todo = todo[:args.limit]
+    print(f"{len(todo)} klip kaydedilecek ({len(ids) - len(todo)} hazır)", flush=True)
+
+    # 1) ham ses (yerel modeller tek süreçte sırayla); gerekirse ASR denetimi ve yeniden deneme
+    judge = Judge() if (args.asr or getattr(eng, "asr", False)) else None
+    raws, qa = {}, {}
+    for k, cid in enumerate(todo, 1):
+        raw = os.path.join(raw_dir, cid + eng.ext)
+        text = manifest["clips"][cid]["say"]
+        if not os.path.exists(raw):
+            score, heard = record(eng, judge, text, raw)
+            qa[cid] = dict(text=text, heard=heard, cer=round(score, 3))
+        raws[cid] = raw
+        if k % 25 == 0 or k == len(todo):
+            done = [q["cer"] for q in qa.values()]
+            info = f", ort. CER {sum(done) / len(done):.3f}" if judge and done else ""
+            print(f"  ses {k}/{len(todo)}{info}", flush=True)
+    if judge:
+        os.makedirs(os.path.join(HERE, "build"), exist_ok=True)
+        tag = args.shard.replace("/", "of") if args.shard else "all"
+        with open(os.path.join(out_dir, f"qa_{tag}.json"), "w", encoding="utf-8") as fh:
+            json.dump(qa, fh, ensure_ascii=False, indent=1)
+        worst = sorted(qa.items(), key=lambda kv: -kv[1]["cer"])[:15]
+        print("En zayıf klipler:", flush=True)
+        for cid, q in worst:
+            print(f"  {q['cer']:.2f}  '{q['text']}'  ->  '{q['heard']}'", flush=True)
+        over = sum(1 for q in qa.values() if q["cer"] > 0.3)
+        print(f"Eşiği (0.3) aşan: {over}/{len(qa)}", flush=True)
+
+    # 2) son işlem paralel
+    def one(cid):
+        out = os.path.join(out_dir, f"{cid}.ogg")
+        post(raws[cid], out + ".tmp.ogg")
+        os.replace(out + ".tmp.ogg", out)
+
+    with cf.ThreadPoolExecutor(args.jobs) as ex:
+        list(ex.map(one, todo))
+    if args.shard or args.out:
+        print(f"parça bitti: {len(todo)} klip -> {out_dir}", flush=True)
+        return
+    # 3) süreler ve kalite kontrolü
+    finalize(manifest, mpath, eng.name)
 
 
 if __name__ == "__main__":
