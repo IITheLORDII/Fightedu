@@ -5,7 +5,7 @@
    "title": "Temeller",
    "from": 1,
    "to": 6,
-   "goal": "Duruşlar, jireugi ve alt/orta blok."
+   "goal": "Duruşlar, düz yumruk ve alt/orta blok."
   },
   {
    "title": "Tekmeler",
@@ -30,7 +30,7 @@
   {
    "day": 1,
    "title": "Duruşlar",
-   "focus": "Ap seogi yürüyüş boyunda, ap kubi'de ön diz ayak ucunun üstünde.",
+   "focus": "Yürüyüş duruşu adım boyunda, ön duruşta ön diz ayak ucunun üstünde.",
    "blocks": [
     {
      "kind": "warmup",
@@ -58,7 +58,7 @@
       "tkd_ap_kubi"
      ],
      "calls": [],
-     "cue": "Teknik raundu: Ap seogi yürüyüş boyunda, ap kubi'de ön diz ayak ucunun üstünde."
+     "cue": "Teknik raundu: Yürüyüş duruşu adım boyunda, ön duruşta ön diz ayak ucunun üstünde."
     },
     {
      "kind": "shadow",
@@ -127,7 +127,7 @@
   },
   {
    "day": 2,
-   "title": "Jireugi",
+   "title": "Düz Yumruk",
    "focus": "Yumruk kalçadan döner, çeken el avuç yukarı bele.",
    "blocks": [
     {
@@ -601,7 +601,7 @@
   },
   {
    "day": 7,
-   "title": "Dollyo Chagi",
+   "title": "Yuvarlak Tekme",
    "focus": "Destek ayağı hedefe, kalça döner, ayak üstüyle vur.",
    "blocks": [
     {
@@ -794,7 +794,7 @@
   },
   {
    "day": 9,
-   "title": "Yeop Chagi",
+   "title": "Yan Tekme",
    "focus": "Yan dön, diz göğse, topuk önde düz it.",
    "blocks": [
     {
@@ -1177,7 +1177,7 @@
   },
   {
    "day": 13,
-   "title": "Dwi Chagi",
+   "title": "Geri Tekme",
    "focus": "Dön, omzun üstünden bak, topuk düz geriye.",
    "blocks": [
     {
@@ -1272,7 +1272,7 @@
   },
   {
    "day": 14,
-   "title": "Naeryo Chagi",
+   "title": "Balta Tekmesi",
    "focus": "Bacak düz yukarı, topukla aşağı in.",
    "blocks": [
     {
@@ -2047,7 +2047,7 @@
   {
    "day": 22,
    "title": "Duruş ve Blok Akışı",
-   "focus": "Dwit kubi'de orta blok, ap kubi'de yumruk.",
+   "focus": "Arka duruşta orta blok, ön duruşta yumruk.",
    "blocks": [
     {
      "kind": "warmup",
@@ -2075,7 +2075,7 @@
       "tkd_momtong_makgi"
      ],
      "calls": [],
-     "cue": "Teknik raundu: Dwit kubi'de orta blok, ap kubi'de yumruk."
+     "cue": "Teknik raundu: Arka duruşta orta blok, ön duruşta yumruk."
     },
     {
      "kind": "shadow",

@@ -63,7 +63,7 @@ def main():
     moves = {}
     for f in dict.fromkeys(files):
         for m in load(f"moves_{f}.json"):
-            moves[m["id"]] = {k: m[k] for k in ("name", "sport", "category", "description", "steps", "tip") if k in m}
+            moves[m["id"]] = {k: m[k] for k in ("name", "sport", "category", "description", "steps", "tip", "call") if k in m}
     programs = {s["id"]: load(f"training_{s['id']}.json") for s in sports}
     clips_dir = os.path.join(ROOT, "app", "src", "main", "assets", "voice", "clips")
     recorded = os.path.isdir(clips_dir) and any(f.endswith(".ogg") for f in os.listdir(clips_dir))

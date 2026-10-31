@@ -11,19 +11,19 @@
    "title": "Dalışlar",
    "from": 7,
    "to": 12,
-   "goal": "Çift ve tek bacak dalışı, sprawl savunması."
+   "goal": "Çift ve tek bacak dalışı, dalış savunması."
   },
   {
    "title": "Bağlantılar",
    "from": 13,
    "to": 18,
-   "goal": "El mücadelesi, snap down ve yer çıkışları."
+   "goal": "El mücadelesi, baş çekme ve yer çıkışları."
   },
   {
    "title": "Maç Temposu",
    "from": 19,
    "to": 24,
-   "goal": "Zincir drill, yüksek tempo ve dayanıklılık."
+   "goal": "Zincir alıştırma, yüksek tempo ve dayanıklılık."
   }
  ],
  "days": [
@@ -78,7 +78,7 @@
     },
     {
      "kind": "drill",
-     "title": "Dalış drilli",
+     "title": "Dalış alıştırması",
      "mode": "round",
      "rounds": 4,
      "work": 120,
@@ -91,7 +91,7 @@
       "wr_level_change",
       "wr_stance"
      ],
-     "cue": "Dalış drilli: 4 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+     "cue": "Dalış alıştırması: 4 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
     },
     {
      "kind": "conditioning",
@@ -174,7 +174,7 @@
     },
     {
      "kind": "drill",
-     "title": "Dalış drilli",
+     "title": "Dalış alıştırması",
      "mode": "round",
      "rounds": 4,
      "work": 120,
@@ -186,7 +186,7 @@
       "wr_level_change",
       "wr_penetration"
      ],
-     "cue": "Dalış drilli: 4 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+     "cue": "Dalış alıştırması: 4 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
     },
     {
      "kind": "conditioning",
@@ -269,7 +269,7 @@
     },
     {
      "kind": "drill",
-     "title": "Dalış drilli",
+     "title": "Dalış alıştırması",
      "mode": "round",
      "rounds": 4,
      "work": 120,
@@ -281,7 +281,7 @@
       "wr_penetration",
       "wr_level_change"
      ],
-     "cue": "Dalış drilli: 4 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+     "cue": "Dalış alıştırması: 4 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
     },
     {
      "kind": "conditioning",
@@ -365,7 +365,7 @@
     },
     {
      "kind": "drill",
-     "title": "Dalış drilli",
+     "title": "Dalış alıştırması",
      "mode": "round",
      "rounds": 4,
      "work": 120,
@@ -378,7 +378,7 @@
       "wr_level_change",
       "wr_penetration"
      ],
-     "cue": "Dalış drilli: 4 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+     "cue": "Dalış alıştırması: 4 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
     },
     {
      "kind": "conditioning",
@@ -412,7 +412,7 @@
   },
   {
    "day": 5,
-   "title": "Sprawl",
+   "title": "Dalış Savunması",
    "focus": "Kalçayı yere at, bacaklar geriye; eller rakibin sırtında.",
    "blocks": [
     {
@@ -462,7 +462,7 @@
     },
     {
      "kind": "drill",
-     "title": "Dalış drilli",
+     "title": "Dalış alıştırması",
      "mode": "round",
      "rounds": 4,
      "work": 120,
@@ -476,7 +476,7 @@
       "wr_level_change",
       "wr_penetration"
      ],
-     "cue": "Dalış drilli: 4 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+     "cue": "Dalış alıştırması: 4 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
     },
     {
      "kind": "conditioning",
@@ -511,7 +511,7 @@
   {
    "day": 6,
    "title": "Değerlendirme 1",
-   "focus": "Seviye değiştir, penetrasyon, sprawl: komutlara anında tepki.",
+   "focus": "Seviye değiştir, dal, savun: komutlara anında tepki.",
    "blocks": [
     {
      "kind": "warmup",
@@ -546,7 +546,7 @@
     },
     {
      "kind": "drill",
-     "title": "Dalış drilli",
+     "title": "Dalış alıştırması",
      "mode": "round",
      "rounds": 6,
      "work": 120,
@@ -560,7 +560,7 @@
       "wr_penetration",
       "wr_sprawl"
      ],
-     "cue": "Dalış drilli: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+     "cue": "Dalış alıştırması: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
     },
     {
      "kind": "conditioning",
@@ -645,7 +645,7 @@
     },
     {
      "kind": "drill",
-     "title": "Dalış drilli",
+     "title": "Dalış alıştırması",
      "mode": "round",
      "rounds": 5,
      "work": 120,
@@ -658,7 +658,7 @@
       "wr_level_change",
       "wr_sprawl"
      ],
-     "cue": "Dalış drilli: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+     "cue": "Dalış alıştırması: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
     },
     {
      "kind": "conditioning",
@@ -742,7 +742,7 @@
     },
     {
      "kind": "drill",
-     "title": "Dalış drilli",
+     "title": "Dalış alıştırması",
      "mode": "round",
      "rounds": 5,
      "work": 120,
@@ -755,7 +755,7 @@
       "wr_level_change",
       "wr_sprawl"
      ],
-     "cue": "Dalış drilli: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+     "cue": "Dalış alıştırması: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
     },
     {
      "kind": "conditioning",
@@ -839,7 +839,7 @@
     },
     {
      "kind": "drill",
-     "title": "Dalış drilli",
+     "title": "Dalış alıştırması",
      "mode": "round",
      "rounds": 5,
      "work": 120,
@@ -853,7 +853,7 @@
       "wr_single_leg",
       "wr_sprawl"
      ],
-     "cue": "Dalış drilli: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+     "cue": "Dalış alıştırması: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
     },
     {
      "kind": "conditioning",
@@ -888,8 +888,8 @@
   },
   {
    "day": 10,
-   "title": "Sprawl ve Dönüş",
-   "focus": "Sprawl'dan sonra yana dön, arkaya geç.",
+   "title": "Savunma ve Dönüş",
+   "focus": "Dalış savunmasından sonra yana dön, arkaya geç.",
    "blocks": [
     {
      "kind": "warmup",
@@ -917,7 +917,7 @@
       "wr_bridge"
      ],
      "calls": [],
-     "cue": "Teknik raundu: Sprawl'dan sonra yana dön, arkaya geç."
+     "cue": "Teknik raundu: Dalış savunmasından sonra yana dön, arkaya geç."
     },
     {
      "kind": "shadow",
@@ -938,7 +938,7 @@
     },
     {
      "kind": "drill",
-     "title": "Dalış drilli",
+     "title": "Dalış alıştırması",
      "mode": "round",
      "rounds": 5,
      "work": 120,
@@ -952,7 +952,7 @@
       "wr_double_leg",
       "wr_level_change"
      ],
-     "cue": "Dalış drilli: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+     "cue": "Dalış alıştırması: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
     },
     {
      "kind": "conditioning",
@@ -987,7 +987,7 @@
   {
    "day": 11,
    "title": "Yerden Çıkış",
-   "focus": "Sit-out ile yana dön, stand-up ile ayağa kalk; eller kontrolde.",
+   "focus": "Oturarak yana dön, sonra yerden kalk; eller kontrolde.",
    "blocks": [
     {
      "kind": "warmup",
@@ -1015,7 +1015,7 @@
       "wr_stand_up"
      ],
      "calls": [],
-     "cue": "Teknik raundu: Sit-out ile yana dön, stand-up ile ayağa kalk; eller kontrolde."
+     "cue": "Teknik raundu: Oturarak yana dön, sonra yerden kalk; eller kontrolde."
     },
     {
      "kind": "shadow",
@@ -1036,7 +1036,7 @@
     },
     {
      "kind": "drill",
-     "title": "Dalış drilli",
+     "title": "Dalış alıştırması",
      "mode": "round",
      "rounds": 5,
      "work": 120,
@@ -1050,7 +1050,7 @@
       "wr_stand_up",
       "wr_sprawl"
      ],
-     "cue": "Dalış drilli: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+     "cue": "Dalış alıştırması: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
     },
     {
      "kind": "conditioning",
@@ -1121,7 +1121,7 @@
     },
     {
      "kind": "drill",
-     "title": "Dalış drilli",
+     "title": "Dalış alıştırması",
      "mode": "round",
      "rounds": 7,
      "work": 120,
@@ -1136,7 +1136,7 @@
       "wr_sprawl",
       "wr_stand_up"
      ],
-     "cue": "Dalış drilli: 7 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+     "cue": "Dalış alıştırması: 7 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
     },
     {
      "kind": "conditioning",
@@ -1221,7 +1221,7 @@
     },
     {
      "kind": "drill",
-     "title": "Dalış drilli",
+     "title": "Dalış alıştırması",
      "mode": "round",
      "rounds": 5,
      "work": 180,
@@ -1234,7 +1234,7 @@
       "wr_level_change",
       "wr_single_leg"
      ],
-     "cue": "Dalış drilli: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+     "cue": "Dalış alıştırması: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
     },
     {
      "kind": "conditioning",
@@ -1268,7 +1268,7 @@
   },
   {
    "day": 14,
-   "title": "Snap Down",
+   "title": "Baş Çekme",
    "focus": "Başı çek, rakibi öne düşür, arkasına geç.",
    "blocks": [
     {
@@ -1318,7 +1318,7 @@
     },
     {
      "kind": "drill",
-     "title": "Dalış drilli",
+     "title": "Dalış alıştırması",
      "mode": "round",
      "rounds": 5,
      "work": 180,
@@ -1332,7 +1332,7 @@
       "wr_hand_fight",
       "wr_sprawl"
      ],
-     "cue": "Dalış drilli: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+     "cue": "Dalış alıştırması: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
     },
     {
      "kind": "conditioning",
@@ -1366,8 +1366,8 @@
   },
   {
    "day": 15,
-   "title": "Zincir Drill",
-   "focus": "Bir hareket diğerine bağlanır: hand fight, seviye, dalış.",
+   "title": "Zincir Alıştırma",
+   "focus": "Bir hareket diğerine bağlanır: el mücadelesi, seviye, dalış.",
    "blocks": [
     {
      "kind": "warmup",
@@ -1395,7 +1395,7 @@
       "wr_hand_fight"
      ],
      "calls": [],
-     "cue": "Teknik raundu: Bir hareket diğerine bağlanır: hand fight, seviye, dalış."
+     "cue": "Teknik raundu: Bir hareket diğerine bağlanır: el mücadelesi, seviye, dalış."
     },
     {
      "kind": "shadow",
@@ -1416,7 +1416,7 @@
     },
     {
      "kind": "drill",
-     "title": "Dalış drilli",
+     "title": "Dalış alıştırması",
      "mode": "round",
      "rounds": 5,
      "work": 180,
@@ -1429,7 +1429,7 @@
       "wr_double_leg",
       "wr_snap_down"
      ],
-     "cue": "Dalış drilli: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+     "cue": "Dalış alıştırması: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
     },
     {
      "kind": "conditioning",
@@ -1465,7 +1465,7 @@
   {
    "day": 16,
    "title": "Alt Pozisyon",
-   "focus": "Sit-out, stand-up, köprü: yerde asla düz kalma.",
+   "focus": "Oturarak çıkış, yerden kalkış, köprü: yerde asla düz kalma.",
    "blocks": [
     {
      "kind": "warmup",
@@ -1493,7 +1493,7 @@
       "wr_bridge"
      ],
      "calls": [],
-     "cue": "Teknik raundu: Sit-out, stand-up, köprü: yerde asla düz kalma."
+     "cue": "Teknik raundu: Oturarak çıkış, yerden kalkış, köprü: yerde asla düz kalma."
     },
     {
      "kind": "shadow",
@@ -1514,7 +1514,7 @@
     },
     {
      "kind": "drill",
-     "title": "Dalış drilli",
+     "title": "Dalış alıştırması",
      "mode": "round",
      "rounds": 5,
      "work": 180,
@@ -1528,7 +1528,7 @@
       "wr_stand_up",
       "wr_bridge"
      ],
-     "cue": "Dalış drilli: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+     "cue": "Dalış alıştırması: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
     },
     {
      "kind": "conditioning",
@@ -1563,7 +1563,7 @@
   {
    "day": 17,
    "title": "Dayanıklılık",
-   "focus": "Son 30 saniyede sürekli sprawl.",
+   "focus": "Son 30 saniyede sürekli dalış savunması.",
    "blocks": [
     {
      "kind": "warmup",
@@ -1591,7 +1591,7 @@
       "wr_penetration"
      ],
      "calls": [],
-     "cue": "Teknik raundu: Son 30 saniyede sürekli sprawl."
+     "cue": "Teknik raundu: Son 30 saniyede sürekli dalış savunması."
     },
     {
      "kind": "shadow",
@@ -1612,7 +1612,7 @@
     },
     {
      "kind": "drill",
-     "title": "Dalış drilli",
+     "title": "Dalış alıştırması",
      "mode": "round",
      "rounds": 5,
      "work": 180,
@@ -1626,7 +1626,7 @@
       "wr_penetration",
       "wr_double_leg"
      ],
-     "cue": "Dalış drilli: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+     "cue": "Dalış alıştırması: 5 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
     },
     {
      "kind": "conditioning",
@@ -1661,7 +1661,7 @@
   {
    "day": 18,
    "title": "Değerlendirme 3",
-   "focus": "El mücadelesi, snap down ve dalış zinciri.",
+   "focus": "El mücadelesi, baş çekme ve dalış zinciri.",
    "blocks": [
     {
      "kind": "warmup",
@@ -1698,7 +1698,7 @@
     },
     {
      "kind": "drill",
-     "title": "Dalış drilli",
+     "title": "Dalış alıştırması",
      "mode": "round",
      "rounds": 7,
      "work": 180,
@@ -1714,7 +1714,7 @@
       "wr_double_leg",
       "wr_sprawl"
      ],
-     "cue": "Dalış drilli: 7 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+     "cue": "Dalış alıştırması: 7 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
     },
     {
      "kind": "conditioning",
@@ -1750,7 +1750,7 @@
   {
    "day": 19,
    "title": "Tüm Dalışlar",
-   "focus": "Komuta göre dalış, sprawl ya da snap down.",
+   "focus": "Komuta göre dalış, savunma ya da baş çekme.",
    "blocks": [
     {
      "kind": "warmup",
@@ -1778,7 +1778,7 @@
       "wr_double_leg"
      ],
      "calls": [],
-     "cue": "Teknik raundu: Komuta göre dalış, sprawl ya da snap down."
+     "cue": "Teknik raundu: Komuta göre dalış, savunma ya da baş çekme."
     },
     {
      "kind": "shadow",
@@ -1800,7 +1800,7 @@
     },
     {
      "kind": "drill",
-     "title": "Dalış drilli",
+     "title": "Dalış alıştırması",
      "mode": "round",
      "rounds": 6,
      "work": 180,
@@ -1815,7 +1815,7 @@
       "wr_snap_down",
       "wr_sprawl"
      ],
-     "cue": "Dalış drilli: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+     "cue": "Dalış alıştırması: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
     },
     {
      "kind": "conditioning",
@@ -1850,7 +1850,7 @@
   {
    "day": 20,
    "title": "Karşı Atak",
-   "focus": "Sprawl'dan snap down'a, snap down'dan arkaya.",
+   "focus": "Dalış savunmasından baş çekmeye, baş çekmeden arkaya.",
    "blocks": [
     {
      "kind": "warmup",
@@ -1878,7 +1878,7 @@
       "wr_snap_down"
      ],
      "calls": [],
-     "cue": "Teknik raundu: Sprawl'dan snap down'a, snap down'dan arkaya."
+     "cue": "Teknik raundu: Dalış savunmasından baş çekmeye, baş çekmeden arkaya."
     },
     {
      "kind": "shadow",
@@ -1899,7 +1899,7 @@
     },
     {
      "kind": "drill",
-     "title": "Dalış drilli",
+     "title": "Dalış alıştırması",
      "mode": "round",
      "rounds": 6,
      "work": 180,
@@ -1913,7 +1913,7 @@
       "wr_snap_down",
       "wr_hand_fight"
      ],
-     "cue": "Dalış drilli: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+     "cue": "Dalış alıştırması: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
     },
     {
      "kind": "conditioning",
@@ -1997,7 +1997,7 @@
     },
     {
      "kind": "drill",
-     "title": "Dalış drilli",
+     "title": "Dalış alıştırması",
      "mode": "round",
      "rounds": 6,
      "work": 180,
@@ -2011,7 +2011,7 @@
       "wr_double_leg",
       "wr_level_change"
      ],
-     "cue": "Dalış drilli: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+     "cue": "Dalış alıştırması: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
     },
     {
      "kind": "conditioning",
@@ -2098,7 +2098,7 @@
     },
     {
      "kind": "drill",
-     "title": "Dalış drilli",
+     "title": "Dalış alıştırması",
      "mode": "round",
      "rounds": 6,
      "work": 180,
@@ -2113,7 +2113,7 @@
       "wr_sit_out",
       "wr_stand_up"
      ],
-     "cue": "Dalış drilli: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+     "cue": "Dalış alıştırması: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
     },
     {
      "kind": "conditioning",
@@ -2198,7 +2198,7 @@
     },
     {
      "kind": "drill",
-     "title": "Dalış drilli",
+     "title": "Dalış alıştırması",
      "mode": "round",
      "rounds": 6,
      "work": 180,
@@ -2213,7 +2213,7 @@
       "wr_sprawl",
       "wr_snap_down"
      ],
-     "cue": "Dalış drilli: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+     "cue": "Dalış alıştırması: 6 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
     },
     {
      "kind": "conditioning",
@@ -2248,7 +2248,7 @@
   {
    "day": 24,
    "title": "Final",
-   "focus": "8 raunt: zincir drill ve dalışlar; son raundu en iyi raundun yap.",
+   "focus": "8 raunt: zincir alıştırma ve dalışlar; son raundu en iyi raundun yap.",
    "blocks": [
     {
      "kind": "warmup",
@@ -2286,7 +2286,7 @@
     },
     {
      "kind": "drill",
-     "title": "Dalış drilli",
+     "title": "Dalış alıştırması",
      "mode": "round",
      "rounds": 8,
      "work": 180,
@@ -2304,7 +2304,7 @@
       "wr_sprawl",
       "wr_stand_up"
      ],
-     "cue": "Dalış drilli: 8 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
+     "cue": "Dalış alıştırması: 8 raunt. Komut gelince o tekniği at, aralarda ayak oyunu."
     },
     {
      "kind": "conditioning",

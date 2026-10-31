@@ -5,13 +5,13 @@
    "title": "Temeller",
    "from": 1,
    "to": 6,
-   "goal": "Duruş, jab–cross, teep ve low kick."
+   "goal": "Duruş, sol–sağ direk, ön tekme ve alçak tekme."
   },
   {
    "title": "Tekme ve Diz",
    "from": 7,
    "to": 12,
-   "goal": "Middle/high kick, diz ve tekme bloğu."
+   "goal": "Orta ve yüksek tekme, diz ve tekme bloğu."
   },
   {
    "title": "Kombinasyonlar",
@@ -29,7 +29,7 @@
  "days": [
   {
    "day": 1,
-   "title": "Duruş ve Jab–Cross",
+   "title": "Duruş ve Sol–Sağ Direk",
    "focus": "Boks duruşundan biraz daha dik; ağırlık ortada, tekmeye hazır.",
    "blocks": [
     {
@@ -123,7 +123,7 @@
   },
   {
    "day": 2,
-   "title": "Teep",
+   "title": "Ön Tekme",
    "focus": "Ön dizi kaldır, kalçayı it; ayak tabanı karına.",
    "blocks": [
     {
@@ -218,7 +218,7 @@
   },
   {
    "day": 3,
-   "title": "Low Kick",
+   "title": "Alçak Tekme",
    "focus": "Kaval vurur, ayak değil; destek ayağının parmakları torbaya.",
    "blocks": [
     {
@@ -410,8 +410,8 @@
   },
   {
    "day": 5,
-   "title": "Jab–Cross–Low",
-   "focus": "Cross'un dönüşü low kick'i yükler; üç vuruş tek akış.",
+   "title": "Sol–Sağ–Alçak Tekme",
+   "focus": "Sağ direğin dönüşü alçak tekmeyi yükler; üç vuruş tek akış.",
    "blocks": [
     {
      "kind": "warmup",
@@ -438,7 +438,7 @@
       "kb_low_kick"
      ],
      "calls": [],
-     "cue": "Teknik raundu: Cross'un dönüşü low kick'i yükler; üç vuruş tek akış."
+     "cue": "Teknik raundu: Sağ direğin dönüşü alçak tekmeyi yükler; üç vuruş tek akış."
     },
     {
      "kind": "shadow",
@@ -508,7 +508,7 @@
   {
    "day": 6,
    "title": "Değerlendirme 1",
-   "focus": "Yumruk + teep + low kick, 6 raunt.",
+   "focus": "Yumruk, ön tekme ve alçak tekme, 6 raunt.",
    "blocks": [
     {
      "kind": "warmup",
@@ -593,7 +593,7 @@
   },
   {
    "day": 7,
-   "title": "Middle Kick",
+   "title": "Orta Tekme",
    "focus": "Kalça devrilir, kaval kaburgaya; kol aşağı savrulur, diğer el çenede.",
    "blocks": [
     {
@@ -687,7 +687,7 @@
   },
   {
    "day": 8,
-   "title": "Check",
+   "title": "Tekme Bloğu",
    "focus": "Ön dizi kaldır, kaval tekmeye; hemen cevap ver.",
    "blocks": [
     {
@@ -882,8 +882,8 @@
   },
   {
    "day": 10,
-   "title": "High Kick",
-   "focus": "Esneklik + kalça: destek ayağı torbaya, bacak yukarı yayla.",
+   "title": "Yüksek Tekme",
+   "focus": "Esneklik ve kalça: destek ayağı torbaya, bacak yukarı yayla.",
    "blocks": [
     {
      "kind": "warmup",
@@ -910,7 +910,7 @@
       "kb_middle_kick"
      ],
      "calls": [],
-     "cue": "Teknik raundu: Esneklik + kalça: destek ayağı torbaya, bacak yukarı yayla."
+     "cue": "Teknik raundu: Esneklik ve kalça: destek ayağı torbaya, bacak yukarı yayla."
     },
     {
      "kind": "shadow",
@@ -980,7 +980,7 @@
   {
    "day": 11,
    "title": "Tekme Karışık",
-   "focus": "Low, middle, high: seviyeyi değiştir, rakip tahmin etmesin.",
+   "focus": "Alçak, orta, yüksek: seviyeyi değiştir, rakip tahmin etmesin.",
    "blocks": [
     {
      "kind": "warmup",
@@ -1007,7 +1007,7 @@
       "kb_high_kick"
      ],
      "calls": [],
-     "cue": "Teknik raundu: Low, middle, high: seviyeyi değiştir, rakip tahmin etmesin."
+     "cue": "Teknik raundu: Alçak, orta, yüksek: seviyeyi değiştir, rakip tahmin etmesin."
     },
     {
      "kind": "shadow",
@@ -1166,8 +1166,8 @@
   },
   {
    "day": 13,
-   "title": "Jab–Cross–Kroşe–Middle",
-   "focus": "Dört vuruş: kroşe ağırlığı ön bacağa koyar, middle ondan çıkar.",
+   "title": "Sol–Sağ–Kroşe–Orta Tekme",
+   "focus": "Dört vuruş: kroşe ağırlığı ön bacağa koyar, orta tekme ondan çıkar.",
    "blocks": [
     {
      "kind": "warmup",
@@ -1194,7 +1194,7 @@
       "kb_middle_kick"
      ],
      "calls": [],
-     "cue": "Teknik raundu: Dört vuruş: kroşe ağırlığı ön bacağa koyar, middle ondan çıkar."
+     "cue": "Teknik raundu: Dört vuruş: kroşe ağırlığı ön bacağa koyar, orta tekme ondan çıkar."
     },
     {
      "kind": "shadow",
@@ -1359,8 +1359,8 @@
   },
   {
    "day": 15,
-   "title": "Teep ve Diz",
-   "focus": "Mesafeyi teep ile kur, yakına gelince diz.",
+   "title": "Ön Tekme ve Diz",
+   "focus": "Mesafeyi ön tekmeyle kur, yakına gelince diz.",
    "blocks": [
     {
      "kind": "warmup",
@@ -1387,7 +1387,7 @@
       "kb_knee"
      ],
      "calls": [],
-     "cue": "Teknik raundu: Mesafeyi teep ile kur, yakına gelince diz."
+     "cue": "Teknik raundu: Mesafeyi ön tekmeyle kur, yakına gelince diz."
     },
     {
      "kind": "shadow",
@@ -1458,7 +1458,7 @@
   {
    "day": 16,
    "title": "Savunma Raundu",
-   "focus": "Check sonrası cevap: check–low, check–cross.",
+   "focus": "Tekme bloğundan sonra cevap: blok ve alçak tekme, blok ve sağ direk.",
    "blocks": [
     {
      "kind": "warmup",
@@ -1485,7 +1485,7 @@
       "kb_jab_cross"
      ],
      "calls": [],
-     "cue": "Teknik raundu: Check sonrası cevap: check–low, check–cross."
+     "cue": "Teknik raundu: Tekme bloğundan sonra cevap: blok ve alçak tekme, blok ve sağ direk."
     },
     {
      "kind": "shadow",
@@ -1557,7 +1557,7 @@
   {
    "day": 17,
    "title": "Dayanıklılık",
-   "focus": "Son 30 saniyede sürekli middle kick, sağ–sol.",
+   "focus": "Son 30 saniyede sürekli orta tekme, sağ–sol.",
    "blocks": [
     {
      "kind": "warmup",
@@ -1584,7 +1584,7 @@
       "kb_knee"
      ],
      "calls": [],
-     "cue": "Teknik raundu: Son 30 saniyede sürekli middle kick, sağ–sol."
+     "cue": "Teknik raundu: Son 30 saniyede sürekli orta tekme, sağ–sol."
     },
     {
      "kind": "shadow",
@@ -1845,7 +1845,7 @@
   {
    "day": 20,
    "title": "Karşı Atak",
-   "focus": "Teep'i yakala, check'le, hemen cevap ver.",
+   "focus": "Ön tekmeyi yakala, tekme bloğu yap, hemen cevap ver.",
    "blocks": [
     {
      "kind": "warmup",
@@ -1872,7 +1872,7 @@
       "kb_teep"
      ],
      "calls": [],
-     "cue": "Teknik raundu: Teep'i yakala, check'le, hemen cevap ver."
+     "cue": "Teknik raundu: Ön tekmeyi yakala, tekme bloğu yap, hemen cevap ver."
     },
     {
      "kind": "shadow",

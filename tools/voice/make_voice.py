@@ -157,15 +157,6 @@ for f in dict.fromkeys(["general"] + [s["id"] for s in SPORTS]):
 PROGRAMS = {s["id"]: load(f"training_{s['id']}.json") for s in SPORTS}
 REST_SESSION = load("rest_day.json")
 
-CALLS = {  # Coach.CALLS ile aynı
-    "box_combo_12": "Bir iki", "box_combo_123": "Bir iki üç", "box_footwork": "Ayak oyunu", "box_parry_block": "Blok",
-    "box_slip": "Slip", "box_roll": "Roll", "box_lead_hook": "Sol kroşe", "box_rear_hook": "Sağ kroşe",
-    "box_lead_uppercut": "Sol aparkat", "box_rear_uppercut": "Sağ aparkat", "box_cross": "Cross",
-    "kb_combo_jcl": "Jab cross low kick", "kb_combo_jcm": "Jab cross kroşe middle", "kb_jab_cross": "Jab cross",
-    "kb_footwork": "Açı değiştir", "kb_knee": "Diz", "wr_level_change": "Seviye", "wr_penetration": "Penetrasyon",
-    "wr_double_leg": "Çift bacak", "wr_single_leg": "Tek bacak", "wr_hand_fight": "El mücadelesi",
-    "wr_sit_out": "Sit out", "wr_stand_up": "Kalk", "tkd_footwork": "Ayak oyunu", "tkd_taegeuk1": "Taegeuk",
-}
 
 
 def short(mid):
@@ -174,7 +165,8 @@ def short(mid):
 
 
 def call_name(mid):
-    return CALLS.get(mid) or short(mid).split(": ")[-1].replace("–", " ").strip()
+    """Raunt içinde söylenecek kısa komut (içerikteki "call" alanı; yoksa hareketin kısa adı)."""
+    return MOVES[mid].get("call") or short(mid).split(": ")[-1].replace("–", " ").strip()
 
 
 def clean(s):
@@ -243,7 +235,7 @@ def steps(day):
 SHADOW_INTRO = {
     "boxing": "Gölge boksu. Komutları dinle, her yumruktan sonra gard; hiç yerinde durma.",
     "kickboxing": "Gölge kick boks. Komut gelince tekniği at, sonra hemen gard ve ayak oyunu.",
-    "wrestling": "Gölge güreş, zincir drill. Komutları dinle, her hareketten sonra duruşuna dön.",
+    "wrestling": "Gölge güreş, zincir alıştırma. Komutları dinle, her hareketten sonra duruşuna dön.",
     "taekwondo": "Ayak oyunu ve gölge. Ritmi koru, komut gelince tekmeni at.",
 }
 MAIN_INTRO = {
@@ -271,6 +263,12 @@ DONE = ["Blok bitti, iyi iş!", "Güzel, bu bölüm tamam!", "Harika, devam ediy
 TEN = ["Son on saniye!", "On saniye, hızlan!", "Son on saniye, bitir!", "On saniye kaldı, dayan!"]
 SPORT_PERSON = {"boxing": "boksör", "kickboxing": "kick boksçu", "wrestling": "güreşçi", "taekwondo": "tekvandocu",
                 "general": "sporcu"}
+
+
+def low_title(t):
+    """Başlık cümle içinde: "Duruş ve Sol Direk" -> "duruş ve sol direk" (sayılar ve özel adlar korunur)."""
+    keep = ("Taegeuk",)
+    return " ".join(w if w.startswith(keep) or not w[:1].isalpha() else low(w) for w in t.split(" "))
 
 
 def block_intro(sport, b):
@@ -389,7 +387,7 @@ def plan_step(clips, length, start, fixed, flex):
     return start_ids, {str(k): v for k, v in sorted(at.items())}
 
 
-def day_cues(sport, prog, day, clips, challenge_n, intro, finish, script):
+def day_cues(sport, prog, day, clips, challenge_n, intro, finish, script, topic=()):
     st = steps(day)
     phase_of = {d: p for p in prog["phases"] for d in range(p["from"], p["to"] + 1)} if prog else {}
     out = []
@@ -453,6 +451,10 @@ def day_cues(sport, prog, day, clips, challenge_n, intro, finish, script):
             if s["between"]:
                 start.append((f"{DONE[done_k % len(DONE)]} {cap(dur(sec))} dinlen.", False))
                 done_k += 1
+                if topic and b["kind"] not in ("warmup", "cooldown"):
+                    # günün konusu ısınma sırasında değil, ilk ana bölümün öncesinde anlatılır
+                    start += [(t, False) for t in topic]
+                    topic = ()
                 start.append((block_summary(b), False))
                 start.append((block_intro(sport, b), True))
             elif b["mode"] == "round":
@@ -511,9 +513,11 @@ def build(known):
         days, rests, script = {}, {}, []
         for day in prog["days"]:
             n = challenge_day_of(day["day"])
-            intro = [f"Gün {num(n)}: {day['title']}.", clean(day["focus"])]
+            intro = [f"Gün {num(n)}. Önce ısınıyoruz."]
+            topic = [f"Bugünün konusu: {low_title(day['title'])}.", clean(day["focus"])]
             script.append(("day", n, day["title"]))
-            days[str(day["day"])] = day_cues(sid, prog, day, clips, n, intro, finish_texts(sid, prog, day["day"]), script)
+            days[str(day["day"])] = day_cues(sid, prog, day, clips, n, intro, finish_texts(sid, prog, day["day"]),
+                                             script, topic)
         for n in REST_DAYS:
             intro = [f"Gün {num(n)}: aktif dinlenme.", "Bugün ağır antrenman yok; birkaç dakika hafif hareket ve esneme."]
             nxt = next(d for d in prog["days"] if d["day"] == workout_of(n + 1))
@@ -569,6 +573,13 @@ def main():
         head = {"version": 1, **({"voice": voice} if voice else {})}
         json.dump({**head, "clips": dict(sorted(clips.used.items()))}, fh, ensure_ascii=False, indent=0)
         fh.write("\n")
+    clips_dir = os.path.join(OUT, "clips")
+    if os.path.isdir(clips_dir):
+        stale = [f for f in os.listdir(clips_dir) if f.endswith(".ogg") and f[:-4] not in clips.used]
+        for f in stale:
+            os.remove(os.path.join(clips_dir, f))
+        missing = sum(1 for c in clips.used if not os.path.exists(os.path.join(clips_dir, c + ".ogg")))
+        print(f"klipler: {len(stale)} eski dosya silindi, {missing} cümlenin kaydı yok (synthesize.py kaydeder)")
     for sid, sheet in sheets.items():
         with open(os.path.join(OUT, f"cues_{sid}.json"), "w", encoding="utf-8") as fh:
             json.dump(sheet, fh, ensure_ascii=False, separators=(",", ":"))

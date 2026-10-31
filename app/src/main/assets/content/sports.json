@@ -5,7 +5,7 @@
     "emoji": "🥊",
     "colorHex": "#D32F2F",
     "tagline": "Yumruk teknikleri, ayak oyunu ve savunma",
-    "description": "Boks; duruş, ayak oyunu, dört temel yumruk (jab, cross, kroşe, aparkat) ve kafa hareketiyle savunma üzerine kuruludur. 30 günlük meydan okumanın sonunda temel kombinasyonları akıcı şekilde uygulayabilir ve 3 dakikalık rauntlarda gölge boksu yapabilir hale gelirsin."
+    "description": "Boks; duruş, ayak oyunu, dört temel yumruk (sol direk, sağ direk, kroşe, aparkat) ve kafa hareketiyle savunma üzerine kuruludur. 30 günlük meydan okumanın sonunda temel kombinasyonları akıcı şekilde uygulayabilir ve 3 dakikalık rauntlarda gölge boksu yapabilir hale gelirsin."
   },
   {
     "id": "kickboxing",
@@ -13,15 +13,15 @@
     "emoji": "🦵",
     "colorHex": "#1565C0",
     "tagline": "Yumruk + tekme + diz kombinasyonları",
-    "description": "Kick boks, boks yumruklarını tekme ve diz teknikleriyle birleştirir. Program; duruş, low kick, middle kick, ön tekme (teep), diz ve tekme bloğu (check) tekniklerini kombinasyonlarla öğretir."
+    "description": "Kick boks, boks yumruklarını tekme ve diz teknikleriyle birleştirir. Program; duruş, alçak tekme, orta tekme, ön tekme, diz ve tekme bloğu tekniklerini kombinasyonlarla öğretir."
   },
   {
     "id": "wrestling",
     "name": "Güreş",
     "emoji": "🤼",
     "colorHex": "#2E7D32",
-    "tagline": "Duruş, dalış, sprawl ve yer kontrolü",
-    "description": "Güreşin temeli doğru duruş, seviye değiştirme ve penetrasyon adımıdır. Program; tek/çift bacak dalışları, sprawl savunması, köprü, el mücadelesi ve yerden kalkış tekniklerini partnersiz drillerle öğretir."
+    "tagline": "Duruş, dalış, dalış savunması ve yer kontrolü",
+    "description": "Güreşin temeli doğru duruş, seviye değiştirme ve dalış adımıdır. Program; tek/çift bacak dalışları, dalış savunması, köprü, el mücadelesi ve yerden kalkış tekniklerini partnersiz alıştırmalarla öğretir."
   },
   {
     "id": "taekwondo",
@@ -29,7 +29,7 @@
     "emoji": "🥋",
     "colorHex": "#6A1B9A",
     "tagline": "Duruşlar, bloklar ve tekme teknikleri",
-    "description": "Tekvando; temel duruşlar (seogi), bloklar (makgi), yumruk (jireugi) ve hızlı, yüksek tekmelerle (chagi) öne çıkar. Program sonunda Taegeuk 1 (Il Jang) formunun parçalarını ve beş temel tekmeyi uygulayabilirsin."
+    "description": "Tekvando; temel duruşlar, bloklar, düz yumruk ve hızlı, yüksek tekmelerle öne çıkar. Program sonunda Taegeuk 1 formunun parçalarını ve beş temel tekmeyi uygulayabilirsin."
   },
   {
     "id": "general",
