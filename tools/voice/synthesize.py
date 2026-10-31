@@ -12,6 +12,8 @@
   python3 tools/voice/synthesize.py --samples      # aday seslerle örnek cümleler (tools/voice/samples)
   python3 tools/voice/synthesize.py --voice tr_TR-fahrettin-medium
   python3 tools/voice/make_voice.py                # ölçülen sürelerle zamanlamayı yeniden kur
+  python3 tools/voice/synthesize.py --engine chatterbox --audit --out yeni/   # kayıtlıları dinle, bozukları yenile
+  python3 tools/voice/synthesize.py --report yeni/  # qa_*.json -> tools/voice/qa_report.md
 
 Her klip: ham ses -> ffmpeg ile baş/son sessizlik kırpma, -16 LUFS ses seviyesi, sonda 0.15 sn boşluk,
 mono Opus 24 kbps -> app/src/main/assets/voice/clips/<id>.ogg. Ham sesler tools/voice/build/raw'da önbelleklenir.
@@ -23,6 +25,7 @@ import concurrent.futures as cf
 import json
 import os
 import random
+import re
 import subprocess
 import sys
 import tempfile
@@ -193,16 +196,54 @@ def make_engine(kind, voice):
 # Otomatik dinleme kontrolü: klip yazıya dökülür, okunması istenen metinle karşılaştırılır
 # --------------------------------------------------------------------------------------------
 _TR = str.maketrans({"İ": "i", "I": "ı"})
+LIMIT = 0.3        # kayıt sırasında: bunu aşan deneme yeniden üretilir
+AUDIT_LIMIT = 0.2  # denetimde: bunu aşan (ya da tekrarlı/süresi aykırı) klip yeniden kaydedilir
+
+
+def _spell(m):
+    n = int(m.group())
+    if n >= 1000:
+        return m.group()
+    sys.path.insert(0, HERE)
+    from make_voice import num
+    return f" {num(n)} "
 
 
 def norm(s):
-    s = s.translate(_TR).lower()
+    """Küçük harf, noktalama yok; ASR'nin yazdığı rakamlar Türkçe okunuşa çevrilir ("16" -> "on altı")."""
+    s = re.sub(r"\d+", _spell, s.translate(_TR).lower())
     s = "".join(ch if ch.isalnum() or ch.isspace() else " " for ch in s)
     return " ".join(s.split())
 
 
+def repeated(ref, hyp):
+    """Seste metinde olmayan bir tekrar var mı ("Dinç gel. Dinç gel.")? Model bazen cümle sonunu yineler."""
+    r, h = norm(ref).split(), norm(hyp).split()
+    rs = f" {' '.join(r)} "
+    for n in range(1, 5):
+        for i in range(len(h) - 2 * n + 1):
+            a = h[i:i + n]
+            if a == h[i + n:i + 2 * n] and len("".join(a)) >= 3 and f" {' '.join(a + a)} " not in rs:
+                return True
+    return False
+
+
+def judge_score(text, heard, seconds):
+    """Dönüş: (puan, neden). Puan boşluksuz karakter hata oranı; tekrar ya da aykırı süre +1."""
+    score, why = cer(text, heard), []
+    if repeated(text, heard):
+        score += 1.0
+        why.append("tekrar")
+    est = max(0.6, len(text) / 14.0)
+    if not (0.35 * est <= seconds <= 2.5 * est + 1.0):
+        score += 1.0  # aşırı kısa/uzun: büyük olasılıkla bozuk
+        why.append("süre")
+    return score, ",".join(why)
+
+
 def cer(ref, hyp):
-    a, b = norm(ref), norm(hyp)
+    # boşluklar sayılmaz: ASR'nin kelime bölmesi ("sıra da ki") hata değildir
+    a, b = norm(ref).replace(" ", ""), norm(hyp).replace(" ", "")
     if not a:
         return 0.0
     prev = list(range(len(b) + 1))
@@ -231,35 +272,32 @@ def wav_seconds(path):
     return float(out or 0)
 
 
-def record(eng, judge, text, raw, attempts=4, limit=0.3):
-    """Klibi üretir; ASR varsa okunanla metni karşılaştırıp en iyi denemeyi tutar. Dönüş: (cer, duyulan)."""
+def record(eng, judge, text, raw, attempts=4, limit=LIMIT, first=0):
+    """Klibi üretir; ASR varsa okunanla metni karşılaştırıp en iyi denemeyi tutar. Dönüş: (puan, duyulan, neden).
+    [first]: ilk denemenin numarası (tohum); yeniden kayıtta önceki denemelerden farklı ses çıksın diye."""
     tmp = raw[: -len(eng.ext)] + ".try{}" + eng.ext
     best = None
-    est = max(0.6, len(text) / 14.0)
-    for k in range(attempts if judge else 1):
+    for k in range(first, first + (attempts if judge else 1)):
         path = tmp.format(k)
         if isinstance(eng, ChatterboxEngine):
             eng.write(text, path, attempt=k)
         else:
             eng.write(text, path)
         if not judge:
-            best = (0.0, "", path)
+            best = (0.0, "", "", path)
             break
         heard = judge.hear(path)
-        score = cer(text, heard)
-        d = wav_seconds(path)
-        if not (0.35 * est <= d <= 2.5 * est + 1.0):
-            score += 1.0  # aşırı kısa/uzun: büyük olasılıkla bozuk
+        score, why = judge_score(text, heard, wav_seconds(path))
         if best is None or score < best[0]:
             if best:
-                os.remove(best[2])
-            best = (score, heard, path)
+                os.remove(best[3])
+            best = (score, heard, why, path)
         else:
             os.remove(path)
         if score <= limit:
             break
-    os.replace(best[2], raw)
-    return best[0], best[1]
+    os.replace(best[3], raw)
+    return best[0], best[1], best[2]
 
 
 def samples(kind, voice=None):
@@ -281,7 +319,7 @@ def samples(kind, voice=None):
             parts = []
             for i, line in enumerate(SAMPLE_LINES):
                 part = os.path.join(SAMPLES, f"{label}.part{i}{eng.ext}")
-                score, heard = record(eng, judge, say_line(line), part)
+                score, heard, _ = record(eng, judge, say_line(line), part)
                 print(f"  cümle {i + 1}: CER {score:.2f} · duyulan: {heard}", flush=True)
                 parts.append(part)
             inputs = sum((["-i", p] for p in parts), [])
@@ -354,6 +392,82 @@ def finalize(manifest, mpath, name):
     print(f"tamam: {len(manifest['clips'])} klip, {total:.1f} dk ses, {size:.1f} MB. Şimdi: make_voice.py", flush=True)
 
 
+def shard_of(ids, shard):
+    if not shard:
+        return ids, "all"
+    i, n = (int(x) for x in shard.split("/"))
+    return ids[i::n], f"{i}of{n}"
+
+
+def audit(manifest, args):
+    """Kayıtlı klipleri yazıya döküp denetler; eşiği aşan, tekrarlı ya da süresi aykırı olanları yeni tohumlarla
+    yeniden kaydeder ve yalnız daha iyi çıkanı --out klasörüne yazar. QA kaydı: <out>/qa_<parça>.json."""
+    ids, tag = shard_of(sorted(manifest["clips"]), args.shard)
+    out_dir = args.out or CLIPS
+    os.makedirs(out_dir, exist_ok=True)
+    judge = Judge()
+    qa, flagged = {}, []
+    for k, cid in enumerate(ids, 1):
+        p = os.path.join(CLIPS, f"{cid}.ogg")
+        text = manifest["clips"][cid]["say"]
+        heard = judge.hear(p)
+        score, why = judge_score(text, heard, wav_seconds(p))
+        qa[cid] = dict(text=text, heard=heard, cer=round(score, 3), why=why)
+        if score > AUDIT_LIMIT:
+            flagged.append(cid)
+    print(f"dinlendi: {len(ids)} klip, yeniden kaydedilecek {len(flagged)}", flush=True)
+    if flagged:
+        eng = make_engine(args.engine, args.voice)
+        if manifest.get("voice") != eng.name:
+            sys.exit(f"Klipler {manifest.get('voice')} ile kaydedilmiş, denetim sesi {eng.name}: önce tam kayıt yapın.")
+        tmp = tempfile.mkdtemp()
+        for cid in flagged:
+            old, raw = qa[cid], os.path.join(tmp, cid + eng.ext)
+            score, heard, why = record(eng, judge, old["text"], raw, attempts=6, limit=AUDIT_LIMIT, first=4)
+            better = score < old["cer"]
+            if better:
+                post(raw, os.path.join(out_dir, f"{cid}.ogg"))
+                qa[cid] = dict(text=old["text"], heard=heard, cer=round(score, 3), why=why, was=old["cer"],
+                               was_heard=old["heard"], was_why=old["why"])
+            os.remove(raw)
+            print(f"  {old['cer']:.2f} -> {score:.2f} {'yenilendi' if better else 'eskisi kaldı'}  '{old['text']}'"
+                  f"  ->  '{heard}'", flush=True)
+    with open(os.path.join(out_dir, f"qa_{tag}.json"), "w", encoding="utf-8") as fh:
+        json.dump(qa, fh, ensure_ascii=False, indent=1)
+
+
+def report(folder):
+    """Parça QA kayıtlarını birleştirir, özeti yazdırır ve tools/voice/qa_report.md'yi yazar."""
+    import glob
+    qa = {}
+    for f in sorted(glob.glob(os.path.join(folder, "qa_*.json"))):
+        with open(f, encoding="utf-8") as fh:
+            qa.update(json.load(fh))
+    if not qa:
+        sys.exit(f"{folder}: QA kaydı yok")
+    vals = [q["cer"] for q in qa.values()]
+    fixed = [q for q in qa.values() if "was" in q]
+    weak = sorted((q for q in qa.values() if q["cer"] > AUDIT_LIMIT), key=lambda q: -q["cer"])
+    avg = sum(min(v, 1.0) for v in vals) / len(vals)
+    head = (f"{len(qa)} klip, ort. hata {avg:.3f}, yeniden kaydedilen {len(fixed)}, "
+            f"hâlâ eşiği ({AUDIT_LIMIT}) aşan {len(weak)} (tekrar: {sum('tekrar' in q.get('why', '') for q in weak)}, "
+            f"süre: {sum('süre' in q.get('why', '') for q in weak)})")
+    print("ASR:", head, flush=True)
+    lines = ["# Koç sesi otomatik dinleme raporu", "",
+             "Her klip faster-whisper (small) ile yazıya döküldü ve okunması istenen metinle karşılaştırıldı. Puan: "
+             "boşluksuz karakter hata oranı (ASR rakamları okunuşa çevrilir); metinde olmayan bir tekrar ya da "
+             "aykırı süre +1. ASR da yanılabilir: listedekiler kulakla kontrol edilmeli.", "", head, ""]
+    if weak:
+        lines += ["## Eşiği aşanlar", "", "| puan | neden | metin | duyulan |", "|---|---|---|---|"]
+        lines += [f"| {q['cer']:.2f} | {q.get('why') or '-'} | {q['text']} | {q['heard']} |" for q in weak]
+    if fixed:
+        lines += ["", "## Yeniden kaydedilenler", "", "| önce | sonra | metin | önce duyulan |", "|---|---|---|---|"]
+        lines += [f"| {q['was']:.2f} | {q['cer']:.2f} | {q['text']} | {q['was_heard']} |"
+                  for q in sorted(fixed, key=lambda q: -q["was"])]
+    with open(os.path.join(HERE, "qa_report.md"), "w", encoding="utf-8") as fh:
+        fh.write("\n".join(lines) + "\n")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--engine", choices=["piper", "google", "chatterbox"], default="piper")
@@ -366,12 +480,19 @@ def main():
     ap.add_argument("--jobs", type=int, default=4)
     ap.add_argument("--limit", type=int, default=0, help="en fazla bu kadar klip (deneme için)")
     ap.add_argument("--redo", action="store_true", help="var olan klipleri de yeniden kaydet (ses değişince)")
+    ap.add_argument("--audit", action="store_true",
+                    help="kayıtlı klipleri dinle; bozuk olanları yeniden kaydet (--out klasörüne yalnız değişenler)")
+    ap.add_argument("--report", default=None, metavar="KLASÖR", help="parçaların qa_*.json dosyalarından rapor yaz")
     args = ap.parse_args()
     if args.samples:
         return samples(args.engine, args.voice)
+    if args.report:
+        return report(args.report)
     mpath = os.path.join(VOICE_DIR, "manifest.json")
     with open(mpath, encoding="utf-8") as fh:
         manifest = json.load(fh)
+    if args.audit:
+        return audit(manifest, args)
     if args.finalize:
         return finalize(manifest, mpath, voice_name(args.engine, args.voice))
     eng = make_engine(args.engine, args.voice)
@@ -382,10 +503,8 @@ def main():
     os.makedirs(out_dir, exist_ok=True)
     raw_dir = os.path.join(RAW, eng.name.replace(":", "_"))
     os.makedirs(raw_dir, exist_ok=True)
-    ids = sorted(manifest["clips"])
+    ids, _ = shard_of(sorted(manifest["clips"]), args.shard)
     if args.shard:
-        i, n = (int(x) for x in args.shard.split("/"))
-        ids = ids[i::n]
         args.redo = True
     todo = [cid for cid in ids if args.redo or not os.path.exists(os.path.join(out_dir, f"{cid}.ogg"))]
     if args.limit:
@@ -399,8 +518,8 @@ def main():
         raw = os.path.join(raw_dir, cid + eng.ext)
         text = manifest["clips"][cid]["say"]
         if not os.path.exists(raw):
-            score, heard = record(eng, judge, text, raw)
-            qa[cid] = dict(text=text, heard=heard, cer=round(score, 3))
+            score, heard, why = record(eng, judge, text, raw)
+            qa[cid] = dict(text=text, heard=heard, cer=round(score, 3), why=why)
         raws[cid] = raw
         if k % 25 == 0 or k == len(todo):
             done = [q["cer"] for q in qa.values()]
@@ -415,8 +534,8 @@ def main():
         print("En zayıf klipler:", flush=True)
         for cid, q in worst:
             print(f"  {q['cer']:.2f}  '{q['text']}'  ->  '{q['heard']}'", flush=True)
-        over = sum(1 for q in qa.values() if q["cer"] > 0.3)
-        print(f"Eşiği (0.3) aşan: {over}/{len(qa)}", flush=True)
+        over = sum(1 for q in qa.values() if q["cer"] > LIMIT)
+        print(f"Eşiği ({LIMIT}) aşan: {over}/{len(qa)}", flush=True)
 
     # 2) son işlem paralel
     def one(cid):
