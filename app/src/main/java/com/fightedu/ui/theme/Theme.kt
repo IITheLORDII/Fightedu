@@ -8,9 +8,26 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+import com.fightedu.R
 
 val DefaultAccent = Color(0xFFD32F2F)
+
+/** Marka renkleri (amblem, açılış ve giriş ekranları). */
+val BrandDark = Color(0xFF0E1116)
+val BrandSurface = Color(0xFF181B22)
+val BrandRed = Color(0xFFFF5A3C)
+val BrandRedDeep = Color(0xFFB0121C)
+
+/** Başlıklar için dar ve kalın spor yazı tipi (Barlow Condensed, OFL). */
+val DisplayFont = FontFamily(
+    Font(R.font.barlow_condensed_semibold, FontWeight.SemiBold),
+    Font(R.font.barlow_condensed_bold, FontWeight.Bold),
+    Font(R.font.barlow_condensed_extrabold, FontWeight.ExtraBold),
+)
 
 /** Lottie figürleri koyu renkli çizildiği için animasyon sahnesi her temada açık renktir. */
 val AnimationStage = Color(0xFFF1F4F6)
@@ -24,8 +41,13 @@ fun parseColor(hex: String?): Color? = try {
 
 private val AppTypography = Typography().let { t ->
     t.copy(
-        headlineMedium = t.headlineMedium.copy(fontWeight = FontWeight.Bold),
-        titleLarge = t.titleLarge.copy(fontWeight = FontWeight.Bold),
+        displayLarge = t.displayLarge.copy(fontFamily = DisplayFont, fontWeight = FontWeight.ExtraBold),
+        displayMedium = t.displayMedium.copy(fontFamily = DisplayFont, fontWeight = FontWeight.ExtraBold),
+        displaySmall = t.displaySmall.copy(fontFamily = DisplayFont, fontWeight = FontWeight.ExtraBold),
+        headlineLarge = t.headlineLarge.copy(fontFamily = DisplayFont, fontWeight = FontWeight.ExtraBold),
+        headlineMedium = t.headlineMedium.copy(fontFamily = DisplayFont, fontWeight = FontWeight.Bold, fontSize = 30.sp),
+        headlineSmall = t.headlineSmall.copy(fontFamily = DisplayFont, fontWeight = FontWeight.Bold, fontSize = 26.sp),
+        titleLarge = t.titleLarge.copy(fontFamily = DisplayFont, fontWeight = FontWeight.Bold, fontSize = 24.sp),
         titleMedium = t.titleMedium.copy(fontWeight = FontWeight.SemiBold),
     )
 }
@@ -57,5 +79,26 @@ fun FightEduTheme(
             surface = Color(0xFFFAFAFA),
         )
     }
+    MaterialTheme(colorScheme = scheme, typography = AppTypography, content = content)
+}
+
+/** Açılış, hoş geldin, kayıt/giriş ve dal seçimi: her zaman koyu marka teması. */
+@Composable
+fun BrandTheme(content: @Composable () -> Unit) {
+    val scheme = darkColorScheme(
+        primary = BrandRed,
+        onPrimary = Color.White,
+        primaryContainer = BrandRedDeep,
+        onPrimaryContainer = Color.White,
+        secondary = BrandRed,
+        background = BrandDark,
+        onBackground = Color(0xFFF2F3F5),
+        surface = BrandSurface,
+        onSurface = Color(0xFFF2F3F5),
+        surfaceVariant = Color(0xFF242832),
+        onSurfaceVariant = Color(0xFFB8BCC6),
+        outline = Color(0xFF4A505C),
+        error = Color(0xFFFF6B6B),
+    )
     MaterialTheme(colorScheme = scheme, typography = AppTypography, content = content)
 }

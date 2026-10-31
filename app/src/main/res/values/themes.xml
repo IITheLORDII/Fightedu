@@ -3,6 +3,13 @@
     <style name="Theme.FightEdu" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:windowBackground">@color/window_background</item>
+        <item name="android:windowBackground">@color/brand_dark</item>
+    </style>
+
+    <!-- Açılış (Android 12+ sistem açılış ekranı; eski sürümlerde core-splashscreen taklit eder) -->
+    <style name="Theme.FightEdu.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/brand_dark</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_emblem</item>
+        <item name="postSplashScreenTheme">@style/Theme.FightEdu</item>
     </style>
 </resources>

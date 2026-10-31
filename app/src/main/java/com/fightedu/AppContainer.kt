@@ -3,6 +3,8 @@ package com.fightedu
 import android.content.Context
 import com.fightedu.core.content.ContentLibrary
 import com.fightedu.core.domain.TrainingPlanner
+import com.fightedu.data.AuthRepository
+import com.fightedu.data.SessionStore
 import com.fightedu.data.TrainingRepository
 import com.fightedu.data.db.AppDatabase
 
@@ -18,5 +20,9 @@ class AppContainer(context: Context) {
 
     private val database: AppDatabase by lazy { AppDatabase.create(appContext) }
 
+    val session: SessionStore by lazy { SessionStore(appContext) }
+
     val repository: TrainingRepository by lazy { TrainingRepository(database) }
+
+    val auth: AuthRepository by lazy { AuthRepository(database, session) }
 }

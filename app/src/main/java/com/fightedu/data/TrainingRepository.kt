@@ -1,91 +1,71 @@
 package com.fightedu.data
 
 import androidx.room.withTransaction
-import com.fightedu.core.domain.PlanConfig
+import com.fightedu.data.db.ActivityDayEntity
 import com.fightedu.data.db.AppDatabase
 import com.fightedu.data.db.CompletedSessionEntity
 import com.fightedu.data.db.UserPlanEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.time.LocalDate
 
 data class ReminderSettings(val enabled: Boolean, val hour: Int)
 
 data class CoachSettings(val voice: Boolean = true, val vibration: Boolean = true)
 
-/** Kullanıcı planı ve ilerlemesinin cihazdaki (Room) kaydı. */
+/** Kullanıcının seçili dalı, ayarları ve dal başına meydan okuma ilerlemesi (Room). */
 class TrainingRepository(private val db: AppDatabase) {
     private val planDao = db.planDao()
     private val progressDao = db.progressDao()
+    private val activityDao = db.activityDao()
 
-    val plan: Flow<PlanConfig?> = planDao.observe().map { it?.toConfig() }
+    fun plan(userId: Long): Flow<UserPlanEntity?> = planDao.observe(userId)
 
-    val reminder: Flow<ReminderSettings> = planDao.observe().map {
-        ReminderSettings(it?.reminderEnabled ?: false, it?.reminderHour ?: DEFAULT_REMINDER_HOUR)
+    suspend fun planNow(userId: Long): UserPlanEntity? = planDao.get(userId)
+
+    fun completedKeys(userId: Long, sportId: String): Flow<Set<String>> =
+        progressDao.observeKeys(userId, sportId).map { it.toSet() }
+
+    suspend fun completedKeysNow(userId: Long, sportId: String): Set<String> = progressDao.keys(userId, sportId).toSet()
+
+    /** Dal -> tamamlanan meydan okuma günü sayısı. */
+    fun sportProgress(userId: Long): Flow<Map<String, Int>> =
+        progressDao.observeCounts(userId).map { list -> list.associate { it.sportId to it.done } }
+
+    fun activityDays(userId: Long): Flow<Set<Long>> = activityDao.observe(userId).map { it.toSet() }
+
+    suspend fun activityDaysNow(userId: Long): Set<Long> = activityDao.days(userId).toSet()
+
+    /** Dalı seçer (ilerleme dal başına saklandığından önceki dalların ilerlemesi korunur). */
+    suspend fun selectSport(userId: Long, sportId: String, reminder: ReminderSettings? = null) {
+        val old = planDao.get(userId)
+        val base = old?.copy(sportId = sportId) ?: UserPlanEntity(userId = userId, sportId = sportId)
+        planDao.upsert(
+            if (reminder == null) base else base.copy(reminderEnabled = reminder.enabled, reminderHour = reminder.hour),
+        )
     }
 
-    val coach: Flow<CoachSettings> = planDao.observe().map {
-        CoachSettings(it?.voiceCoach ?: true, it?.vibration ?: true)
-    }
-
-    val completedKeys: Flow<Set<String>> = progressDao.observeAll().map { list -> list.map { it.sessionKey }.toSet() }
-
-    suspend fun currentPlan(): PlanConfig? = planDao.get()?.toConfig()
-
-    suspend fun completedKeysNow(): Set<String> = progressDao.keys().toSet()
-
-    /** En son tamamlanan antrenmanın zamanı (epoch ms). */
-    suspend fun lastCompletedAt(): Long? = progressDao.lastCompletedAt()
-
-    suspend fun reminderNow(): ReminderSettings {
-        val p = planDao.get()
-        return ReminderSettings(p?.reminderEnabled ?: false, p?.reminderHour ?: DEFAULT_REMINDER_HOUR)
-    }
-
-    /** Yeni program oluşturur; önceki ilerleme silinir, hatırlatıcı ayarı korunur. */
-    suspend fun startPlan(config: PlanConfig) {
-        db.withTransaction {
-            val old = planDao.get()
-            progressDao.clear()
-            planDao.upsert(
-                UserPlanEntity(
-                    sportId = config.sportId,
-                    daysMask = PlanConfig.daysToMask(config.trainingDays),
-                    reminderEnabled = old?.reminderEnabled ?: false,
-                    reminderHour = old?.reminderHour ?: DEFAULT_REMINDER_HOUR,
-                    voiceCoach = old?.voiceCoach ?: true,
-                    vibration = old?.vibration ?: true,
-                ),
-            )
-        }
-    }
-
-    suspend fun setReminder(enabled: Boolean, hour: Int) {
-        val current = planDao.get() ?: return
+    suspend fun setReminder(userId: Long, enabled: Boolean, hour: Int) {
+        val current = planDao.get(userId) ?: return
         planDao.upsert(current.copy(reminderEnabled = enabled, reminderHour = hour))
     }
 
-    suspend fun setCoach(settings: CoachSettings) {
-        val current = planDao.get() ?: return
+    suspend fun setCoach(userId: Long, settings: CoachSettings) {
+        val current = planDao.get(userId) ?: return
         planDao.upsert(current.copy(voiceCoach = settings.voice, vibration = settings.vibration))
     }
 
-    suspend fun markCompleted(sessionKey: String) {
-        progressDao.insert(CompletedSessionEntity(sessionKey, System.currentTimeMillis()))
-    }
-
-    suspend fun unmarkCompleted(sessionKey: String) = progressDao.delete(sessionKey)
-
-    suspend fun reset() {
+    suspend fun markCompleted(userId: Long, sportId: String, key: String) {
         db.withTransaction {
-            progressDao.clear()
-            planDao.clear()
+            progressDao.insert(CompletedSessionEntity(userId, sportId, key, System.currentTimeMillis()))
+            activityDao.insert(ActivityDayEntity(userId, LocalDate.now().toEpochDay()))
         }
     }
 
-    private fun UserPlanEntity.toConfig() = PlanConfig(
-        sportId = sportId,
-        trainingDays = PlanConfig.maskToDays(daysMask),
-    )
+    suspend fun unmarkCompleted(userId: Long, sportId: String, key: String) = progressDao.delete(userId, sportId, key)
+
+    /** Dalın meydan okumasını baştan başlatır. */
+    suspend fun restartSport(userId: Long, sportId: String) = progressDao.clearSport(userId, sportId)
 
     companion object {
         const val DEFAULT_REMINDER_HOUR = 18

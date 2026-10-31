@@ -58,14 +58,6 @@ fun LibraryScreen(content: ContentLibrary, defaultSportId: String?, onOpenMove: 
                         label = { Text("${sport.emoji} ${sport.name}") },
                     )
                 }
-                FilterChip(
-                    selected = sportId == ContentLibrary.GENERAL,
-                    onClick = {
-                        sportId = ContentLibrary.GENERAL
-                        category = null
-                    },
-                    label = { Text("💪 Isınma & Kondisyon") },
-                )
             }
             ChipRow {
                 FilterChip(selected = category == null, onClick = { category = null }, label = { Text("Tümü") })

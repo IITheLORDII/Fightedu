@@ -63,9 +63,10 @@ fun SessionDetailScreen(
     onStart: () -> Unit,
     onToggleCompleted: (Boolean) -> Unit,
     onOpenMove: (Move) -> Unit,
+    title: String = "Gün ${day.day}",
 ) {
     AppScaffold(
-        title = "Gün ${day.day}",
+        title = title,
         onBack = onBack,
         bottomBar = {
             Row(

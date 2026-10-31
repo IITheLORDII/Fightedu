@@ -77,6 +77,8 @@ fun PlayerScreen(
     planner: TrainingPlanner,
     coach: CoachSettings,
     onExit: () -> Unit,
+    /** Üst çubukta ve bitiş ekranında gösterilen gün, ör. "GÜN 13 / 30". */
+    label: String = "GÜN ${day.day}",
     onCompleted: () -> Unit,
     onDone: () -> Unit,
     vm: PlayerViewModel = viewModel(),
@@ -105,10 +107,10 @@ fun PlayerScreen(
                 .statusBarsPadding()
                 .navigationBarsPadding(),
         ) {
-            TopBar(day, steps, ui, fg) { if (ui.finished) onDone() else showExit = true }
+            TopBar(label, day, steps, ui, fg) { if (ui.finished) onDone() else showExit = true }
             Box(Modifier.weight(1f).fillMaxWidth()) {
                 when {
-                    ui.finished -> FinishedContent(day, steps, ui.totalElapsed, onDone)
+                    ui.finished -> FinishedContent(label, day, steps, ui.totalElapsed, onDone)
                     step is Step.Work -> WorkContent(step, ui, vm::next)
                     step is Step.Rest -> RestContent(step, ui, fg, onAdd = { vm.addRest(15) })
                 }
@@ -121,7 +123,7 @@ fun PlayerScreen(
         AlertDialog(
             onDismissRequest = { showExit = false },
             title = { Text("Antrenmandan çıkılsın mı?") },
-            text = { Text("İlerlemen kaydedilmez; Gün ${day.day} tamamlanmamış olarak kalır.") },
+            text = { Text("İlerlemen kaydedilmez; bu gün tamamlanmamış olarak kalır.") },
             confirmButton = { TextButton(onClick = { showExit = false; onExit() }) { Text("Çık") } },
             dismissButton = { TextButton(onClick = { showExit = false }) { Text("Devam et") } },
         )
@@ -129,13 +131,13 @@ fun PlayerScreen(
 }
 
 @Composable
-private fun TopBar(day: TrainingDay, steps: List<Step>, ui: PlayerUi, fg: Color, onClose: () -> Unit) {
+private fun TopBar(label: String, day: TrainingDay, steps: List<Step>, ui: PlayerUi, fg: Color, onClose: () -> Unit) {
     val current = steps.getOrNull(ui.index)
     val block = current?.let { day.blocks.getOrNull(it.blockIndex) }
     Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
-                Text("GÜN ${day.day}", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold,
+                Text(label, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold,
                     color = fg.copy(alpha = 0.7f))
                 Text(day.title, style = MaterialTheme.typography.titleMedium, maxLines = 1)
             }
@@ -241,7 +243,7 @@ private fun RestContent(step: Step.Rest, ui: PlayerUi, fg: Color, onAdd: () -> U
 }
 
 @Composable
-private fun FinishedContent(day: TrainingDay, steps: List<Step>, total: Int, onDone: () -> Unit) {
+private fun FinishedContent(label: String, day: TrainingDay, steps: List<Step>, total: Int, onDone: () -> Unit) {
     val rounds = steps.count { it is Step.Work && it.block.mode == BlockMode.ROUND }
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(24.dp),
@@ -249,7 +251,7 @@ private fun FinishedContent(day: TrainingDay, steps: List<Step>, total: Int, onD
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Text("🏆", fontSize = 64.sp)
-        Text("GÜN ${day.day} TAMAMLANDI", fontSize = 28.sp, fontWeight = FontWeight.Black, textAlign = TextAlign.Center)
+        Text("$label TAMAMLANDI", fontSize = 28.sp, fontWeight = FontWeight.Black, textAlign = TextAlign.Center)
         Text(day.title, style = MaterialTheme.typography.titleMedium)
         Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
             Stat(formatClock(total), "süre")
@@ -264,7 +266,7 @@ private fun FinishedContent(day: TrainingDay, steps: List<Step>, total: Int, onD
             }
         }
         Spacer(Modifier.height(8.dp))
-        Button(onClick = onDone, modifier = Modifier.fillMaxWidth().height(56.dp)) { Text("Ana sayfaya dön") }
+        Button(onClick = onDone, modifier = Modifier.fillMaxWidth().height(56.dp)) { Text("Meydan okumaya dön") }
     }
 }
 
