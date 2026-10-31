@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.fightedu.coach.Coach
+import com.fightedu.coach.CoachVoice
 import com.fightedu.core.domain.Callout
 import com.fightedu.core.domain.SessionRunner
 import com.fightedu.core.domain.SessionRunner.Event
@@ -45,10 +46,12 @@ class PlayerViewModel(app: Application, private val saved: SavedStateHandle) : A
     val steps: List<Step> get() = runner?.steps.orEmpty()
 
     /** İlk çağrıda antrenmanı kurar ve başlatır; sonraki çağrılar (yeniden oluşturma) etkisizdir. */
-    fun setup(day: Int, steps: List<Step>, settings: CoachSettings) {
+    fun setup(day: Int, steps: List<Step>, settings: CoachSettings, voice: CoachVoice?) {
         coach.voiceEnabled = settings.voice
         coach.vibrationEnabled = settings.vibration
         if (runner != null) return
+        // ses planı oynatıcının adımlarıyla eşleşmiyorsa (içerik değişmiş) kısa anonslara dön
+        coach.setVoice(voice?.takeIf { it.cues.steps.size == steps.size })
         val r = SessionRunner(steps)
         runner = r
         if (saved.get<Int>(KEY_DAY) == day) {
@@ -62,7 +65,7 @@ class PlayerViewModel(app: Application, private val saved: SavedStateHandle) : A
             )
         } else {
             saved[KEY_DAY] = day
-            coach.onEvents(r.start())
+            coach.onEvents(r.start(), r.index, r.elapsedInStep)
         }
         publish()
         ticker = viewModelScope.launch {
@@ -106,7 +109,7 @@ class PlayerViewModel(app: Application, private val saved: SavedStateHandle) : A
                 else -> Unit
             }
         }
-        coach.onEvents(events)
+        coach.onEvents(events, r.index, r.elapsedInStep)
         publish()
     }
 

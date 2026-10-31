@@ -1,40 +1,37 @@
 package com.fightedu.coach
 
 import android.content.Context
-import android.media.AudioManager
-import android.media.ToneGenerator
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
-import android.speech.tts.TextToSpeech
 import com.fightedu.core.domain.SessionRunner.Event
 import com.fightedu.core.domain.Step
 import com.fightedu.core.model.BlockMode
 import com.fightedu.core.model.Move
-import java.util.Locale
+import com.fightedu.core.voice.DayCues
+import com.fightedu.core.voice.TurkishNumbers
+import com.fightedu.core.voice.VoiceManifest
+
+/** Bir seansın ses planı: cümleler [manifest]te, adım adım zamanlama [cues]ta; [recorded] = ses dosyaları var. */
+data class CoachVoice(val manifest: VoiceManifest, val cues: DayCues, val recorded: Boolean)
 
 /**
- * Antrenman sırasında sesli koç: Türkçe konuşma (cihazda Türkçe ses yoksa yalnızca zil), gong/bip ve
- * titreşim. [SessionRunner] olaylarını konuşmaya çevirir.
+ * Antrenman sırasında sesli koç. Seansın ses planı varsa her adımın başında ve belirli saniyelerinde rauntlara
+ * özel cümleleri çalar (kayıtlı Türkçe ses; kayıt yoksa aynı cümleleri cihazın konuşma motoru okur). Efektler
+ * (gong, zil, 3-2-1, bitiş) ve titreşim her zaman çalışır. Plan yoksa eski kısa anonslar kullanılır.
  */
 class Coach(context: Context) {
     var voiceEnabled = true
     var vibrationEnabled = true
 
-    private var ready = false
-    private val tts: TextToSpeech = TextToSpeech(context.applicationContext) { status ->
-        if (status == TextToSpeech.SUCCESS) {
-            val r = tts.setLanguage(Locale("tr", "TR"))
-            ready = r != TextToSpeech.LANG_MISSING_DATA && r != TextToSpeech.LANG_NOT_SUPPORTED
-            tts.setSpeechRate(1.05f)
-        }
-    }
-    private val tone: ToneGenerator? = try {
-        ToneGenerator(AudioManager.STREAM_MUSIC, 85)
-    } catch (_: RuntimeException) {
-        null
-    }
+    private val focus = AudioFocus(context)
+    private val fx = Fx(context)
+    private val appContext = context.applicationContext
+    private var voice: CoachVoice? = null
+    private var clipPlayer: VoicePlayer? = null
+    private var ttsSpeaker: TtsSpeaker? = null
+
     private val vibrator: Vibrator? =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             (context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as? VibratorManager)?.defaultVibrator
@@ -43,46 +40,72 @@ class Coach(context: Context) {
             context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
         }
 
-    fun onEvents(events: List<Event>) = events.forEach(::onEvent)
+    fun setVoice(v: CoachVoice?) {
+        voice = v
+        if (v?.recorded == true && clipPlayer == null) clipPlayer = VoicePlayer(appContext, focus)
+    }
 
-    fun onEvent(event: Event) {
-        when (event) {
-            is Event.StepStarted -> {
-                val s = event.step
-                if (s is Step.Work) {
-                    tone?.startTone(ToneGenerator.TONE_PROP_BEEP2, 450) // gong
-                    vibrate(longArrayOf(0, 120, 80, 120))
-                    say(workAnnouncement(s), flush = true)
-                } else if (s is Step.Rest) {
-                    tone?.startTone(ToneGenerator.TONE_PROP_ACK, 350)
-                    vibrate(longArrayOf(0, 300))
-                    say(restAnnouncement(s), flush = true)
+    private fun tts(): TtsSpeaker = ttsSpeaker ?: TtsSpeaker(appContext, focus).also { ttsSpeaker = it }
+
+    /** Runner olayları; [index] ve [elapsed] olaylardan sonraki adım ve adım içi saniyedir. */
+    fun onEvents(events: List<Event>, index: Int, elapsed: Int) {
+        var stepStarted = false
+        for (event in events) {
+            when (event) {
+                is Event.StepStarted -> {
+                    stepStarted = true
+                    val work = event.step is Step.Work
+                    fx.play(if (work) Fx.Sound.GONG else Fx.Sound.BELL)
+                    vibrate(if (work) longArrayOf(0, 120, 80, 120) else longArrayOf(0, 300))
+                    val cues = voice?.cues?.steps?.getOrNull(index)
+                    if (cues != null) {
+                        speakClips(cues.start, flush = true)
+                    } else {
+                        speakText(listOf(legacyAnnouncement(event.step)), flush = true)
+                    }
+                }
+                is Event.Call -> if (voice == null && !speaking()) speakText(listOf(callName(event.callout.move) + "!"), flush = false)
+                Event.TenSecondsLeft -> if (voice == null && !speaking()) speakText(listOf("Son on saniye!"), flush = false)
+                is Event.Countdown -> fx.play(Fx.Sound.BEEP, 0.75f)
+                Event.Finished -> {
+                    fx.play(Fx.Sound.FINISH)
+                    vibrate(longArrayOf(0, 200, 100, 200, 100, 400))
+                    val fin = voice?.cues?.finish
+                    if (fin != null) speakClips(fin, flush = true) else speakText(listOf("Antrenman bitti. Harika iş çıkardın!"), flush = true)
                 }
             }
-            is Event.Call -> say(callName(event.callout.move) + "!", flush = true)
-            Event.TenSecondsLeft -> say("Son on saniye!", flush = true)
-            is Event.Countdown -> tone?.startTone(ToneGenerator.TONE_PROP_BEEP, 120)
-            Event.Finished -> {
-                tone?.startTone(ToneGenerator.TONE_PROP_BEEP2, 900)
-                vibrate(longArrayOf(0, 200, 100, 200, 100, 400))
-                say("Antrenman bitti. Harika iş çıkardın!", flush = true)
-            }
+        }
+        if (!stepStarted && elapsed > 0) {
+            voice?.cues?.steps?.getOrNull(index)?.at?.get(elapsed)?.let { speakClips(it, flush = false) }
         }
     }
 
-    fun say(text: String, flush: Boolean = false) {
-        if (!voiceEnabled || !ready) return
-        tts.speak(text, if (flush) TextToSpeech.QUEUE_FLUSH else TextToSpeech.QUEUE_ADD, null, text.hashCode().toString())
+    private fun speaking() = clipPlayer?.isSpeaking == true || ttsSpeaker?.isSpeaking == true
+
+    private fun speakClips(ids: List<String>, flush: Boolean) {
+        if (!voiceEnabled || ids.isEmpty()) return
+        val v = voice ?: return
+        if (v.recorded) {
+            clipPlayer?.play(ids, flush)
+        } else {
+            speakText(ids.mapNotNull { v.manifest.clip(it)?.say }, flush)
+        }
+    }
+
+    private fun speakText(texts: List<String>, flush: Boolean) {
+        if (!voiceEnabled || texts.isEmpty()) return
+        tts().speak(texts, flush)
     }
 
     fun stop() {
-        if (ready) tts.stop()
+        clipPlayer?.stop()
+        ttsSpeaker?.stop()
     }
 
     fun release() {
-        tts.stop()
-        tts.shutdown()
-        tone?.release()
+        clipPlayer?.release()
+        ttsSpeaker?.release()
+        fx.release()
     }
 
     private fun vibrate(pattern: LongArray) {
@@ -126,14 +149,25 @@ class Coach(context: Context) {
             "tkd_taegeuk1" to "Taegeuk",
         )
 
+        /** Ses planı olmayan seanslar için kısa anons (sayılar kelimeyle). */
+        fun legacyAnnouncement(step: Step): String = when (step) {
+            is Step.Work -> workAnnouncement(step)
+            is Step.Rest -> restAnnouncement(step)
+        }
+
         fun workAnnouncement(s: Step.Work): String {
             val b = s.block
             val first = s.round == 1 && s.station == 1
-            val intro = if (first && b.cue.isNotBlank()) b.cue + " " else ""
+            val intro = if (first && b.cue.isNotBlank()) b.cue.replace(Regex("\\d+")) { TurkishNumbers.cardinal(it.value.toInt()) } + " " else ""
+            val name = s.move.name.substringBefore(" (")
             return intro + when (b.mode) {
-                BlockMode.ROUND -> if (s.totalRounds > 1) "Raunt ${s.round}. Başla!" else "Başla!"
-                BlockMode.CIRCUIT -> "${s.move.name.substringBefore(" (")}. ${s.seconds} saniye. Başla!"
-                BlockMode.REPS -> "${s.move.name.substringBefore(" (")}. ${s.reps} tekrar."
+                BlockMode.ROUND -> when {
+                    s.totalRounds == 1 -> "Başla!"
+                    s.round == s.totalRounds -> "Son raunt, başla!"
+                    else -> "${TurkishNumbers.ordinal(s.round).replaceFirstChar { it.titlecase() }} raunt, başla!"
+                }
+                BlockMode.CIRCUIT -> "$name, ${TurkishNumbers.duration(s.seconds ?: 0)}. Başla!"
+                BlockMode.REPS -> "$name. ${TurkishNumbers.cardinal(s.reps ?: 0)} tekrar."
             }
         }
 
@@ -141,10 +175,11 @@ class Coach(context: Context) {
             val n = s.next
             val next = when {
                 s.betweenBlocks -> "Sıradaki: ${n.block.title}"
-                n.block.mode == BlockMode.ROUND -> "Sıradaki raunt ${n.round}"
+                n.block.mode == BlockMode.ROUND && n.round == n.totalRounds -> "Sıradaki: son raunt"
+                n.block.mode == BlockMode.ROUND -> "Sıradaki: ${TurkishNumbers.ordinal(n.round)} raunt"
                 else -> "Sıradaki: ${n.move.name.substringBefore(" (")}"
             }
-            return "Dinlen. ${s.seconds} saniye. $next."
+            return "Dinlen, ${TurkishNumbers.duration(s.seconds)}. $next."
         }
     }
 }

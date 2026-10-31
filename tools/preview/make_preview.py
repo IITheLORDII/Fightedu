@@ -27,7 +27,11 @@ def main():
         for m in load(f"moves_{f}.json"):
             moves[m["id"]] = {k: m[k] for k in ("name", "sport", "category", "description", "steps", "tip") if k in m}
     programs = {s["id"]: load(f"training_{s['id']}.json") for s in sports}
-    data = dict(sports=sports, moves=moves, programs=programs, rest=load("rest_day.json"))
+    clips_dir = os.path.join(ROOT, "app", "src", "main", "assets", "voice", "clips")
+    web_dir = os.path.join(ROOT, "tools", "render3d", "build", "preview", "program", "voice", "clips_web")
+    recorded = os.path.isdir(clips_dir) and any(f.endswith(".ogg") for f in os.listdir(clips_dir))
+    data = dict(sports=sports, moves=moves, programs=programs, rest=load("rest_day.json"), voiceRecorded=recorded,
+                voiceExt="ogg")
     with open(os.path.join(HERE, "app_preview.html"), encoding="utf-8") as fh:
         html = fh.read()
     html = html.replace("/*__DATA__*/{}", json.dumps(data, ensure_ascii=False, separators=(",", ":")))

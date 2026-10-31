@@ -64,6 +64,7 @@ import com.fightedu.core.domain.Step
 import com.fightedu.core.domain.TrainingPlanner
 import com.fightedu.core.model.BlockMode
 import com.fightedu.core.model.TrainingDay
+import com.fightedu.coach.CoachVoice
 import com.fightedu.data.CoachSettings
 import com.fightedu.ui.components.KindBadge
 import com.fightedu.ui.components.MoveAnimation
@@ -79,12 +80,14 @@ fun PlayerScreen(
     onExit: () -> Unit,
     /** Üst çubukta ve bitiş ekranında gösterilen gün, ör. "GÜN 13 / 30". */
     label: String = "GÜN ${day.day}",
+    /** Seansın rauntlara özel ses planı (yoksa kısa anonslar). */
+    voice: CoachVoice? = null,
     onCompleted: () -> Unit,
     onDone: () -> Unit,
     vm: PlayerViewModel = viewModel(),
 ) {
     val steps = remember(day) { planner.steps(day) }
-    LaunchedEffect(day, coach) { vm.setup(day.day, steps, coach) }
+    LaunchedEffect(day, coach) { vm.setup(day.day, steps, coach, voice) }
     val ui by vm.ui.collectAsStateWithLifecycle()
     var showExit by rememberSaveable { mutableStateOf(false) }
     val view = LocalView.current

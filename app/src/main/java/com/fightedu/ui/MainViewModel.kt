@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.fightedu.appContainer
+import com.fightedu.coach.CoachVoice
 import com.fightedu.core.content.ContentLibrary
 import com.fightedu.core.domain.ChallengeProgress
 import com.fightedu.core.domain.ProgressTracker
@@ -11,6 +12,7 @@ import com.fightedu.core.domain.TrainingPlanner
 import com.fightedu.core.model.Sport
 import com.fightedu.core.model.TrainingDay
 import com.fightedu.core.model.TrainingProgram
+import com.fightedu.core.voice.VoiceScript
 import com.fightedu.data.AuthResult
 import com.fightedu.data.CoachSettings
 import com.fightedu.data.ReminderSettings
@@ -54,8 +56,24 @@ data class UiState(
     val sportProgress: Map<String, Int> = emptyMap(),
     val reminder: ReminderSettings = ReminderSettings(false, TrainingRepository.DEFAULT_REMINDER_HOUR),
     val coach: CoachSettings = CoachSettings(),
+    val voice: VoiceScript? = null,
+    val voiceRecorded: Boolean = false,
     val error: String? = null,
 ) {
+    /** Antrenman gününün ([day] = programın gün numarası) ses planı. */
+    fun workoutVoice(day: Int): CoachVoice? {
+        val v = voice ?: return null
+        val cues = sportId?.let { v.workout(it, day) } ?: return null
+        return CoachVoice(v.manifest, cues, voiceRecorded)
+    }
+
+    /** Meydan okumanın [challengeDay]. günündeki (dinlenme) esneme seansının ses planı. */
+    fun restVoice(challengeDay: Int): CoachVoice? {
+        val v = voice ?: return null
+        val cues = sportId?.let { v.restDay(it, challengeDay) } ?: return null
+        return CoachVoice(v.manifest, cues, voiceRecorded)
+    }
+
     val sport: Sport? get() = sportId?.let { content?.sport(it) }
     val program: TrainingProgram? get() = sportId?.let { content?.program(it) }
     val completedDays: Set<Int> get() = ProgressTracker.daysFromKeys(completedKeys)
@@ -78,7 +96,12 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     private val repo = container.repository
     private val auth = container.auth
 
-    private val contentFlow = flow { emit(container.content to container.planner) }.flowOn(Dispatchers.IO)
+    private val contentFlow = flow {
+        // ses planları da arka planda yüklensin (oynatıcı açılırken beklemesin)
+        container.voice
+        container.voiceRecorded
+        emit(container.content to container.planner)
+    }.flowOn(Dispatchers.IO)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private val userData: Flow<UserData> = auth.currentUser.flatMapLatest { user ->
@@ -105,6 +128,8 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             completedKeys = data.completedKeys,
             activityDays = data.activityDays,
             sportProgress = data.sportProgress,
+            voice = container.voice,
+            voiceRecorded = container.voiceRecorded,
             reminder = ReminderSettings(plan?.reminderEnabled ?: false,
                 plan?.reminderHour ?: TrainingRepository.DEFAULT_REMINDER_HOUR),
             coach = CoachSettings(plan?.voiceCoach ?: true, plan?.vibration ?: true),

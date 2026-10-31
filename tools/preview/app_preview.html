@@ -510,6 +510,33 @@ function moveSheet(id) {
     <p>${esc(m.description || "")}</p><ol style="padding-left:20px">${(m.steps || []).map(x => `<li>${esc(x)}</li>`).join("")}</ol>${m.tip ? `<div class="note"><b>İpucu:</b> ${esc(m.tip)}</div>` : ""}</div>`;
 }
 
+// ---- sesli koç: uygulamayla aynı ses planları (assets/voice) ----
+const VOICE = {manifest: null, sheets: {}, recorded: !!DATA.voiceRecorded, ext: DATA.voiceExt || "ogg"};
+async function loadVoice(sport) {
+  try {
+    if (!VOICE.manifest) VOICE.manifest = await (await fetch("voice/manifest.json")).json();
+    if (!VOICE.sheets[sport]) VOICE.sheets[sport] = await (await fetch(`voice/cues_${sport}.json`)).json();
+  } catch (e) { /* ses planı yoksa kısa anonslar */ }
+}
+let aq = [], audio = null;
+function nextClip() {
+  const id = aq.shift(); if (!id) { audio = null; return; }
+  audio = new Audio(`voice/clips/${id}.${VOICE.ext}`); audio.onended = nextClip; audio.onerror = nextClip;
+  audio.play().catch(nextClip);
+}
+function sayClips(ids, flush) {
+  if (!ids || !ids.length || !VOICE.manifest) return;
+  if (VOICE.recorded) {
+    if (flush) { aq = []; if (audio) { audio.onended = null; audio.pause(); } audio = null; }
+    aq.push(...ids); if (!audio) nextClip();
+  } else {
+    try { if (flush) speechSynthesis.cancel();
+      ids.forEach(id => { const c = VOICE.manifest.clips[id]; if (!c) return;
+        const u = new SpeechSynthesisUtterance(c.say); u.lang = "tr-TR"; u.rate = 1.05; speechSynthesis.speak(u); }); } catch (e) {}
+  }
+}
+function hush() { aq = []; if (audio) { audio.onended = null; audio.pause(); } audio = null; try { speechSynthesis.cancel(); } catch (e) {} }
+
 // ---- oynatıcı ----
 let P = null, timer = null, actx = null;
 function speak(t) { try { const u = new SpeechSynthesisUtterance(t); u.lang = "tr-TR"; u.rate = 1.05; speechSynthesis.cancel(); speechSynthesis.speak(u); } catch (e) {} }
@@ -520,26 +547,36 @@ function announce(s) {
     speak((first && s.b.cue ? s.b.cue + " " : "") + (s.b.mode === "round" ? (s.total > 1 ? `Raunt ${s.round}. Başla!` : "Başla!") : s.b.mode === "circuit" ? `${short(mv(s.move).name)}. ${s.sec} saniye. Başla!` : `${short(mv(s.move).name)}. ${s.reps} tekrar.`)); }
   else { beep(520, 300); const n = s.next; speak(`Dinlen. ${s.sec} saniye. ${s.between ? "Sıradaki: " + n.b.title : n.b.mode === "round" ? "Sıradaki raunt " + n.round : "Sıradaki: " + short(mv(n.move).name)}.`); }
 }
-function start(day, label, n) {
+function cueStart(i) {
+  const c = P.cues && P.cues.steps[i];
+  if (c) { P.steps[i].type === "work" ? beep(660, 400) : beep(520, 300); sayClips(c.s, true); } else announce(P.steps[i]);
+}
+async function start(day, label, n, rest = false) {
+  await loadVoice(st.sport);
+  const sheet = VOICE.sheets[st.sport];
+  const cues = sheet ? (rest ? sheet.rest[n] : sheet.days[day.day]) : null;
   P = {day, label, n, steps: steps(day), i: 0, rem: 0, el: 0, tot: 0, paused: false, fin: false, call: null, callUntil: 0, speed: 1};
-  P.rem = P.steps[0].sec || 0; announce(P.steps[0]); $("player").hidden = false; document.body.style.overflow = "hidden"; draw(); loop();
+  P.cues = cues && cues.steps.length === P.steps.length ? cues : null;
+  P.rem = P.steps[0].sec || 0; cueStart(0); $("player").hidden = false; document.body.style.overflow = "hidden"; draw(); loop();
 }
 function loop() { clearTimeout(timer); if (!P) return; timer = setTimeout(() => { tick(); loop(); }, 1000 / P.speed); }
 function step(i) {
-  if (i >= P.steps.length) { P.fin = true; beep(660, 900); speak("Antrenman bitti. Harika iş çıkardın!"); markDone(P.n); draw(); return; }
-  P.i = Math.max(0, i); P.rem = P.steps[P.i].sec || 0; P.el = 0; P.call = null; announce(P.steps[P.i]); draw();
+  if (i >= P.steps.length) { P.fin = true; beep(660, 900);
+    if (P.cues) sayClips(P.cues.finish, true); else speak("Antrenman bitti. Harika iş çıkardın!"); markDone(P.n); draw(); return; }
+  P.i = Math.max(0, i); P.rem = P.steps[P.i].sec || 0; P.el = 0; P.call = null; cueStart(P.i); draw();
 }
 function tick() {
   if (!P || P.paused || P.fin) return; P.tot++; const s = P.steps[P.i]; if (!s.sec) { draw(); return; }
   P.rem--; P.el++;
-  if (s.type === "work") { s.calls.filter(c => c.at === P.el).forEach(c => { P.call = c.move; P.callUntil = P.tot + 4; speak(callName(c.move) + "!"); });
-    if (P.rem === 10 && s.sec >= 30) speak("Son on saniye!"); }
+  if (s.type === "work") s.calls.filter(c => c.at === P.el).forEach(c => { P.call = c.move; P.callUntil = P.tot + 4; if (!P.cues) speak(callName(c.move) + "!"); });
+  if (P.cues) { const at = P.cues.steps[P.i].at; if (at && at[P.el]) sayClips(at[P.el], false); }
+  else if (s.type === "work" && P.rem === 10 && s.sec >= 30) speak("Son on saniye!");
   if (P.rem > 0 && P.rem <= 3) beep(990, 100);
   if (P.call && P.tot >= P.callUntil) P.call = null;
   if (P.rem <= 0) step(P.i + 1); else draw();
 }
 function prev() { let t = P.el > 2 ? P.i : P.i - 1; while (t > 0 && P.steps[t].type === "rest") t--; step(Math.max(0, t)); }
-function closePlayer() { clearTimeout(timer); try { speechSynthesis.cancel(); } catch (e) {} const fin = P && P.fin; P = null; $("player").hidden = true; document.body.style.overflow = ""; if (fin) go("tab", {tab: "challenge"}); else render(); }
+function closePlayer() { clearTimeout(timer); hush(); const fin = P && P.fin; P = null; $("player").hidden = true; document.body.style.overflow = ""; if (fin) go("tab", {tab: "challenge"}); else render(); }
 function ring(rem, total, color) {
   const r = 80, c = 2 * Math.PI * r, f = total ? rem / total : 0;
   return `<div class="ring"><svg viewBox="0 0 180 180"><circle cx="90" cy="90" r="${r}" fill="none" stroke="${color}" stroke-opacity=".18" stroke-width="14"/>
@@ -625,7 +662,7 @@ document.addEventListener("click", e => {
     if ("close" in ds) closePlayer();
     else if ("next" in ds) step(P.i + 1);
     else if ("prev" in ds) prev();
-    else if ("pause" in ds) { P.paused = !P.paused; if (P.paused) try { speechSynthesis.cancel(); } catch (x) {} draw(); }
+    else if ("pause" in ds) { P.paused = !P.paused; if (P.paused) hush(); draw(); }
     else if ("add" in ds) { P.rem += 15; draw(); }
     else if ("speed" in ds) { P.speed = P.speed === 1 ? 5 : P.speed === 5 ? 20 : 1; draw(); loop(); }
     return;
@@ -653,7 +690,7 @@ document.addEventListener("click", e => {
       if (arr.includes(k)) arr.splice(arr.indexOf(k), 1); else markDone(st.day); save(); render(); break; }
     case "restdone": { const arr = st.done[st.sport] = st.done[st.sport] || [], k = keyOf(st.day);
       if (arr.includes(k)) { arr.splice(arr.indexOf(k), 1); save(); render(); } else { markDone(st.day); go("tab", {tab: "challenge"}); toast("Dinlenme günü tamamlandı. Serin devam ediyor 🔥"); } break; }
-    case "stretch": start(DATA.rest, `GÜN ${st.day} · DİNLENME`, st.day); break;
+    case "stretch": start(DATA.rest, `GÜN ${st.day} · DİNLENME`, st.day, true); break;
     case "restart": dialog("Meydan okuma baştan başlasın mı?", `${sportOf(st.sport).name} için tamamladığın günler sıfırlanır. Serin ve diğer dallardaki ilerlemen korunur.`,
       [["Vazgeç"], ["Baştan başlat", () => { st.done[st.sport] = []; save(); render(); }]]); break;
     case "logout": dialog("Çıkış yapılsın mı?", st.user.guest ? "Misafir olarak yaptığın ilerleme silinecek. Saklamak için önce hesap oluştur." : "İlerlemen hesabında saklı; tekrar giriş yaptığında kaldığın yerden devam edersin.",
