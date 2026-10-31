@@ -4,6 +4,7 @@ Giysi bölgeleri her köşenin baskın kemiği ve o kemik boyunca konumuyla (t: 
 seçilir; örn. şort = pelvis + bel + uyluğun üst %55'i. Giysi, gövdenin dışına normaller boyunca
 itilir, yumuşatılır ve gövdenin deri ağırlıklarını (yumuşatılmış) kullanır.
 """
+import heapq
 import math
 
 import bpy
@@ -121,15 +122,63 @@ def _smooth(values, idx_nb, iters, keep=None):
     return v
 
 
+def _detail_peaks(ch, radius=6):
+    """Köşe başına çevresindeki en yüksek ince kas ayrıntısı (m): UV haritasında yerel en büyük değer
+    (köşeler arasındaki tepeler de hesaba katılsın)."""
+    if getattr(ch, "_peaks", None) is None:
+        h = ch.anat
+        m = h.copy()
+        for ax in (0, 1):
+            src = m.copy()
+            for s in range(1, radius + 1):
+                m = np.maximum(m, np.roll(src, s, axis=ax))
+                m = np.maximum(m, np.roll(src, -s, axis=ax))
+        size = h.shape[0]
+        vi = np.concatenate([np.asarray(f) for f in ch.bf])
+        uv = ch.base.uvs[np.concatenate([np.asarray(f) for f in ch.buvf])]
+        xy = np.clip(np.rint(uv * size - 0.5).astype(int), 0, size - 1)
+        peaks = np.full(len(ch.bv), -np.inf)
+        np.maximum.at(peaks, vi, m[xy[:, 1], xy[:, 0]])
+        ch._peaks = np.where(np.isfinite(peaks), peaks, 0.0)
+    return ch._peaks
+
+
+def _inner_mask(ch, used, faces, rest, boundary, dist):
+    """Giysinin altında kalıp ağzına (sınır köşelerine) yüzey boyunca `dist`ten uzak deri köşeleri."""
+    nbr = [[] for _ in range(len(used))]
+    for f in faces:
+        for a, b in zip(f, f[1:] + f[:1]):
+            ln = float(np.linalg.norm(rest[a] - rest[b]))
+            nbr[a].append((b, ln))
+            nbr[b].append((a, ln))
+    d = np.full(len(used), np.inf)
+    heap = [(0.0, int(i)) for i in np.nonzero(boundary)[0]]
+    d[boundary] = 0.0
+    heapq.heapify(heap)
+    while heap:
+        di, i = heapq.heappop(heap)
+        if di > d[i]:
+            continue
+        for j, ln in nbr[i]:
+            if di + ln < d[j]:
+                d[j] = di + ln
+                heapq.heappush(heap, (d[j], j))
+    mask = np.zeros(len(ch.bv), dtype=bool)
+    mask[used[d >= dist]] = True
+    return mask
+
+
 def garment(ch, bm, name, rules, offset, materials, thickness=0.003, smooth_iters=4,
             snap=None, subsurf=1, texspace=None, relax=None, keep_face=None, hem_z=None, edge_smooth=8,
-            cloth=None, shape=None, anatomy=1.0):
+            cloth=None, shape=None, anatomy=1.0, hide_inner=None, clear=None):
     """offset(dom_base, t, rest_pos) -> metre; materials: [(malzeme, yüz_seçici(merkez, kemik, t))...]
     snap: {kemik: t} – bu kemikteki sınır köşeleri tam t düzlemine taşınır (düz paça/kol ağzı).
     cloth: kumaş simülasyonu {"pin": pin(dom_base, t, rest_pos) -> 0..1, ...ayarlar}; pin 1 olan köşeler
     gövdeye bağlı kabukta kalır (bel lastiği), küçük değerler yalnızca hafifçe şekline çekilir (sarkan paça).
     shape(pos, body_rest, komşular) -> pos: kabuğun son biçimlendirmesi (örn. ayakkabı burnu ve tabanı).
-    anatomy: gövdenin kas yontusunun giysiye geçen oranı (giysi gövde UV'sini taşır; deri kumaştan taşmasın)."""
+    anatomy: gövdenin kas yontusunun giysiye geçen oranı (giysi gövde UV'sini taşır; deri kumaştan taşmasın).
+    hide_inner: giysi ağzına (yaka, kol, etek) bu uzaklıktan (m) daha içerideki deri gizlenir.
+    clear: kabuk, ince kas ayrıntısıyla birlikte derinin en az bu kadar (m) dışında kalır."""
     fids = bm.select_faces(rules)
     if keep_face is not None:
         fids = [k for k in fids if keep_face(ch.bv[ch.bf[k]].mean(axis=0), bm.fdom[k], bm.ft[k])]
@@ -191,6 +240,14 @@ def garment(ch, bm, name, rules, offset, materials, thickness=0.003, smooth_iter
                 pos[movable] += lam * (avg[movable] - pos[movable])
     if shape is not None:
         pos = shape(pos, ch.bv[used], nb)
+    if clear is not None:
+        # giysiye geçmeyen kas ayrıntısı (tepeleri) deriyi kumaştan dışarı itmesin
+        n = bm.normals[used]
+        need = np.maximum(_detail_peaks(ch)[used], 0.0) * (1.0 - anatomy) + clear
+        gap = np.einsum("ij,ij->i", pos - ch.bv[used], n)
+        pos += n * np.maximum(need - gap, 0.0)[:, None]
+    if hide_inner is not None:
+        hide_body(ch, _inner_mask(ch, used, faces, rest, boundary, hide_inner))
     uvf = [ch.buvf[k] for k in fids]
     ob = mesh_from(f"{ch.name}_{name}", pos, faces, uvf, ch.base.uvs)
     for mat, _sel in materials:
@@ -749,7 +806,11 @@ def taekwondo_kit(ch, bm, belt="#111111", hogu=None, **_kw):
                       "neck_01": (-9, 0.1), "upperarm": (-9, 9), "lowerarm": (-9, 0.88), "pelvis": (-9, 9),
                       "thigh": (-9, 0.14)},
                      jacket_off, [(white, None)], thickness=0.004, smooth_iters=8,
-                     snap={"lowerarm": 0.88, "thigh": 0.14}, keep_face=keep_jacket)]
+                     snap={"lowerarm": 0.88, "thigh": 0.14}, keep_face=keep_jacket,
+                     # bol pamuk ceket: kas ayrıntısı kumaşta görünmez
+                     anatomy=0.0, relax=(["spine_01", "spine_02", "spine_03", "pelvis", "clavicle", "upperarm",
+                                          "lowerarm", "thigh"], 12),
+                     clear=0.004, hide_inner=0.05)]
     def pants_pin(b, t, p):
         # bel (kuşağın altı) sabit; uyluktan paçaya doğru kumaş serbestleşir
         if b == "pelvis":
@@ -816,7 +877,10 @@ def general_kit(ch, bm, shirt="#7B8794", shorts_color="#1E1E1E", shoes="#F4F4F4"
                      lambda b, t, p: (0.008 if b in ("clavicle", "spine_03", "neck_01") else
                                       (0.009 + 0.008 * t if b == "upperarm" else
                                        (0.017 if b == "pelvis" else 0.011))), [(tee, None)],
-                     thickness=0.003, smooth_iters=6, snap={"upperarm": 0.56}, keep_face=keep, hem_z=hem)]
+                     thickness=0.003, smooth_iters=6, snap={"upperarm": 0.56}, keep_face=keep, hem_z=hem,
+                     # pamuklu tişört: göğüs ve sırt hacmi kalır, karın kası blokları kumaşa geçmez
+                     anatomy=0.25, relax=(["spine_01", "spine_02", "spine_03", "pelvis", "clavicle"], 8),
+                     clear=0.003, hide_inner=0.05)]
     items.append(shorts(ch, bm, "shorts", shorts_color, "#E6E6E6", length=0.84, flare=0.028, band=0.04,
                         stripe=True, shiny=False))
     sock = fabric(f"{ch.name}_sock", "#F2F2F2", roughness=0.9, sheen=0.6, weave=300.0)

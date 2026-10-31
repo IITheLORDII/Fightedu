@@ -32,6 +32,8 @@ from shading import srgb  # noqa: E402
 
 WIDTH, HEIGHT = 640, 512
 ROPE_POINTS = 13
+LEG_HITS = ("shin", "ball", "knee", "heel", "toe", "ankle")
+KICK_IMPULSE = 0.05  # tekme darbesinde torbanın açısal hızı (radyan/kare): ~6° savrulma
 
 FIGHTER_SHAPE = ATHLETE
 PARTNER_SHAPE = dict(ATHLETE, muscle=0.92, weight=0.40, height=0.52,
@@ -98,17 +100,135 @@ class MoveRenderer:
             outfits.KITS[mv.sport](self.opp, obm, **style["partner"])
             self.opp.dims = retarget.body_dims(self.opp)
             self.oposer = retarget.Poser(self.opp, fist=fist, thumb=thumb)
+        self.bag_report = None
+        if sb.bag:
+            self._bag_contacts()
         self.bag = self._bag() if sb.bag else None
         self.rope = self._rope() if mv.rope is not None else None
         self._camera_and_lights(style)
 
+    def _bag_dims(self):
+        """(askı noktası, zincir, boy, yarıçap) – Blender metresi."""
+        b = self.sb.bag
+        chain = (26.0 if b["long"] else 36.0) / 100.0
+        length = (188.0 if b["long"] else 118.0) / 100.0
+        return retarget.B((b["x"], 236.0, b["z"])), chain, length, b["r"] / 100.0
+
+    def _swing(self, t):
+        """Darbelerin zamana bağlı sallanması: yatay eğim vektörü (radyan, alt uç bu yöne gider)."""
+        ang, push = self.sb.bag_swing(t)
+        return math.radians(ang) * retarget.Bv(push)[:2]
+
+    def _bag_depth(self, P, tilt):
+        """Noktaların eğik torba silindirine girme derinliği (m, > 0 içeride)."""
+        pivot, chain, length, r = self._bag_dims()
+        ang = float(np.linalg.norm(tilt))
+        L = P - pivot
+        if ang > 1e-9:
+            d = np.array([tilt[0], tilt[1], 0.0]) / ang
+            R = np.array(Quaternion(Vector(np.cross(d, (0.0, 0.0, 1.0)).tolist()), ang).to_matrix())
+            L = L @ R  # torba yerel ekseni (satır vektörü: R^T p)
+        inside = (L[:, 2] < -chain) & (L[:, 2] > -chain - length)
+        return np.where(inside, r - np.hypot(L[:, 0], L[:, 1]), -1.0)
+
+    def _bag_contacts(self, margin=0.002, max_tilt=0.6):
+        """Vuruşun devamında uzuv torbanın içinden geçmesin: her karede dövüşçü ağlarını torbaya karşı sına,
+        giren köşeler kalmayacak kadar torbayı itme yönünde ek eğ. Temas bitince torba sönümlü bir yayla
+        geri gelir (iki tur hesaplanır, döngü dikişsiz). Yalnızca tekmeli hareketlerde itme çok büyükse torba
+        o kadar geriye yerleştirilir (ağır torba fazla savrulmasın)."""
+        sb, dur = self.sb, self.mv.dur
+        obs = [o for o in bpy.data.objects if o.type == "MESH" and o.name.startswith("fig_")
+               and not any(m.type == "CLOTH" for m in o.modifiers)]
+        frames = []
+        for t in range(dur):
+            self.fposer.pose(sb.fsk[t])
+            bpy.context.view_layer.update()
+            dg = bpy.context.evaluated_depsgraph_get()
+            pts = []
+            for ob in obs:
+                ev = ob.evaluated_get(dg)
+                me = ev.to_mesh()
+                co = np.empty(len(me.vertices) * 3)
+                me.vertices.foreach_get("co", co)
+                mw = np.array(ev.matrix_world)
+                ev.to_mesh_clear()
+                pts.append(co.reshape(-1, 3) @ mw[:3, :3].T + mw[:3, 3])
+            frames.append(np.concatenate(pts))
+        pushes = []
+        for p in sb.bag["pushes"]:
+            v = retarget.Bv(p)[:2]
+            pushes.append(v / max(np.linalg.norm(v), 1e-9))
+        hits = [f for f, _n, _p in sb.hit_pts]
+        legs_only = all(n.endswith(LEG_HITS) for _f, n, _p in sb.hit_pts)
+        shifted = 0.0
+        for _attempt in range(3):
+            pivot, chain, length, r = self._bag_dims()
+            need, dirs, worst = [], [], (0.0, 0.0, 0)
+            for t, P in enumerate(frames):
+                P = P[np.hypot(P[:, 0] - pivot[0], P[:, 1] - pivot[1]) < r + 0.4]
+                k = min(range(len(hits)), key=lambda i: min(abs(t - hits[i]), dur - abs(t - hits[i])))
+                n = pushes[k]
+                base = self._swing(t)
+                d = self._bag_depth(P, base) if len(P) else np.full(1, -1.0)
+                e = 0.0
+                if d.max() > -margin:
+                    if self._bag_depth(P, base + max_tilt * n).max() > -margin:
+                        e = max_tilt
+                    else:
+                        lo, hi = 0.0, max_tilt
+                        for _ in range(18):
+                            mid = (lo + hi) / 2
+                            if self._bag_depth(P, base + mid * n).max() > -margin:
+                                lo = mid
+                            else:
+                                hi = mid
+                        e = hi
+                    lever = pivot[2] - float(np.mean(P[d > -margin][:, 2]))
+                    if e * lever > worst[0]:
+                        worst = (e * lever, e, t)
+                need.append(e)
+                dirs.append(n)
+            k_w = worst[2]
+            if legs_only and worst[0] > 0.10:
+                # torbayı itme yönünde geri al: kalan temas ~6 cm itmeyle çözülsün
+                s = worst[0] - 0.06
+                n = dirs[k_w]
+                sb.bag["x"] += s * n[0] * 100.0
+                sb.bag["z"] -= s * n[1] * 100.0  # Blender y = -biz z
+                shifted += s
+                continue
+            break
+        # temas varken bacakla birlikte it, bırakınca kritik sönümlü yayla dön; tekme torbayı belirgin
+        # savurur (darbe karesinde itme yönünde hız), yumruklar yalnızca eski hafif sallanmayla kalır
+        kicks = {f: pushes[k] for k, (f, n, _p) in enumerate(sb.hit_pts) if n.endswith(LEG_HITS)}
+        w = 2.0 * math.pi / 36.0
+        val = vel = 0.0
+        n_cur = dirs[0]
+        tilt = []
+        for lap in range(2):
+            for t in range(dur):
+                if need[t] > 0.0:
+                    n_cur = dirs[t]
+                if t in kicks:
+                    n_cur = kicks[t]
+                    vel += KICK_IMPULSE
+                prev = val
+                vel += -w * w * val - 2.0 * w * vel
+                val += vel
+                if val <= need[t]:
+                    vel = max(need[t] - prev, 0.0)
+                    val = need[t]
+                val = max(val, 0.0)
+                if lap == 1:
+                    tilt.append(self._swing(t) + val * n_cur)
+        self.bag_tilt = tilt
+        self.bag_report = dict(push_cm=round(float(worst[0]) * 100.0, 1), tilt_deg=round(math.degrees(worst[1]), 1),
+                               frame=worst[2], shifted_cm=round(shifted * 100.0, 1))
+
     def _bag(self):
         b = self.sb.bag
         long_bag = b["long"]
-        r = b["r"] / 100.0
-        chain = (26.0 if long_bag else 36.0) / 100.0
-        length = (188.0 if long_bag else 118.0) / 100.0
-        pivot = retarget.B((b["x"], 236.0, b["z"]))
+        pivot, chain, length, r = self._bag_dims()
         root = bpy.data.objects.new("bag_pivot", None)
         bpy.context.scene.collection.objects.link(root)
         root.location = Vector(pivot.tolist())
@@ -278,11 +398,13 @@ class MoveRenderer:
         if self.opp is not None:
             self.oposer.pose(sb.psk[t])
         if self.bag is not None:
-            ang, push = sb.bag_swing(t)
-            # alt uç itme yönüne gitsin: eksen = itme x yukarı
-            axis = np.cross(retarget.Bv(push), np.array([0.0, 0.0, 1.0]))
+            tilt = self.bag_tilt[t]
+            ang = float(np.linalg.norm(tilt))
+            d = np.array([tilt[0], tilt[1], 0.0]) / ang if ang > 1e-9 else np.array([1.0, 0.0, 0.0])
+            # alt uç eğim yönüne gitsin: eksen = yön x yukarı
+            axis = np.cross(d, np.array([0.0, 0.0, 1.0]))
             self.bag.rotation_mode = "QUATERNION"
-            self.bag.rotation_quaternion = Quaternion(Vector(axis.tolist()), math.radians(ang))
+            self.bag.rotation_quaternion = Quaternion(Vector(axis.tolist()), ang)
         if self.rope is not None:
             self._update_rope(t)
 
@@ -369,6 +491,7 @@ def main():
     ap.add_argument("--preview", help="yalnızca bu kareleri render et (virgüllü), video üretme")
     ap.add_argument("--samples", type=int, default=10)
     ap.add_argument("--draft", action="store_true", help="düşük çözünürlükte her 4. kare + temas sayfası")
+    ap.add_argument("--bag-report", action="store_true", help="render etmeden torba temas itmelerini yazdır")
     args = ap.parse_args(sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else sys.argv[1:])
     # iskelet ölçülerini gövdeye eşitle, sonra hareketleri yükle (pozlar yüklenirken çözülür)
     studio.reset_scene()
@@ -381,8 +504,13 @@ def main():
         args.samples = 6
     for mid in ids:
         t0 = time.time()
+        if args.bag_report and MOVES[mid].target not in ("bag", "long_bag"):
+            continue
         r = MoveRenderer(mid, MOVES[mid], samples=args.samples)
         r.build()
+        if args.bag_report:
+            print(f"{mid}: {r.bag_report}", flush=True)
+            continue
         fdir = os.path.join(args.frames, mid)
         if args.draft:
             frames = list(range(0, MOVES[mid].dur, 4))
