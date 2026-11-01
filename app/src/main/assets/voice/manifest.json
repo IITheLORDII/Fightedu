@@ -630,7 +630,7 @@
 "14027977fb0a": {
 "text": "Form devresi: Burpee ve Şınav. Hız değil, kontrol.",
 "say": "Form devresi: börpi ve Şınav. Hız değil, kontrol.",
-"ms": 3356,
+"ms": 4743,
 "measured": true
 },
 "14152638a2ca": {
@@ -1254,7 +1254,7 @@
 "26d845ee0d5a": {
 "text": "Gün on: aktif dinlenme.",
 "say": "Gün on: aktif dinlenme.",
-"ms": 1716,
+"ms": 1456,
 "measured": true
 },
 "26f9789a3690": {
@@ -1776,7 +1776,7 @@
 "36b8cfc5539b": {
 "text": "Sıradaki raunt: Geri Tekme.",
 "say": "Sıradaki raunt: Geri Tekme.",
-"ms": 1946,
+"ms": 1868,
 "measured": true
 },
 "36cc012fe546": {
@@ -1956,7 +1956,7 @@
 "3c8b3d73606d": {
 "text": "Gün yirmi dört. Önce ısınıyoruz.",
 "say": "Gün yirmi dört. Önce ısınıyoruz.",
-"ms": 1776,
+"ms": 2263,
 "measured": true
 },
 "3cc4c1512f8f": {
@@ -2220,7 +2220,7 @@
 "47b071a9c00c": {
 "text": "Sık yapılan hata: dirseği fazla açmak. Buna dikkat et.",
 "say": "Sık yapılan hata: dirseği fazla açmak. Buna dikkat et.",
-"ms": 3446,
+"ms": 3112,
 "measured": true
 },
 "47d5fb1980e5": {
@@ -2778,7 +2778,7 @@
 "5ba511c6d427": {
 "text": "Şınav, elli saniye. Başla!",
 "say": "Şınav, elli saniye. Başla!",
-"ms": 3196,
+"ms": 1927,
 "measured": true
 },
 "5bde9d9fe4d5": {
@@ -3114,7 +3114,7 @@
 "672a616eab2e": {
 "text": "Sıradaki: dördüncü tur, İp Atlama.",
 "say": "Sıradaki: dördüncü tur, İp Atlama.",
-"ms": 2216,
+"ms": 2032,
 "measured": true
 },
 "67db0d65230f": {
@@ -3162,7 +3162,7 @@
 "690e0c8c25e4": {
 "text": "50/10: dinlenme kısa, nefesini hareket sırasında düzenle.",
 "say": "Elli on: dinlenme kısa, nefesini hareket sırasında düzenle.",
-"ms": 3136,
+"ms": 3217,
 "measured": true
 },
 "69393b7cf908": {
@@ -3510,7 +3510,7 @@
 "764e45bfeeb2": {
 "text": "Diz!",
 "say": "Diz!",
-"ms": 626,
+"ms": 600,
 "measured": true
 },
 "7657318d1934": {
@@ -3720,7 +3720,7 @@
 "7b59b6aafec5": {
 "text": "Tebrikler! Gün on altı tamamlandı.",
 "say": "Tebrikler! Gün on altı tamamlandı.",
-"ms": 2376,
+"ms": 2476,
 "measured": true
 },
 "7b6aad5baf9c": {
@@ -3966,7 +3966,7 @@
 "82a775a33ea3": {
 "text": "Tebrikler! Gün yirmi bir tamamlandı.",
 "say": "Tebrikler! Gün yirmi bir tamamlandı.",
-"ms": 2206,
+"ms": 2194,
 "measured": true
 },
 "836697600141": {
@@ -4008,7 +4008,7 @@
 "84521695a662": {
 "text": "Sıradaki raunt: Dalış Adımı.",
 "say": "Sıradaki raunt: Dalış Adımı.",
-"ms": 2176,
+"ms": 3706,
 "measured": true
 },
 "845a78cb0ae9": {
@@ -4458,7 +4458,7 @@
 "937ffce4ff05": {
 "text": "Sıradaki: Ön Bacak Esnetme.",
 "say": "Sıradaki: Ön Bacak Esnetme.",
-"ms": 1896,
+"ms": 1946,
 "measured": true
 },
 "939d255742f9": {
@@ -4620,7 +4620,7 @@
 "996cf3562bda": {
 "text": "Sık yapılan hata: dik durarak mücadele etmek. Buna dikkat et.",
 "say": "Sık yapılan hata: dik durarak mücadele etmek. Buna dikkat et.",
-"ms": 3316,
+"ms": 3516,
 "measured": true
 },
 "999954672607": {
@@ -4800,7 +4800,7 @@
 "9e53c08e1aaa": {
 "text": "Squat, kırk beş saniye. Başla!",
 "say": "Skuat, kırk beş saniye. Başla!",
-"ms": 2156,
+"ms": 2129,
 "measured": true
 },
 "9e7bd131a2c7": {
@@ -4926,7 +4926,7 @@
 "a177362b82db": {
 "text": "Bugünün konusu: yan tekme.",
 "say": "Bugünün konusu: yan tekme.",
-"ms": 1716,
+"ms": 1778,
 "measured": true
 },
 "a18f8228648f": {
@@ -5088,7 +5088,7 @@
 "a6eef3f93628": {
 "text": "Düz Diz: arka dizi yukarı ve ileri sür, kalçayı öne it.",
 "say": "Düz Diz: arka dizi yukarı ve ileri sür, kalçayı öne it.",
-"ms": 3426,
+"ms": 2926,
 "measured": true
 },
 "a726f19f28e0": {
@@ -6522,7 +6522,7 @@
 "d52c96a89bd6": {
 "text": "Savun!",
 "say": "Savun!",
-"ms": 956,
+"ms": 670,
 "measured": true
 },
 "d538d2be1a24": {
@@ -6774,7 +6774,7 @@
 "dd0e811e1cb6": {
 "text": "Sıradaki raunt: Seviye Değiştirme.",
 "say": "Sıradaki raunt: Seviye Değiştirme.",
-"ms": 2136,
+"ms": 2488,
 "measured": true
 },
 "dd9e0c760919": {
@@ -6924,7 +6924,7 @@
 "e254aa1d1095": {
 "text": "Sıradaki: dördüncü raunt.",
 "say": "Sıradaki: dördüncü raunt.",
-"ms": 1806,
+"ms": 2916,
 "measured": true
 },
 "e29e3231df2c": {
