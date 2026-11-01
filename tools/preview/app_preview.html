@@ -519,12 +519,16 @@ function nextClip() {
   clearTimeout(clipTimer);
   const id = aq.shift(); if (!id) { audio = null; return; }
   if (SPR && SPR.map[id]) {
-    const [si, start, dur] = SPR.map[id], a = sprites[si], token = {};
+    // klipler arasında 0,5 sn sessizlik var: 0,1 sn önceden başla (MP3 çözücüsünün atlama sonrası ilk karesi
+    // sessizliğe düşsün, cümle başında çıtırtı olmasın), currentTime klibin sonunu geçince dur (setTimeout yedek)
+    const [si, start, dur] = SPR.map[id], a = sprites[si], token = {}, end = start + dur;
     audio = a; a.__token = token;
+    const stop = () => { if (a.__token !== token) return; a.__token = null; clearTimeout(clipTimer); a.pause(); nextClip(); };
+    const watch = () => { if (a.__token !== token) return; if (a.currentTime >= end || a.ended) stop(); else requestAnimationFrame(watch); };
     const play = () => { if (a.__token !== token) return;
-      a.play().then(() => { clipTimer = setTimeout(() => { a.pause(); nextClip(); }, dur * 1000); }).catch(nextClip); };
+      a.play().then(() => { requestAnimationFrame(watch); clipTimer = setTimeout(stop, (dur + 0.4) * 1000); }).catch(nextClip); };
     const seek = () => { if (a.__token !== token) return;
-      a.addEventListener("seeked", play, {once: true}); a.currentTime = start; };
+      a.addEventListener("seeked", play, {once: true}); a.currentTime = Math.max(0, start - 0.1); };
     if (a.readyState >= 1) seek(); else a.addEventListener("loadedmetadata", seek, {once: true});
     return;
   }
@@ -534,7 +538,7 @@ function nextClip() {
 function sayClips(ids, flush) {
   if (!ids || !ids.length || !VOICE.manifest) return;
   if (VOICE.recorded) {
-    if (flush) { aq = []; clearTimeout(clipTimer); if (audio) { audio.onended = null; audio.pause(); } audio = null; }
+    if (flush) { aq = []; clearTimeout(clipTimer); if (audio) { audio.__token = null; audio.onended = null; audio.pause(); } audio = null; }
     aq.push(...ids); if (!audio) nextClip();
   } else {
     try { if (flush) speechSynthesis.cancel();
@@ -542,7 +546,7 @@ function sayClips(ids, flush) {
         const u = new SpeechSynthesisUtterance(c.say); u.lang = "tr-TR"; u.rate = 1.05; speechSynthesis.speak(u); }); } catch (e) {}
   }
 }
-function hush() { aq = []; clearTimeout(clipTimer); if (audio) { audio.onended = null; audio.pause(); } audio = null; try { speechSynthesis.cancel(); } catch (e) {} }
+function hush() { aq = []; clearTimeout(clipTimer); if (audio) { audio.__token = null; audio.onended = null; audio.pause(); } audio = null; try { speechSynthesis.cancel(); } catch (e) {} }
 
 // ---- oynatıcı ----
 let P = null, timer = null, actx = null;

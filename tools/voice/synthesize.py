@@ -373,6 +373,12 @@ class Judge:
                                         condition_on_previous_text=False, initial_prompt=PROMPT if prompt else None)
         return " ".join(s.text for s in segs).strip()
 
+    def words(self, path):
+        """Kelime zaman damgaları: [(kelime, başlangıç sn, bitiş sn)]."""
+        segs, _ = self.model.transcribe(path, language="tr", beam_size=1, vad_filter=False,
+                                        condition_on_previous_text=False, initial_prompt=PROMPT, word_timestamps=True)
+        return [(w.word, float(w.start), float(w.end)) for seg in segs for w in (seg.words or [])]
+
     def strict(self, text, path):
         """Sözlüklü ve sözlüksüz dinlemenin ortalaması: sözlük kötü bir kaydı "doğru duyup" gizleyemesin."""
         d = wav_seconds(path)
@@ -385,6 +391,74 @@ def wav_seconds(path):
     out = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", path],
                          capture_output=True, text=True, check=True).stdout.strip()
     return float(out or 0)
+
+
+def _similar(a, b):
+    import difflib
+    return a == b or (len(a) >= 3 and len(b) >= 3 and
+                      (a[:4] == b[:4] or difflib.SequenceMatcher(None, a, b).ratio() >= 0.6))
+
+
+def edge_plan(text, words, dur, pad_in=0.12, pad_out=0.3, min_cover=0.6):
+    """Cümlenin gerçekten konuşulduğu aralık (t0, t1); Chatterbox'ın cümle öncesi/sonrası ürettiği nefes, hırıltı ve
+    uğultu bunun dışında kalır. Duyulan kelimeler beklenen kelimelerle (yazım farkına toleranslı) hizalanır; çöpten
+    uydurulan kelimeler eşleşmez. İlk/son beklenen kelime duyulmadıysa o kenara dokunulmaz. Hizalama zayıfsa None."""
+    exp = norm(text).split()
+    heard = [(tok, a, b) for w, a, b in words for tok in norm(w).split()]
+    n, m = len(heard), len(exp)
+    if not n or not m:
+        return None
+    L = [[0] * (m + 1) for _ in range(n + 1)]
+    for i in range(n - 1, -1, -1):
+        for j in range(m - 1, -1, -1):
+            L[i][j] = L[i + 1][j + 1] + 1 if _similar(heard[i][0], exp[j]) else max(L[i + 1][j], L[i][j + 1])
+    pairs, i, j = [], 0, 0
+    while i < n and j < m:
+        if _similar(heard[i][0], exp[j]) and L[i][j] == L[i + 1][j + 1] + 1:
+            pairs.append((i, j))
+            i, j = i + 1, j + 1
+        elif L[i + 1][j] >= L[i][j + 1]:
+            i += 1
+        else:
+            j += 1
+    if len(pairs) < (m / 2 if m <= 3 else min_cover * m):  # kısa komutlarda yarısı yeter ("Saat direk")
+        return None
+    (h0, e0), (h1, e1) = pairs[0], pairs[-1]
+    # baş: ilk beklenen kelime eşleştiyse onun başı; değilse ve önünde duyulan kelime varsa (yanlış duyulmuş ilk
+    # kelimeler) duyulan ilk kelimenin başı; hiçbiri yoksa dokunma
+    t0 = heard[h0][1] if e0 == 0 else heard[0][1] if h0 > 0 else None
+    # son: son beklenen kelime eşleştiyse onun sonu; değilse eksik kelime sayısı kadar sonraki duyulan kelimenin sonu
+    k = m - 1 - e1
+    t1 = heard[h1 + k][2] if h1 + k < n else None
+    t0 = 0.0 if t0 is None else max(0.0, t0 - pad_in)
+    t1 = dur if t1 is None else min(dur, t1 + pad_out)
+    return (t0, t1) if t1 - t0 > 0.3 else None
+
+
+def cut_to(src, dst_wav, t0, t1, sr=24000):
+    """[t0, t1] aralığını yumuşak giriş/çıkışla float WAV olarak yazar."""
+    import numpy as np
+    x = np.frombuffer(subprocess.run(["ffmpeg", "-v", "error", "-i", src, "-f", "f32le", "-ac", "1", "-ar", str(sr), "-"],
+                                     capture_output=True, check=True).stdout, np.float32)
+    y = x[int(t0 * sr): int(t1 * sr)].copy()
+    a, b = min(len(y), int(0.015 * sr)), min(len(y), int(0.04 * sr))
+    if t0 > 0:
+        y[:a] *= np.linspace(0, 1, a, dtype=np.float32)
+    y[-b:] *= np.linspace(1, 0, b, dtype=np.float32)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "f32le", "-ac", "1", "-ar", str(sr), "-i", "-",
+                    "-c:a", "pcm_f32le", dst_wav], input=y.tobytes(), check=True)
+
+
+def trim_edges(judge, text, path):
+    """Ham kaydın kenarlarını kelime damgalarıyla kırpar (yerinde). Dönüş: kesilen süre (sn)."""
+    dur = wav_seconds(path)
+    plan = edge_plan(text, judge.words(path), dur)
+    if not plan or (plan[0] < 0.05 and dur - plan[1] < 0.05):
+        return 0.0
+    tmp = path + ".edge.wav"
+    cut_to(path, tmp, *plan)
+    os.replace(tmp, path)
+    return plan[0] + dur - plan[1]
 
 
 def record(eng, judge, text, raw, attempts=4, limit=LIMIT, first=0, strict=False):
@@ -416,6 +490,8 @@ def record(eng, judge, text, raw, attempts=4, limit=LIMIT, first=0, strict=False
         if score <= limit:
             break
     os.replace(best[3], raw)
+    if judge and raw.endswith(".wav"):
+        trim_edges(judge, text, raw)  # cümle öncesi/sonrası çöp
     return best[0], best[1], best[2]
 
 
@@ -521,6 +597,39 @@ def shard_of(ids, shard):
     return ids[i::n], f"{i}of{n}"
 
 
+def edges(manifest, args):
+    """Kayıtlı klipleri kelime damgalarıyla dinler; cümle öncesi/sonrasındaki çöp 0.12 sn'yi aşıyorsa klibi kırpıp
+    --out klasörüne yazar. QA kaydı: <out>/qa_<parça>.json (cut = kesilen sn)."""
+    ids, tag = shard_of(sorted(manifest["clips"]), args.shard)
+    out_dir = args.out or CLIPS
+    os.makedirs(out_dir, exist_ok=True)
+    judge, qa, total = Judge(), {}, 0.0
+    tmp = tempfile.mkdtemp()
+    for cid in ids:
+        p = os.path.join(CLIPS, f"{cid}.ogg")
+        text = manifest["clips"][cid]["say"]
+        words = judge.words(p)
+        heard = "".join(w for w, _, _ in words).strip()
+        dur = wav_seconds(p)
+        score, why = judge_score(text, heard, dur)
+        plan = edge_plan(text, words, dur)
+        cut = plan[0] + dur - plan[1] if plan else 0.0
+        q = dict(text=text, heard=heard, cer=round(score, 3), why=why)
+        if cut > 0.12:
+            wav = os.path.join(tmp, cid + ".wav")
+            cut_to(p, wav, *plan)
+            trim_encode(wav, os.path.join(out_dir, f"{cid}.ogg"))
+            os.remove(wav)
+            q["cut"] = round(cut, 2)
+            total += cut
+            print(f"  -{cut:.2f} sn ({plan[0]:.2f}..{plan[1]:.2f}/{dur:.2f})  '{text}'  ->  '{heard}'", flush=True)
+        qa[cid] = q
+    print(f"kenar temizliği: {len(ids)} klip, kırpılan {sum('cut' in q for q in qa.values())}, toplam {total:.1f} sn",
+          flush=True)
+    with open(os.path.join(out_dir, f"qa_{tag}.json"), "w", encoding="utf-8") as fh:
+        json.dump(qa, fh, ensure_ascii=False, indent=1)
+
+
 def audit(manifest, args):
     """Kayıtlı klipleri yazıya döküp denetler; eşiği aşan, tekrarlı ya da süresi aykırı olanları yeni tohumlarla
     yeniden kaydeder ve yalnız daha iyi çıkanı --out klasörüne yazar. QA kaydı: <out>/qa_<parça>.json."""
@@ -589,6 +698,9 @@ def report(folder):
     head = (f"{len(qa)} klip, ort. hata {avg:.3f}, yeniden kaydedilen {len(fixed)}, "
             f"hâlâ eşiği ({AUDIT_LIMIT}) aşan {len(weak)} (tekrar: {sum('tekrar' in q.get('why', '') for q in weak)}, "
             f"süre: {sum('süre' in q.get('why', '') for q in weak)})")
+    cuts = [q["cut"] for q in qa.values() if "cut" in q]
+    if cuts:
+        head += f"; kenar temizliği: {len(cuts)} klipten toplam {sum(cuts):.0f} sn çöp kırpıldı"
     print("ASR:", head, flush=True)
     lines = ["# Koç sesi otomatik dinleme raporu", "",
              "Her klip faster-whisper (small) ile yazıya döküldü ve okunması istenen metinle karşılaştırıldı. Puan: "
@@ -622,6 +734,8 @@ def main():
                     help="kayıtlı klipleri dinle; bozuk olanları yeniden kaydet (--out klasörüne yalnız değişenler)")
     ap.add_argument("--missing", action="store_true",
                     help="yalnız uygulamada dosyası olmayan klipleri kaydet (metin değişince; --shard ile de)")
+    ap.add_argument("--edges", action="store_true",
+                    help="kayıtlı kliplerin cümle öncesi/sonrası çöpünü kelime damgalarıyla kırp (--out'a yalnız değişenler)")
     ap.add_argument("--regate", action="store_true",
                     help="kayıtlı kliplere konuşma kapısını uygula (bir kez), süreleri yeniden ölç")
     ap.add_argument("--first", type=int, default=4, help="audit: ilk deneme numarası (önceki turların tohumlarını atla)")
@@ -639,6 +753,8 @@ def main():
         manifest = json.load(fh)
     if args.audit:
         return audit(manifest, args)
+    if args.edges:
+        return edges(manifest, args)
     if args.regate:
         regate(manifest, mpath)
         return finalize(manifest, mpath, manifest.get("voice") or voice_name(args.engine, args.voice))

@@ -5,14 +5,15 @@ name: Koç sesleri (Chatterbox, ticari serbest)
 # her klip faster-whisper ile yazıya dökülüp metinle karşılaştırılır, bozuk çıkanlar yeniden üretilir.
 # mode=audit: kayıtlı klipleri yeniden dinler; bozuk/tekrarlı olanları yeni tohumlarla kaydeder (yalnız onlar
 # değişir). İkisi de tools/voice/qa_report.md raporunu yazar. mode=missing: yalnız dosyası olmayan (metni
-# yeni değişmiş) klipleri kaydeder.
+# yeni değişmiş) klipleri kaydeder. mode=edges: kayıtlı kliplerin cümle öncesi/sonrasındaki nefes, hırıltı ve
+# uğultuyu Whisper kelime damgalarıyla kırpar.
 on:
   workflow_dispatch:
     inputs:
       mode:
         description: "samples ya da full"
         type: choice
-        options: [samples, full, audit, missing]
+        options: [samples, full, audit, missing, edges]
         default: samples
       voice:
         description: "builtin (Chatterbox'ın hazır sesi) ya da depodaki referans kayıt yolu (ör. tools/voice/reference/koc.wav)"
@@ -122,6 +123,7 @@ jobs:
               args=(--audit --first "$SEED" --attempts 8)
               if [ -n "$ONLY" ]; then args+=(--only "$ONLY"); fi ;;
             missing) args=(--missing) ;;
+            edges) args=(--edges) ;;
           esac
           python3 tools/voice/synthesize.py --engine chatterbox --voice "$VOICE" --shard "$SHARD" --out shard_out "${args[@]}"
       - uses: actions/upload-artifact@v4
@@ -168,7 +170,10 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A app/src/main/assets/voice tools/voice/qa_report.md
           if git diff --cached --quiet; then echo "değişiklik yok"; exit 0; fi
-          if [ "$MODE" = missing ]; then
+          if [ "$MODE" = edges ]; then
+            title="Koç sesleri: cümle başı/sonundaki nefes ve uğultu kırpıldı ($VOICE)"
+            body="Kayıtlı klipler Whisper kelime damgalarıyla dinlendi; ilk kelimeden önceki ve son kelimeden sonraki çöp ses kırpıldı. Rapor: tools/voice/qa_report.md."
+          elif [ "$MODE" = missing ]; then
             title="Koç sesleri: değişen cümleler kaydedildi ($VOICE)"
             body="Metni değişen cümleler Chatterbox ile kaydedildi; ses planları ölçülen sürelerle yeniden zamanlandı."
           elif [ "$MODE" = audit ]; then

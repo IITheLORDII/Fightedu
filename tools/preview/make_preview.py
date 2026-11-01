@@ -20,7 +20,7 @@ def load(name):
 
 
 SPRITE_RATE = 24000
-SPRITE_PARTS = 3
+SPRITE_PARTS = 4
 
 
 def make_sprites(clips_dir):
@@ -33,7 +33,7 @@ def make_sprites(clips_dir):
         pcm[cid] = subprocess.run(["ffmpeg", "-v", "error", "-i", os.path.join(clips_dir, cid + ".ogg"), "-f", "s16le",
                                    "-ac", "1", "-ar", str(SPRITE_RATE), "-"], capture_output=True, check=True).stdout
     total = sum(len(b) for b in pcm.values())
-    gap = b"\0\0" * int(SPRITE_RATE * 0.12)
+    gap = b"\0\0" * int(SPRITE_RATE * 0.5)  # oynatıcının atlama/durma payı sessizliğe düşsün
     out_dir = os.path.join(os.path.dirname(OUT), "websprites")  # assets/voice bağlantısına yazma
     os.makedirs(out_dir, exist_ok=True)
     files, mapping, part, buf = [], {}, 0, bytearray()
@@ -41,7 +41,7 @@ def make_sprites(clips_dir):
     def flush():
         name = f"websprites/sprite_{len(files)}.mp3"
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "s16le", "-ac", "1", "-ar", str(SPRITE_RATE), "-i", "-",
-                        "-c:a", "libmp3lame", "-b:a", "40k", os.path.join(os.path.dirname(OUT), name)],
+                        "-c:a", "libmp3lame", "-b:a", "64k", os.path.join(os.path.dirname(OUT), name)],
                        input=bytes(buf), check=True)
         files.append(name)
 
