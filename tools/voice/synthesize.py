@@ -105,19 +105,23 @@ def pick_voice():
 # üretir (1 kHz üstü boş). Kapı 1-10 kHz bandına (formantlar ve s/ş/f gibi sürtünmeliler) bakar: bu bantta enerji
 # yokken sesi ~30 dB kısar; sonra sondaki çöp kırpılır (trim_encode). Eşik -16 LUFS'e eşitlenmiş klipler için
 # ayarlandı: 1.301 klipte 300 ms'den uzun uğultu 2,4 dk -> 0,14 dk; konuşma karelerindeki fark yalnız yeniden kodlama
-# kadar. Sürüm değişirse --regate kayıtlı klipleri yeniden işler.
-GATE_VERSION = "gate1"
+# kadar. Cümle içindeki 0,6 sn'den uzun duraklamalar 0,35 sn'ye kısaltılır. Sürüm değişirse --regate kayıtlı
+# klipleri yeniden işler.
+GATE_VERSION = "gate2"
 GATE = ("asplit=2[m][k0];[k0]highpass=f=1000:p=2,lowpass=f=10000:p=2[k];"
         "[m][k]sidechaingate=threshold=0.0063:ratio=6:range=0.03:attack=5:release=200:knee=2.8:detection=rms")
 OPUS = ["-ac", "1", "-ar", "24000", "-c:a", "libopus", "-b:a", "32k", "-application", "voip"]
 
 
-def trim_encode(wav, out_path, sr=24000):
-    """Konuşmanın bittiği yeri 1-8 kHz bandından bulur (en az 30 ms süren; tek karelik tıkırtı sayılmaz), 0.12 sn
-    pay bırakıp yumuşakça keser, sona 0.15 sn sessizlik ekler ve Opus'a kodlar."""
+def trim_encode(wav, out_path, sr=24000, max_pause=0.6, pause=0.35):
+    """Konuşma karelerini 1-8 kHz bandından bulur (en az 30 ms süren; tek karelik tıkırtı sayılmaz). Cümle içindeki
+    [max_pause] sn'den uzun sessizlikleri [pause] sn'ye kısaltır (model bazen kelimeler arasında 2 sn duruyor),
+    sondaki çöpü 0.12 sn pay bırakıp yumuşakça keser, sona 0.15 sn sessizlik ekler ve Opus'a kodlar."""
     import numpy as np
     x = np.frombuffer(subprocess.run(["ffmpeg", "-v", "error", "-i", wav, "-f", "f32le", "-ac", "1", "-ar", str(sr), "-"],
                                      capture_output=True, check=True).stdout, np.float32)
+    if len(x) < sr // 10:
+        raise RuntimeError(f"{wav}: ses boş ya da çok kısa ({len(x)} örnek)")
     f = sr // 100
     n = len(x) // f
     w = np.hanning(f)
@@ -131,6 +135,18 @@ def trim_encode(wav, out_path, sr=24000):
         y = y[: min(len(y), (sp[-1] + 2) * f + int(0.12 * sr))]
         k = min(len(y), int(0.04 * sr))
         y[-k:] *= np.linspace(1, 0, k, dtype=np.float32)
+        # uzun iç duraklamalar: iki konuşma karesi arası > max_pause ise ortasından kes, 10 ms çapraz geçiş
+        cuts, keep, xf = [], int(pause * sr), int(0.01 * sr)
+        for a, b in zip(sp[:-1], sp[1:]):
+            if (b - a) * f > max_pause * sr:
+                s0 = (a + 1) * f + keep // 2
+                s1 = b * f - keep // 2
+                if s1 - s0 > 2 * xf:
+                    cuts.append((s0, s1))
+        for s0, s1 in reversed(cuts):
+            fade = np.linspace(1, 0, xf, dtype=np.float32)
+            mix = y[s0 - xf:s0] * fade + y[s1 - xf:s1] * fade[::-1]
+            y = np.concatenate([y[: s0 - xf], mix, y[s1:]])
     y = np.concatenate([y, np.zeros(int(0.15 * sr), np.float32)])
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "f32le", "-ac", "1", "-ar", str(sr), "-i", "-", *OPUS,
                     out_path], input=y.tobytes(), check=True)
@@ -141,11 +157,15 @@ def post(raw_path, out_path):
     pre = ("silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.03,"
            "areverse,silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.05,areverse,"
            "loudnorm=I=-16:TP=-1.5:LRA=11")
-    tmp = out_path + ".gate.wav"
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", raw_path, "-filter_complex", f"[0:a]{pre},{GATE}[o]",
-                    "-map", "[o]", "-ar", "24000", tmp], check=True)
-    trim_encode(tmp, out_path)
-    os.remove(tmp)
+    # iki ayrı adım: loudnorm ile kapı aynı grafikte zincirlenince ffmpeg (6.1) çıktıyı erken kesebiliyor
+    norm, gated = out_path + ".norm.wav", out_path + ".gate.wav"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", raw_path, "-af", pre, "-ac", "1", "-ar", "24000",
+                    "-c:a", "pcm_s16le", norm], check=True)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", norm, "-filter_complex", f"[0:a]{GATE}[o]", "-map", "[o]",
+                    "-ar", "24000", gated], check=True)
+    trim_encode(gated, out_path)
+    os.remove(norm)
+    os.remove(gated)
 
 
 def regate(manifest, mpath):
