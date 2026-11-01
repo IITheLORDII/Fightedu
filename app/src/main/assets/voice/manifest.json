@@ -203,7 +203,7 @@
 "059a73ead90f": {
 "text": "Dizi hedefe doğrultup bacağı açarak ayak üstüyle vur.",
 "say": "Dizi hedefe doğrultup bacağı açarak ayak üstüyle vur.",
-"ms": 3957,
+"ms": 3357,
 "measured": true
 },
 "05e6854b88ab": {
@@ -359,7 +359,7 @@
 "0c118f778a65": {
 "text": "Göğsünü dik, bakışını ileri tut.",
 "say": "Göğsünü dik, bakışını ileri tut.",
-"ms": 2149,
+"ms": 3357,
 "measured": true
 },
 "0c236c4313f8": {
@@ -401,7 +401,7 @@
 "0ccf38a5a05d": {
 "text": "Gün yirmi yedi. Önce ısınıyoruz.",
 "say": "Gün yirmi yedi. Önce ısınıyoruz.",
-"ms": 3856,
+"ms": 1799,
 "measured": true
 },
 "0d6898f8cbd7": {
@@ -515,7 +515,7 @@
 "109e57925bd5": {
 "text": "Sık yapılan hata: ayağa kalkarken dik durmak. Buna dikkat et.",
 "say": "Sık yapılan hata: ayağa kalkarken dik durmak. Buna dikkat et.",
-"ms": 4756,
+"ms": 5657,
 "measured": true
 },
 "10a5ab81dfb9": {
@@ -665,7 +665,7 @@
 "15201377b13c": {
 "text": "Bugünün konusu: diz.",
 "say": "Bugünün konusu: diz.",
-"ms": 1588,
+"ms": 1524,
 "measured": true
 },
 "15295395eff9": {
@@ -779,14 +779,14 @@
 "19a12c0b60d4": {
 "text": "Form + 8 raunt tekme: son raundu en iyi raundun yap.",
 "say": "Form ve sekiz raunt tekme: son raundu en iyi raundun yap.",
-"ms": 4421,
-"measured": false
+"ms": 4656,
+"measured": true
 },
 "19f0a92910b1": {
 "text": "Rakibin bileğini kavra ve aşağı/yana çek.",
 "say": "Rakibin bileğini kavra ve aşağı ya da yana çek.",
-"ms": 3707,
-"measured": false
+"ms": 4656,
+"measured": true
 },
 "1a2a16623edf": {
 "text": "Arka el çenede; vuruştan sonra gard pozisyonuna dön.",
@@ -959,7 +959,7 @@
 "1ee62f96b2f1": {
 "text": "Tempoyu düşürme!",
 "say": "Tempoyu düşürme!",
-"ms": 3256,
+"ms": 3657,
 "measured": true
 },
 "1f37a3af4829": {
@@ -1301,7 +1301,7 @@
 "27d5befcfd4a": {
 "text": "Bitirici! Son bir gayret, tempoyu sonuna kadar koru.",
 "say": "Bitirici! Son bir gayret, tempoyu sonuna kadar koru.",
-"ms": 5557,
+"ms": 4857,
 "measured": true
 },
 "2907a967c8ad": {
@@ -1559,8 +1559,8 @@
 "3054cfea599c": {
 "text": "Dört yumruk + savunma: komutlara anında cevap ver.",
 "say": "Dört yumruk ve savunma: komutlara anında cevap ver.",
-"ms": 3992,
-"measured": false
+"ms": 4056,
+"measured": true
 },
 "3059b7a1bf21": {
 "text": "Teknik çalışma: Ayak Oyunu: İleri–Geri Adım ve Sol–Sağ Direk. Yavaş ve doğru; hız sonra gelir.",
@@ -1721,8 +1721,8 @@
 "3538682d557b": {
 "text": "Yarın gün on altı: Saldırı + Savunma. Dinç gel!",
 "say": "Yarın gün on altı: Saldırı ve Savunma. Dinç gel!",
-"ms": 3778,
-"measured": false
+"ms": 4656,
+"measured": true
 },
 "3583473f98a5": {
 "text": "Önce iki teknik, sonra üç, sonra dört; parçalara bölerek öğren.",
@@ -1745,7 +1745,7 @@
 "35c175566bf2": {
 "text": "Gün on dört. Önce ısınıyoruz.",
 "say": "Gün on dört. Önce ısınıyoruz.",
-"ms": 3126,
+"ms": 3257,
 "measured": true
 },
 "35ddd0e85ccf": {
@@ -2021,8 +2021,8 @@
 "3e9ea97c2a02": {
 "text": "Ellerinle rakibin başını/omuzlarını aşağı it.",
 "say": "Ellerinle rakibin başını ya da omuzlarını aşağı it.",
-"ms": 3992,
-"measured": false
+"ms": 3756,
+"measured": true
 },
 "3edb401c0150": {
 "text": "Sıradaki gün: Maç Simülasyonu. Görüşmek üzere!",
@@ -2423,8 +2423,8 @@
 "4dcbe2c931ba": {
 "text": "Yüksek Tekme: destek ayağında tam dön; gövde hafif geriye/yana açılır.",
 "say": "Yüksek Tekme: destek ayağında tam dön; gövde hafif geriye ya da yana açılır.",
-"ms": 5778,
-"measured": false
+"ms": 6156,
+"measured": true
 },
 "4e43863d1504": {
 "text": "Arka dizini öne ve yukarı kaldır.",
@@ -2753,7 +2753,7 @@
 "5b2f250a8755": {
 "text": "Bugünün konusu: final.",
 "say": "Bugünün konusu: final.",
-"ms": 3857,
+"ms": 3557,
 "measured": true
 },
 "5b38d1d8b8f4": {
@@ -2819,13 +2819,13 @@
 "5c9658ae8e49": {
 "text": "Şınavda dirsekler 45°, gövde tek parça.",
 "say": "Şınavda dirsekler kırk beş derece, gövde tek parça.",
-"ms": 4256,
+"ms": 4556,
 "measured": true
 },
 "5c9e65367fed": {
 "text": "Sıradaki raunt: Düz Diz.",
 "say": "Sıradaki raunt: Düz Diz.",
-"ms": 1863,
+"ms": 1748,
 "measured": true
 },
 "5cfe49651700": {
@@ -3035,20 +3035,20 @@
 "654e501617bf": {
 "text": "Sıradaki: üçüncü tur, Squat.",
 "say": "Sıradaki: üçüncü tur, skuat.",
-"ms": 1890,
+"ms": 2246,
 "measured": true
 },
 "6551799752a8": {
 "text": "Sol–Sağ Direk: sağ direğin bitişinde ağırlık ön ayakta olur: bu, arka bacak tekmesi için yük oluşturur.",
 "say": "Sol, Sağ Direk: sağ direğin bitişinde ağırlık ön ayakta olur: bu, arka bacak tekmesi için yük oluşturur.",
-"ms": 5957,
+"ms": 6856,
 "measured": true
 },
 "657cf52e9997": {
 "text": "Dalış Savunması: ellerinle rakibin başını/omuzlarını aşağı it.",
 "say": "Dalış Savunması: ellerinle rakibin başını ya da omuzlarını aşağı it.",
-"ms": 5207,
-"measured": false
+"ms": 3656,
+"measured": true
 },
 "6580b89b4ce8": {
 "text": "Isınma: ip atlama. Omuzlar gevşek, ayak uçlarında hafif zıpla.",
@@ -3161,8 +3161,8 @@
 "690e0c8c25e4": {
 "text": "50/10: dinlenme kısa, nefesini hareket sırasında düzenle.",
 "say": "Elli on: dinlenme kısa, nefesini hareket sırasında düzenle.",
-"ms": 4564,
-"measured": false
+"ms": 4657,
+"measured": true
 },
 "69393b7cf908": {
 "text": "Sol–Sağ Direk: garda dön ve hafif bir adımla açıdan çık.",
@@ -3287,7 +3287,7 @@
 "6e02d8715fd1": {
 "text": "Yürüyüş duruşu!",
 "say": "Yürüyüş duruşu!",
-"ms": 1051,
+"ms": 3049,
 "measured": true
 },
 "6e412a9af4d7": {
@@ -3347,8 +3347,8 @@
 "6fdc03c083df": {
 "text": "El Mücadelesi: rakibin bileğini kavra ve aşağı/yana çek.",
 "say": "El Mücadelesi: rakibin bileğini kavra ve aşağı ya da yana çek.",
-"ms": 4778,
-"measured": false
+"ms": 6256,
+"measured": true
 },
 "704a6719ca7d": {
 "text": "Sıradaki: Torba. Dört raunt, ikişer dakika.",
@@ -3359,8 +3359,8 @@
 "708de67c515f": {
 "text": "Tekme + diz + savunma, 6 raunt.",
 "say": "Tekme, diz ve savunma, altı raunt.",
-"ms": 2778,
-"measured": false
+"ms": 2574,
+"measured": true
 },
 "70d9d5a84ffa": {
 "text": "Bilekleri kontrol et, dirsekleri içeride tut; açıklık yarat.",
@@ -3401,13 +3401,13 @@
 "72d9752d5f43": {
 "text": "Sıradaki: beşinci tur, Burpee.",
 "say": "Sıradaki: beşinci tur, börpi.",
-"ms": 2053,
+"ms": 2575,
 "measured": true
 },
 "7300b52f0042": {
 "text": "Ön Duruş: kalça ve gövde öne dönük.",
 "say": "Ön Duruş: kalça ve gövde öne dönük.",
-"ms": 4357,
+"ms": 4156,
 "measured": true
 },
 "730a7be8c851": {
@@ -3425,7 +3425,7 @@
 "734b10284dd8": {
 "text": "Sağ kroşe!",
 "say": "Sağ kroşe!",
-"ms": 2864,
+"ms": 1959,
 "measured": true
 },
 "737cbe5e616c": {
@@ -3509,7 +3509,7 @@
 "764e45bfeeb2": {
 "text": "Diz!",
 "say": "Diz!",
-"ms": 561,
+"ms": 908,
 "measured": true
 },
 "7657318d1934": {
@@ -3593,7 +3593,7 @@
 "7842f6a3553a": {
 "text": "Ön kolu dirsekten yaklaşık 90° bükerek yere paralel kaldır.",
 "say": "Ön kolu dirsekten yaklaşık doksan derece bükerek yere paralel kaldır.",
-"ms": 3556,
+"ms": 5356,
 "measured": true
 },
 "784de1cb69e8": {
@@ -3617,13 +3617,13 @@
 "78cbeebf98e1": {
 "text": "Garda geri dön.",
 "say": "Garda geri dön.",
-"ms": 1048,
+"ms": 1047,
 "measured": true
 },
 "78eb79fc4825": {
 "text": "Sağ direkten dönen gövdeyle ağırlığı ön ayağa al.",
 "say": "Sağ direkten dönen gövdeyle ağırlığı ön ayağa al.",
-"ms": 3956,
+"ms": 3009,
 "measured": true
 },
 "78f36b86e75e": {
@@ -3641,7 +3641,7 @@
 "791fb485dfd9": {
 "text": "Dinlen, kırk beş saniye.",
 "say": "Dinlen, kırk beş saniye.",
-"ms": 3656,
+"ms": 4156,
 "measured": true
 },
 "798dffdd7672": {
@@ -3713,7 +3713,7 @@
 "7b2d43061fca": {
 "text": "Dal!",
 "say": "Dal!",
-"ms": 639,
+"ms": 518,
 "measured": true
 },
 "7b59b6aafec5": {
@@ -3725,7 +3725,7 @@
 "7b6aad5baf9c": {
 "text": "Hedef göğüs ortası.",
 "say": "Hedef göğüs ortası.",
-"ms": 2989,
+"ms": 2597,
 "measured": true
 },
 "7b90b5f5b785": {
@@ -3803,7 +3803,7 @@
 "7ce3f2f607c4": {
 "text": "Bugünün konusu: 1-2 torba günü.",
 "say": "Bugünün konusu: bir iki torba günü.",
-"ms": 3456,
+"ms": 3656,
 "measured": true
 },
 "7d4fe0c237bf": {
@@ -3815,7 +3815,7 @@
 "7d8e40cc286b": {
 "text": "Ön tekme!",
 "say": "Ön tekme!",
-"ms": 836,
+"ms": 762,
 "measured": true
 },
 "7dc93a959fa3": {
@@ -3851,8 +3851,8 @@
 "7e920141456c": {
 "text": "Penetrasyon + iki dizin arkası; baş yan tarafta, kalçayı sür.",
 "say": "Penetrasyon ve iki dizin arkası; baş yan tarafta, kalçayı sür.",
-"ms": 4778,
-"measured": false
+"ms": 4756,
+"measured": true
 },
 "7ec907fe1c14": {
 "text": "Kolun bir kanca gibi sabit kalır; dönüşü gövde yapar.",
@@ -3905,13 +3905,13 @@
 "804cb8f4b61a": {
 "text": "Orta Tekme: tekme atan taraftaki kol dengeleme için aşağı/arkaya gidebilir, diğer el çenede.",
 "say": "Orta Tekme: tekme atan taraftaki kol dengeleme için aşağı ya da arkaya gidebilir, diğer el çenede.",
-"ms": 7350,
-"measured": false
+"ms": 5756,
+"measured": true
 },
 "80c73063a386": {
 "text": "Duruşta, ellerini önde aktif tut.",
 "say": "Duruşta, ellerini önde aktif tut.",
-"ms": 3072,
+"ms": 3152,
 "measured": true
 },
 "81735843b281": {
@@ -3989,7 +3989,7 @@
 "840eafd0efaf": {
 "text": "Dördüncü raunt, başla!",
 "say": "Dördüncü raunt, başla!",
-"ms": 2488,
+"ms": 1953,
 "measured": true
 },
 "8419ef578e74": {
@@ -4157,14 +4157,14 @@
 "89bb40f7c73e": {
 "text": "Arka ayakla iterek kalçayı ileri taşı.",
 "say": "Arka ayakla iterek kalçayı ileri taşı.",
-"ms": 3556,
+"ms": 4656,
 "measured": true
 },
 "89d32c5200cd": {
 "text": "Destek ayağında tam dön; gövde hafif geriye/yana açılır.",
 "say": "Destek ayağında tam dön; gövde hafif geriye ya da yana açılır.",
-"ms": 4778,
-"measured": false
+"ms": 5256,
+"measured": true
 },
 "89e85b75fb29": {
 "text": "Sıradaki gün: 1-2-3. Görüşmek üzere!",
@@ -4241,7 +4241,7 @@
 "8be677684c8b": {
 "text": "Dinlen, yirmi saniye.",
 "say": "Dinlen, yirmi saniye.",
-"ms": 4156,
+"ms": 4256,
 "measured": true
 },
 "8c197f057002": {
@@ -4385,7 +4385,7 @@
 "90c563672e3c": {
 "text": "Sıradaki: dördüncü tur, Squat.",
 "say": "Sıradaki: dördüncü tur, skuat.",
-"ms": 2546,
+"ms": 2374,
 "measured": true
 },
 "90dfe865fa59": {
@@ -4427,8 +4427,8 @@
 "91ef3d090c8c": {
 "text": "45/15 temposunda tüm istasyonlar; formu bozma.",
 "say": "Kırk beş on beş temposunda tüm istasyonlar; formu bozma.",
-"ms": 4350,
-"measured": false
+"ms": 5257,
+"measured": true
 },
 "9296ba01e915": {
 "text": "Sıradaki raunt: Ayak Oyunu ve Açı Değiştirme.",
@@ -4505,7 +4505,7 @@
 "951a32f7caa3": {
 "text": "Sol sağ kroşe!",
 "say": "Sol sağ kroşe!",
-"ms": 2524,
+"ms": 3143,
 "measured": true
 },
 "954e068c7ef8": {
@@ -4523,7 +4523,7 @@
 "95f843bc62e2": {
 "text": "Gün on üç. Önce ısınıyoruz.",
 "say": "Gün on üç. Önce ısınıyoruz.",
-"ms": 3457,
+"ms": 3257,
 "measured": true
 },
 "960e6e947cc4": {
@@ -4793,13 +4793,13 @@
 "9e1eafb64e0d": {
 "text": "Gard al ve sürekli hareket et.",
 "say": "Gard al ve sürekli hareket et.",
-"ms": 3656,
+"ms": 5056,
 "measured": true
 },
 "9e53c08e1aaa": {
 "text": "Squat, kırk beş saniye. Başla!",
 "say": "Skuat, kırk beş saniye. Başla!",
-"ms": 2713,
+"ms": 2082,
 "measured": true
 },
 "9e7bd131a2c7": {
@@ -5159,7 +5159,7 @@
 "a8a555b4c126": {
 "text": "Seviye değiştir.",
 "say": "Seviye değiştir.",
-"ms": 2949,
+"ms": 1048,
 "measured": true
 },
 "a8b6dba1ef42": {
@@ -5375,7 +5375,7 @@
 "afd5875cfb00": {
 "text": "Blok bitti, iyi iş! Kırk beş saniye dinlen.",
 "say": "Blok bitti, iyi iş! Kırk beş saniye dinlen.",
-"ms": 3257,
+"ms": 3457,
 "measured": true
 },
 "afd634f0214c": {
@@ -5411,7 +5411,7 @@
 "b10b1fce6111": {
 "text": "Sık yapılan hata: inişte dizi bükmek. Buna dikkat et.",
 "say": "Sık yapılan hata: inişte dizi bükmek. Buna dikkat et.",
-"ms": 4856,
+"ms": 4256,
 "measured": true
 },
 "b11555582bda": {
@@ -5711,7 +5711,7 @@
 "b98aed78bb39": {
 "text": "Burpee, başla!",
 "say": "Börpi, başla!",
-"ms": 2880,
+"ms": 3090,
 "measured": true
 },
 "b990ca785426": {
@@ -5741,7 +5741,7 @@
 "ba4ead38dfad": {
 "text": "Sıradaki raunt: Balta Tekmesi.",
 "say": "Sıradaki raunt: Balta Tekmesi.",
-"ms": 1868,
+"ms": 3009,
 "measured": true
 },
 "ba708aa7df2c": {
@@ -5825,8 +5825,8 @@
 "bd313437c4c5": {
 "text": "Tekme atan taraftaki kol dengeleme için aşağı/arkaya gidebilir, diğer el çenede.",
 "say": "Tekme atan taraftaki kol dengeleme için aşağı ya da arkaya gidebilir, diğer el çenede.",
-"ms": 6492,
-"measured": false
+"ms": 5656,
+"measured": true
 },
 "bd35f97995b6": {
 "text": "Bugünün konusu: dövüşçü kondisyonu.",
@@ -5987,7 +5987,7 @@
 "c2d695233064": {
 "text": "Squat, otuz saniye. Başla!",
 "say": "Skuat, otuz saniye. Başla!",
-"ms": 2955,
+"ms": 4056,
 "measured": true
 },
 "c2fcdf9c97b1": {
@@ -6005,7 +6005,7 @@
 "c37708e7327d": {
 "text": "Güzel, vücudun ısınıyor.",
 "say": "Güzel, vücudun ısınıyor.",
-"ms": 2297,
+"ms": 1746,
 "measured": true
 },
 "c37c3b657d9d": {
@@ -6047,7 +6047,7 @@
 "c422c21c5635": {
 "text": "Orta Blok: bloğu gövde dönüşüyle destekle.",
 "say": "Orta Blok: bloğu gövde dönüşüyle destekle.",
-"ms": 2600,
+"ms": 3456,
 "measured": true
 },
 "c42c124a03b2": {
@@ -6107,8 +6107,8 @@
 "c56d86b47171": {
 "text": "Bugünün konusu: saldırı + savunma.",
 "say": "Bugünün konusu: saldırı ve savunma.",
-"ms": 2850,
-"measured": false
+"ms": 4057,
+"measured": true
 },
 "c577411273de": {
 "text": "Dizlerini sırayla kalça hizasına kadar kaldır.",
@@ -6407,7 +6407,7 @@
 "d225567d134b": {
 "text": "Her tekrarda yön değiştir.",
 "say": "Her tekrarda yön değiştir.",
-"ms": 4057,
+"ms": 3756,
 "measured": true
 },
 "d2a54634a6e7": {
@@ -6521,7 +6521,7 @@
 "d52c96a89bd6": {
 "text": "Savun!",
 "say": "Savun!",
-"ms": 1502,
+"ms": 658,
 "measured": true
 },
 "d538d2be1a24": {
@@ -6641,7 +6641,7 @@
 "d956e5d4c6f1": {
 "text": "Sıradaki gün: Kardiyo Patlaması. Görüşmek üzere!",
 "say": "Sıradaki gün: Kardiyo Patlaması. Görüşmek üzere!",
-"ms": 4356,
+"ms": 3857,
 "measured": true
 },
 "d9671d68ecdf": {
@@ -6773,7 +6773,7 @@
 "dd0e811e1cb6": {
 "text": "Sıradaki raunt: Seviye Değiştirme.",
 "say": "Sıradaki raunt: Seviye Değiştirme.",
-"ms": 3457,
+"ms": 3356,
 "measured": true
 },
 "dd9e0c760919": {
@@ -6869,7 +6869,7 @@
 "e1275d005e43": {
 "text": "Köprü!",
 "say": "Köprü!",
-"ms": 649,
+"ms": 2220,
 "measured": true
 },
 "e12e8c006cb6": {
@@ -7007,7 +7007,7 @@
 "e6d99780e1bc": {
 "text": "Ön Tekme: ön tekme bir itme hareketidir; kalça ileri gitmezse güç olmaz.",
 "say": "Ön Tekme: ön tekme bir itme hareketidir; kalça ileri gitmezse güç olmaz.",
-"ms": 6057,
+"ms": 7156,
 "measured": true
 },
 "e716a2d3361b": {
@@ -7223,7 +7223,7 @@
 "ed1773dc0938": {
 "text": "Sıradaki: dördüncü tur, Şınav.",
 "say": "Sıradaki: dördüncü tur, Şınav.",
-"ms": 2694,
+"ms": 4356,
 "measured": true
 },
 "ed2e540d886d": {
@@ -7379,7 +7379,7 @@
 "f0af51bd6c77": {
 "text": "Sıradaki raunt: Savuşturma ve Blok.",
 "say": "Sıradaki raunt: Savuşturma ve Blok.",
-"ms": 2650,
+"ms": 3556,
 "measured": true
 },
 "f0f3d3f537b7": {
@@ -7625,8 +7625,8 @@
 "fa8ec666cd49": {
 "text": "Ön Duruş: ağırlığın yaklaşık 2/3'ü ön bacakta.",
 "say": "Ön Duruş: ağırlığın yaklaşık üçte ikisi ön bacakta.",
-"ms": 3992,
-"measured": false
+"ms": 5056,
+"measured": true
 },
 "fb2d116ad36a": {
 "text": "Teknik çalışma: Kombinasyon: Sol Direk – Sağ Direk – Sol Kroşe – Orta Tekme ve Orta Tekme. Yavaş ve doğru; hız sonra gelir.",
@@ -7709,7 +7709,7 @@
 "fd30a65832f5": {
 "text": "Sıradaki: HIIT devresi. Dört tur, dört hareket.",
 "say": "Sıradaki: hit devresi. Dört tur, dört hareket.",
-"ms": 3957,
+"ms": 5057,
 "measured": true
 },
 "fd38960f30a2": {
@@ -7763,8 +7763,8 @@
 "fe79e1435a8e": {
 "text": "Dalış + savunma + yerden çıkış.",
 "say": "Dalış, savunma ve yerden çıkış.",
-"ms": 2564,
-"measured": false
+"ms": 5357,
+"measured": true
 },
 "fe95bd3b2099": {
 "text": "Ön kol hafif açılı, dışa döner.",
