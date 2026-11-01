@@ -133,8 +133,14 @@ def say_text(text):
     s = re.sub(r"(\d+)\s*°", lambda m: m.group(1) + " derece", s)
     s = re.sub(r"(\d+)\s*cm\b", lambda m: m.group(1) + " santim", s)
     s = re.sub(r"(\d+)\s*-\s*(?=\d)", lambda m: num(int(m.group(1))) + " ", s)  # 1-2-3 -> bir iki üç
+    s = re.sub(r"\b2/3'ü\b", "üçte ikisi", s)
+    s = re.sub(r"(\d+)/(\d+)", r"\1 \2", s)  # 45/15 tempo -> kırk beş on beş
     s = re.sub(r"\d+", lambda m: num(int(m.group(0))), s)
     s = s.replace("–", ", ").replace("—", ", ").replace(" / ", " ya da ").replace("&", " ve ")
+    s = re.sub(r"(?<=\w)/(?=\w)", " ya da ", s)  # aşağı/yana -> aşağı ya da yana
+    parts = s.split(" + ")  # "Dalış + savunma + yerden çıkış" -> "Dalış, savunma ve yerden çıkış"
+    if len(parts) > 1:
+        s = ", ".join(parts[:-1]) + " ve " + parts[-1]
     for rx, rep in SAY_RE:
         s = rx.sub(rep, s)
     s = re.sub(r"\s+", " ", s).replace(" ,", ",").strip()

@@ -20,6 +20,9 @@ on:
       shards:
         description: "full/audit modda paralel iş sayısı"
         default: "8"
+      seed:
+        description: "audit: ilk deneme numarası (önceki turlarda denenen tohumları atlamak için büyüt)"
+        default: "4"
 
 permissions:
   contents: write
@@ -107,8 +110,13 @@ jobs:
         env:
           SHARD: ${{ matrix.shard }}/${{ inputs.shards }}
           MODE: ${{ inputs.mode }}
+          SEED: ${{ inputs.seed }}
         run: |
-          case "$MODE" in audit) extra=--audit ;; missing) extra=--missing ;; *) extra= ;; esac
+          case "$MODE" in
+            audit) extra="--audit --first $SEED --attempts 8" ;;
+            missing) extra=--missing ;;
+            *) extra= ;;
+          esac
           python3 tools/voice/synthesize.py --engine chatterbox --voice "$VOICE" --shard "$SHARD" --out shard_out $extra
       - uses: actions/upload-artifact@v4
         with:

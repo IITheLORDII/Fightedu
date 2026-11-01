@@ -170,7 +170,11 @@ class ChatterboxEngine:
         seed = int(hashlib.sha1(f"{text}|{attempt}".encode()).hexdigest()[:8], 16)
         self.torch.manual_seed(seed)
         random.seed(seed)
-        wav = self.model.generate(text, language_id="tr", exaggeration=0.6, cfg_weight=0.4, temperature=0.8)
+        if len(text) <= 20 and attempt % 2:
+            # kısa komutlarda enerjik ayar bazen kelimeyi bozar: tek numaralı denemeler daha kararlı
+            wav = self.model.generate(text, language_id="tr", exaggeration=0.5, cfg_weight=0.5, temperature=0.6)
+        else:
+            wav = self.model.generate(text, language_id="tr", exaggeration=0.6, cfg_weight=0.4, temperature=0.8)
         torchaudio.save(path, wav, self.model.sr)
 
 
@@ -200,20 +204,29 @@ LIMIT = 0.3        # kayıt sırasında: bunu aşan deneme yeniden üretilir
 AUDIT_LIMIT = 0.2  # denetimde: bunu aşan (ya da tekrarlı/süresi aykırı) klip yeniden kaydedilir
 
 
-def _spell(m):
-    n = int(m.group())
+# ASR ödünç kelimeleri İngilizce yazar; okunuşu aynı olduğu için hata sayılmaz
+LOANS = {"round": "raunt", "rounds": "raunt", "block": "blok", "squat": "skuat", "squad": "skuat",
+         "kickbox": "kik boks", "kickboks": "kik boks", "crochet": "kroşe"}
+
+
+def _spell(m, ordinal=False):
+    n = int(m.group(1))
     if n >= 1000:
         return m.group()
     sys.path.insert(0, HERE)
-    from make_voice import num
-    return f" {num(n)} "
+    from make_voice import num, ordinal as ord_
+    return f" {ord_(n) if ordinal else num(n)} "
 
 
-def norm(s):
-    """Küçük harf, noktalama yok; ASR'nin yazdığı rakamlar Türkçe okunuşa çevrilir ("16" -> "on altı")."""
-    s = re.sub(r"\d+", _spell, s.translate(_TR).lower())
+def norm(s, ordinal=False):
+    """Küçük harf, noktalama yok; ASR'nin yazdığı rakamlar Türkçe okunuşa çevrilir ("16" -> "on altı";
+    ordinal=True iken "4." -> "dördüncü")."""
+    s = s.translate(_TR).lower()
+    if ordinal:
+        s = re.sub(r"(\d+)\.", lambda m: _spell(m, True), s)
+    s = re.sub(r"(\d+)", _spell, s)
     s = "".join(ch if ch.isalnum() or ch.isspace() else " " for ch in s)
-    return " ".join(s.split())
+    return " ".join(LOANS.get(w, w) for w in s.split())
 
 
 def repeated(ref, hyp):
@@ -242,8 +255,13 @@ def judge_score(text, heard, seconds):
 
 
 def cer(ref, hyp):
+    # "4." hem "dört" hem "dördüncü" okunabilir: ikisinden iyisi alınır
+    return min(_cer(ref, hyp, False), _cer(ref, hyp, True))
+
+
+def _cer(ref, hyp, ordinal):
     # boşluklar sayılmaz: ASR'nin kelime bölmesi ("sıra da ki") hata değildir
-    a, b = norm(ref).replace(" ", ""), norm(hyp).replace(" ", "")
+    a, b = norm(ref).replace(" ", ""), norm(hyp, ordinal).replace(" ", "")
     if not a:
         return 0.0
     prev = list(range(len(b) + 1))
@@ -255,6 +273,11 @@ def cer(ref, hyp):
     return prev[-1] / len(a)
 
 
+# tek kelimelik komutlar bağlamsız kalmasın diye alan sözlüğü (bozuk sesi yine yakalar)
+PROMPT = ("Antrenman komutları: sol direk, sağ direk, sol kroşe, sağ aparkat, raunt, garda dön, eğil, blok, köprü, "
+          "skuat, şınav, plank, tekme, dinlen.")
+
+
 class Judge:
     def __init__(self):
         from faster_whisper import WhisperModel
@@ -262,7 +285,7 @@ class Judge:
 
     def hear(self, path):
         segs, _ = self.model.transcribe(path, language="tr", beam_size=1, vad_filter=False,
-                                        condition_on_previous_text=False)
+                                        condition_on_previous_text=False, initial_prompt=PROMPT)
         return " ".join(s.text for s in segs).strip()
 
 
@@ -413,6 +436,10 @@ def audit(manifest, args):
     for k, cid in enumerate(ids, 1):
         p = os.path.join(CLIPS, f"{cid}.ogg")
         text = manifest["clips"][cid]["say"]
+        if not os.path.exists(p):  # metni yeni değişmiş: kaydı yok
+            qa[cid] = dict(text=text, heard="", cer=99.0, why="yok")
+            flagged.append(cid)
+            continue
         heard = judge.hear(p)
         score, why = judge_score(text, heard, wav_seconds(p))
         qa[cid] = dict(text=text, heard=heard, cer=round(score, 3), why=why)
@@ -426,7 +453,8 @@ def audit(manifest, args):
         tmp = tempfile.mkdtemp()
         for cid in flagged:
             old, raw = qa[cid], os.path.join(tmp, cid + eng.ext)
-            score, heard, why = record(eng, judge, old["text"], raw, attempts=6, limit=AUDIT_LIMIT, first=4)
+            score, heard, why = record(eng, judge, old["text"], raw, attempts=args.attempts, limit=AUDIT_LIMIT,
+                                       first=args.first)
             better = score < old["cer"]
             if better:
                 post(raw, os.path.join(out_dir, f"{cid}.ogg"))
@@ -465,7 +493,8 @@ def report(folder):
         lines += [f"| {q['cer']:.2f} | {q.get('why') or '-'} | {q['text']} | {q['heard']} |" for q in weak]
     if fixed:
         lines += ["", "## Yeniden kaydedilenler", "", "| önce | sonra | metin | önce duyulan |", "|---|---|---|---|"]
-        lines += [f"| {q['was']:.2f} | {q['cer']:.2f} | {q['text']} | {q['was_heard']} |"
+        lines += [f"| {'yeni' if q['was'] >= 99 else format(q['was'], '.2f')} | {q['cer']:.2f} | {q['text']} | "
+                  f"{q['was_heard'] or '-'} |"
                   for q in sorted(fixed, key=lambda q: -q["was"])]
     with open(os.path.join(HERE, "qa_report.md"), "w", encoding="utf-8") as fh:
         fh.write("\n".join(lines) + "\n")
@@ -487,6 +516,8 @@ def main():
                     help="kayıtlı klipleri dinle; bozuk olanları yeniden kaydet (--out klasörüne yalnız değişenler)")
     ap.add_argument("--missing", action="store_true",
                     help="yalnız uygulamada dosyası olmayan klipleri kaydet (metin değişince; --shard ile de)")
+    ap.add_argument("--first", type=int, default=4, help="audit: ilk deneme numarası (önceki turların tohumlarını atla)")
+    ap.add_argument("--attempts", type=int, default=6, help="audit: klip başına en fazla deneme")
     ap.add_argument("--report", default=None, metavar="KLASÖR", help="parçaların qa_*.json dosyalarından rapor yaz")
     args = ap.parse_args()
     if args.samples:
