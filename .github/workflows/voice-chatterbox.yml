@@ -123,7 +123,7 @@ jobs:
               args=(--audit --first "$SEED" --attempts 8)
               if [ -n "$ONLY" ]; then args+=(--only "$ONLY"); fi ;;
             missing) args=(--missing) ;;
-            edges) args=(--edges) ;;
+            edges) args=(--edges --first "$SEED" --attempts 6) ;;
           esac
           python3 tools/voice/synthesize.py --engine chatterbox --voice "$VOICE" --shard "$SHARD" --out shard_out "${args[@]}"
       - uses: actions/upload-artifact@v4

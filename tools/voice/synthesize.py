@@ -449,16 +449,34 @@ def cut_to(src, dst_wav, t0, t1, sr=24000):
                     "-c:a", "pcm_f32le", dst_wav], input=y.tobytes(), check=True)
 
 
-def trim_edges(judge, text, path):
-    """Ham kaydın kenarlarını kelime damgalarıyla kırpar (yerinde). Dönüş: kesilen süre (sn)."""
-    dur = wav_seconds(path)
-    plan = edge_plan(text, judge.words(path), dur)
-    if not plan or (plan[0] < 0.05 and dur - plan[1] < 0.05):
-        return 0.0
-    tmp = path + ".edge.wav"
-    cut_to(path, tmp, *plan)
-    os.replace(tmp, path)
-    return plan[0] + dur - plan[1]
+def edge_cut(judge, text, src, base, tmpdir):
+    """Kelime damgalarına göre kırpılmış hâli dener; kırpılmış sesi yeniden dinler ve okunan metin kötüleşmediyse
+    (puan <= base + 0.03) kabul eder. Whisper uzun duraklama ya da mırıltı olan yerlerde kelime zamanlarını erkene
+    koyabiliyor; bu kontrol gerçek kelimelerin kesilmesini önler. Önce iki kenar, olmazsa yalnız baş denenir.
+    Dönüş: (wav yolu, kesilen sn) ya da (None, 0)."""
+    dur = wav_seconds(src)
+    plan = edge_plan(text, judge.words(src), dur)
+    if not plan:
+        return None, 0.0
+    tries = [plan] + ([(plan[0], dur)] if plan[0] > 0.12 and dur - plan[1] > 0.05 else [])
+    for t0, t1 in tries:
+        cut = t0 + dur - t1
+        if cut <= 0.12:
+            continue
+        wav = os.path.join(tmpdir, "edge.wav")
+        cut_to(src, wav, t0, t1)
+        score, _ = judge_score(text, judge.hear(wav), wav_seconds(wav))
+        if score <= base + 0.03:
+            return wav, cut
+    return None, 0.0
+
+
+def trim_edges(judge, text, path, base):
+    """Ham kaydın kenarlarını yerinde kırpar (edge_cut doğrulamasıyla). Dönüş: kesilen süre (sn)."""
+    wav, cut = edge_cut(judge, text, path, base, os.path.dirname(path) or ".")
+    if wav:
+        os.replace(wav, path)
+    return cut
 
 
 def record(eng, judge, text, raw, attempts=4, limit=LIMIT, first=0, strict=False):
@@ -491,7 +509,7 @@ def record(eng, judge, text, raw, attempts=4, limit=LIMIT, first=0, strict=False
             break
     os.replace(best[3], raw)
     if judge and raw.endswith(".wav"):
-        trim_edges(judge, text, raw)  # cümle öncesi/sonrası çöp
+        trim_edges(judge, text, raw, best[0])  # cümle öncesi/sonrası çöp
     return best[0], best[1], best[2]
 
 
@@ -598,34 +616,49 @@ def shard_of(ids, shard):
 
 
 def edges(manifest, args):
-    """Kayıtlı klipleri kelime damgalarıyla dinler; cümle öncesi/sonrasındaki çöp 0.12 sn'yi aşıyorsa klibi kırpıp
-    --out klasörüne yazar. QA kaydı: <out>/qa_<parça>.json (cut = kesilen sn)."""
+    """Kayıtlı klipleri kelime damgalarıyla dinler; cümle öncesi/sonrasındaki çöp 0.12 sn'yi aşıyorsa ve kırpılmış
+    hâl aynı netlikte okunuyorsa klibi kırpıp --out'a yazar. Kırpılamayan ve metnine göre çok uzun klipler (cümleye
+    mırıltı karışmış) yeni tohumlarla yeniden kaydedilir. QA: <out>/qa_<parça>.json (cut / redo)."""
     ids, tag = shard_of(sorted(manifest["clips"]), args.shard)
     out_dir = args.out or CLIPS
     os.makedirs(out_dir, exist_ok=True)
-    judge, qa, total = Judge(), {}, 0.0
+    judge, qa, total, eng = Judge(), {}, 0.0, None
     tmp = tempfile.mkdtemp()
+    kept = redo = 0
     for cid in ids:
         p = os.path.join(CLIPS, f"{cid}.ogg")
         text = manifest["clips"][cid]["say"]
-        words = judge.words(p)
-        heard = "".join(w for w, _, _ in words).strip()
         dur = wav_seconds(p)
-        score, why = judge_score(text, heard, dur)
-        plan = edge_plan(text, words, dur)
-        cut = plan[0] + dur - plan[1] if plan else 0.0
-        q = dict(text=text, heard=heard, cer=round(score, 3), why=why)
-        if cut > 0.12:
-            wav = os.path.join(tmp, cid + ".wav")
-            cut_to(p, wav, *plan)
+        heard = judge.hear(p)
+        base, why = judge_score(text, heard, dur)
+        q = dict(text=text, heard=heard, cer=round(base, 3), why=why)
+        wav, cut = edge_cut(judge, text, p, base, tmp)
+        if wav:
             trim_encode(wav, os.path.join(out_dir, f"{cid}.ogg"))
-            os.remove(wav)
             q["cut"] = round(cut, 2)
             total += cut
-            print(f"  -{cut:.2f} sn ({plan[0]:.2f}..{plan[1]:.2f}/{dur:.2f})  '{text}'  ->  '{heard}'", flush=True)
+            print(f"  -{cut:.2f} sn  '{text}'", flush=True)
+        elif dur > max(2.5, 1.5 * len(text) / 12):  # ~12 harf/sn: çok uzun ve kırpılamadı -> yeniden kaydet
+            kept += 1
+            if eng is None:
+                eng = make_engine(args.engine, args.voice)
+            raw = os.path.join(tmp, cid + eng.ext)
+            score, nh, nw = record(eng, judge, text, raw, attempts=args.attempts, limit=AUDIT_LIMIT, first=args.first)
+            new = os.path.join(tmp, cid + ".ogg")
+            post(raw, new)
+            nd = wav_seconds(new)
+            if score <= base + 0.02 and nd < dur * 0.85:
+                os.replace(new, os.path.join(out_dir, f"{cid}.ogg"))
+                q.update(heard=nh, cer=round(score, 3), why=nw, redo=True, was=base, was_heard=heard, was_why=why)
+                redo += 1
+            print(f"  uzun {dur:.1f}s -> {'yeniden kaydedildi ' + format(nd, '.1f') + 's' if q.get('redo') else 'eskisi kaldı'}"
+                  f"  '{text}'", flush=True)
+            for f in (raw, new):
+                if os.path.exists(f):
+                    os.remove(f)
         qa[cid] = q
-    print(f"kenar temizliği: {len(ids)} klip, kırpılan {sum('cut' in q for q in qa.values())}, toplam {total:.1f} sn",
-          flush=True)
+    print(f"kenar temizliği: {len(ids)} klip, kırpılan {sum('cut' in q for q in qa.values())} ({total:.1f} sn), "
+          f"kırpılamayan uzun {kept}, yeniden kaydedilen {redo}", flush=True)
     with open(os.path.join(out_dir, f"qa_{tag}.json"), "w", encoding="utf-8") as fh:
         json.dump(qa, fh, ensure_ascii=False, indent=1)
 
