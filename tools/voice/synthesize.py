@@ -101,13 +101,72 @@ def pick_voice():
     sys.exit("Hiçbir Türkçe ses kullanılamadı.")
 
 
+# Konuşma kapısı: Chatterbox bazen kelime aralarında ve cümle sonunda formantsız, alçak frekanslı bir uğultu/hırıltı
+# üretir (1 kHz üstü boş). Kapı 1-10 kHz bandına (formantlar ve s/ş/f gibi sürtünmeliler) bakar: bu bantta enerji
+# yokken sesi ~30 dB kısar; sonra sondaki çöp kırpılır (trim_encode). Eşik -16 LUFS'e eşitlenmiş klipler için
+# ayarlandı: 1.301 klipte 300 ms'den uzun uğultu 2,4 dk -> 0,14 dk; konuşma karelerindeki fark yalnız yeniden kodlama
+# kadar. Sürüm değişirse --regate kayıtlı klipleri yeniden işler.
+GATE_VERSION = "gate1"
+GATE = ("asplit=2[m][k0];[k0]highpass=f=1000:p=2,lowpass=f=10000:p=2[k];"
+        "[m][k]sidechaingate=threshold=0.0063:ratio=6:range=0.03:attack=5:release=200:knee=2.8:detection=rms")
+OPUS = ["-ac", "1", "-ar", "24000", "-c:a", "libopus", "-b:a", "32k", "-application", "voip"]
+
+
+def trim_encode(wav, out_path, sr=24000):
+    """Konuşmanın bittiği yeri 1-8 kHz bandından bulur (en az 30 ms süren; tek karelik tıkırtı sayılmaz), 0.12 sn
+    pay bırakıp yumuşakça keser, sona 0.15 sn sessizlik ekler ve Opus'a kodlar."""
+    import numpy as np
+    x = np.frombuffer(subprocess.run(["ffmpeg", "-v", "error", "-i", wav, "-f", "f32le", "-ac", "1", "-ar", str(sr), "-"],
+                                     capture_output=True, check=True).stdout, np.float32)
+    f = sr // 100
+    n = len(x) // f
+    w = np.hanning(f)
+    S = np.abs(np.fft.rfft(x[: n * f].reshape(n, f) * w, axis=1)) ** 2 * 2 / (f * (w ** 2).sum())
+    fq = np.fft.rfftfreq(f, 1 / sr)
+    key = 10 * np.log10(S[:, (fq >= 1000) & (fq < 8000)].sum(1) + 1e-12) > -50
+    run = np.convolve(key, np.ones(3), mode="same") >= 3  # 3 ardışık kare
+    sp = np.where(run)[0]
+    y = x.copy()
+    if len(sp):
+        y = y[: min(len(y), (sp[-1] + 2) * f + int(0.12 * sr))]
+        k = min(len(y), int(0.04 * sr))
+        y[-k:] *= np.linspace(1, 0, k, dtype=np.float32)
+    y = np.concatenate([y, np.zeros(int(0.15 * sr), np.float32)])
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "f32le", "-ac", "1", "-ar", str(sr), "-i", "-", *OPUS,
+                    out_path], input=y.tobytes(), check=True)
+
+
 def post(raw_path, out_path):
-    """Sessizlik kırp, ses seviyesini eşitle, sona kısa boşluk ekle, mono Opus 24 kbps."""
-    af = ("silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.03,"
-          "areverse,silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.05,areverse,"
-          "loudnorm=I=-16:TP=-1.5:LRA=11,apad=pad_dur=0.15")
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", raw_path, "-af", af, "-ac", "1", "-ar", "24000",
-                    "-c:a", "libopus", "-b:a", "24k", "-application", "voip", out_path], check=True)
+    """Sessizlik kırp, ses seviyesini eşitle, konuşma kapısı, sondaki çöpü kırp, mono Opus 32 kbps."""
+    pre = ("silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.03,"
+           "areverse,silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.05,areverse,"
+           "loudnorm=I=-16:TP=-1.5:LRA=11")
+    tmp = out_path + ".gate.wav"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", raw_path, "-filter_complex", f"[0:a]{pre},{GATE}[o]",
+                    "-map", "[o]", "-ar", "24000", tmp], check=True)
+    trim_encode(tmp, out_path)
+    os.remove(tmp)
+
+
+def regate(manifest, mpath):
+    """Kayıtlı (eski son işlemli) kliplere yalnız konuşma kapısını uygular; sonra süreler yeniden ölçülür."""
+    if manifest.get("post") == GATE_VERSION:
+        print("klipler zaten", GATE_VERSION, "ile işlenmiş")
+        return
+
+    def one(cid):
+        p = os.path.join(CLIPS, f"{cid}.ogg")
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", p, "-filter_complex", f"[0:a]{GATE}[o]", "-map", "[o]",
+                        "-ar", "24000", p + ".gate.wav"], check=True)
+        trim_encode(p + ".gate.wav", p + ".tmp.ogg")
+        os.remove(p + ".gate.wav")
+        os.replace(p + ".tmp.ogg", p)
+
+    ids = [c for c in manifest["clips"] if os.path.exists(os.path.join(CLIPS, f"{c}.ogg"))]
+    with cf.ThreadPoolExecutor(os.cpu_count() or 4) as ex:
+        list(ex.map(one, ids))
+    manifest["post"] = GATE_VERSION
+    print(f"konuşma kapısı uygulandı: {len(ids)} klip", flush=True)
 
 
 def duration_ms(path):
@@ -543,6 +602,8 @@ def main():
                     help="kayıtlı klipleri dinle; bozuk olanları yeniden kaydet (--out klasörüne yalnız değişenler)")
     ap.add_argument("--missing", action="store_true",
                     help="yalnız uygulamada dosyası olmayan klipleri kaydet (metin değişince; --shard ile de)")
+    ap.add_argument("--regate", action="store_true",
+                    help="kayıtlı kliplere konuşma kapısını uygula (bir kez), süreleri yeniden ölç")
     ap.add_argument("--first", type=int, default=4, help="audit: ilk deneme numarası (önceki turların tohumlarını atla)")
     ap.add_argument("--attempts", type=int, default=6, help="audit: klip başına en fazla deneme")
     ap.add_argument("--only", default="", help="audit: '|' ile ayrılmış metinler; bunlar eşik altında olsa da "
@@ -558,6 +619,9 @@ def main():
         manifest = json.load(fh)
     if args.audit:
         return audit(manifest, args)
+    if args.regate:
+        regate(manifest, mpath)
+        return finalize(manifest, mpath, manifest.get("voice") or voice_name(args.engine, args.voice))
     if args.finalize:
         return finalize(manifest, mpath, voice_name(args.engine, args.voice))
     eng = make_engine(args.engine, args.voice)

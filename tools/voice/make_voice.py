@@ -564,12 +564,12 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--stats", action="store_true", help="yalnızca sayıları yaz, dosya üretme")
     args = ap.parse_args()
-    known, voice = {}, None
+    known, voice, post = {}, None, None
     mpath = os.path.join(OUT, "manifest.json")
     if os.path.exists(mpath):
         with open(mpath, encoding="utf-8") as fh:
             old = json.load(fh)
-        known, voice = old.get("clips", {}), old.get("voice")
+        known, voice, post = old.get("clips", {}), old.get("voice"), old.get("post")
     clips, sheets, scripts = build(known)
     # ölçülmüş süreler değiştiyse zamanlamayı bir kez daha kur (kararlı)
     chars = sum(len(c["say"]) for c in clips.used.values())
@@ -580,7 +580,7 @@ def main():
         return
     os.makedirs(OUT, exist_ok=True)
     with open(mpath, "w", encoding="utf-8") as fh:
-        head = {"version": 1, **({"voice": voice} if voice else {})}
+        head = {"version": 1, **({"voice": voice} if voice else {}), **({"post": post} if post else {})}
         json.dump({**head, "clips": dict(sorted(clips.used.items()))}, fh, ensure_ascii=False, indent=0)
         fh.write("\n")
     clips_dir = os.path.join(OUT, "clips")
