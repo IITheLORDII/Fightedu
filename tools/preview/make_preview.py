@@ -32,8 +32,8 @@ def make_sprites(clips_dir):
     for cid in ids:
         pcm[cid] = subprocess.run(["ffmpeg", "-v", "error", "-i", os.path.join(clips_dir, cid + ".ogg"), "-f", "s16le",
                                    "-ac", "1", "-ar", str(SPRITE_RATE), "-"], capture_output=True, check=True).stdout
-    total = sum(len(b) for b in pcm.values())
     gap = b"\0\0" * int(SPRITE_RATE * 0.5)  # oynatıcının atlama/durma payı sessizliğe düşsün
+    total = sum(len(b) for b in pcm.values()) + len(gap) * len(ids)  # dosyalar eşit büyüklükte olsun
     out_dir = os.path.join(os.path.dirname(OUT), "websprites")  # assets/voice bağlantısına yazma
     os.makedirs(out_dir, exist_ok=True)
     files, mapping, part, buf = [], {}, 0, bytearray()
