@@ -359,7 +359,7 @@
 "0c118f778a65": {
 "text": "Göğsünü dik, bakışını ileri tut.",
 "say": "Göğsünü dik, bakışını ileri tut.",
-"ms": 3357,
+"ms": 3256,
 "measured": true
 },
 "0c236c4313f8": {
@@ -725,7 +725,7 @@
 "17bdd7d4424c": {
 "text": "Squat, başla!",
 "say": "Skuat, başla!",
-"ms": 2370,
+"ms": 2941,
 "measured": true
 },
 "17c5194511ce": {
@@ -755,7 +755,7 @@
 "18d06b5dd335": {
 "text": "Üçüncü tur. Squat, başla!",
 "say": "Üçüncü tur. skuat, başla!",
-"ms": 3457,
+"ms": 3557,
 "measured": true
 },
 "18ec4f95bdc5": {
@@ -1319,7 +1319,7 @@
 "291709278154": {
 "text": "Bugünün konusu: kardiyo fırtınası.",
 "say": "Bugünün konusu: kardiyo fırtınası.",
-"ms": 3856,
+"ms": 3656,
 "measured": true
 },
 "291e8ada4fcd": {
@@ -1631,7 +1631,7 @@
 "31ed66360759": {
 "text": "Bir bacağını diğerinin altından öne fırlat.",
 "say": "Bir bacağını diğerinin altından öne fırlat.",
-"ms": 2305,
+"ms": 4057,
 "measured": true
 },
 "32007dd759ea": {
@@ -1661,7 +1661,7 @@
 "32a295f84ae0": {
 "text": "Bugünün konusu: zirve devresi.",
 "say": "Bugünün konusu: zirve devresi.",
-"ms": 3856,
+"ms": 3556,
 "measured": true
 },
 "32d841e3ee86": {
@@ -2213,7 +2213,7 @@
 "47a3d6ae9d1e": {
 "text": "Sol kroşe!",
 "say": "Sol kroşe!",
-"ms": 2230,
+"ms": 962,
 "measured": true
 },
 "47b071a9c00c": {
@@ -2525,7 +2525,7 @@
 "52a106c7060c": {
 "text": "Tebrikler! Gün on bir tamamlandı.",
 "say": "Tebrikler! Gün on bir tamamlandı.",
-"ms": 3857,
+"ms": 3657,
 "measured": true
 },
 "52f7dc2c1e49": {
@@ -2825,7 +2825,7 @@
 "5c9e65367fed": {
 "text": "Sıradaki raunt: Düz Diz.",
 "say": "Sıradaki raunt: Düz Diz.",
-"ms": 1748,
+"ms": 2049,
 "measured": true
 },
 "5cfe49651700": {
@@ -3287,7 +3287,7 @@
 "6e02d8715fd1": {
 "text": "Yürüyüş duruşu!",
 "say": "Yürüyüş duruşu!",
-"ms": 3049,
+"ms": 3256,
 "measured": true
 },
 "6e412a9af4d7": {
@@ -3641,7 +3641,7 @@
 "791fb485dfd9": {
 "text": "Dinlen, kırk beş saniye.",
 "say": "Dinlen, kırk beş saniye.",
-"ms": 4156,
+"ms": 4057,
 "measured": true
 },
 "798dffdd7672": {
@@ -3713,7 +3713,7 @@
 "7b2d43061fca": {
 "text": "Dal!",
 "say": "Dal!",
-"ms": 518,
+"ms": 571,
 "measured": true
 },
 "7b59b6aafec5": {
@@ -4523,7 +4523,7 @@
 "95f843bc62e2": {
 "text": "Gün on üç. Önce ısınıyoruz.",
 "say": "Gün on üç. Önce ısınıyoruz.",
-"ms": 3257,
+"ms": 3147,
 "measured": true
 },
 "960e6e947cc4": {
@@ -4751,7 +4751,7 @@
 "9ce3467ad6f2": {
 "text": "Form devresi: Mekik ve Plank. Hız değil, kontrol.",
 "say": "Form devresi: Mekik ve Plank. Hız değil, kontrol.",
-"ms": 4956,
+"ms": 2987,
 "measured": true
 },
 "9ce557a708de": {
@@ -4799,7 +4799,7 @@
 "9e53c08e1aaa": {
 "text": "Squat, kırk beş saniye. Başla!",
 "say": "Skuat, kırk beş saniye. Başla!",
-"ms": 2082,
+"ms": 3856,
 "measured": true
 },
 "9e7bd131a2c7": {
@@ -5093,7 +5093,7 @@
 "a726f19f28e0": {
 "text": "Sıradaki raunt: Tekme Bloğu.",
 "say": "Sıradaki raunt: Tekme Bloğu.",
-"ms": 3656,
+"ms": 3856,
 "measured": true
 },
 "a7592dae5a92": {
@@ -5627,7 +5627,7 @@
 "b71eb027bd49": {
 "text": "Bugünün konusu: yerden çıkış.",
 "say": "Bugünün konusu: yerden çıkış.",
-"ms": 5757,
+"ms": 4456,
 "measured": true
 },
 "b73cdd59c4ec": {
@@ -5873,7 +5873,7 @@
 "bf3b9f116d6c": {
 "text": "Form devresi: Burpee ve Squat. Hız değil, kontrol.",
 "say": "Form devresi: börpi ve skuat. Hız değil, kontrol.",
-"ms": 4456,
+"ms": 3118,
 "measured": true
 },
 "bf3f29a0b50a": {
@@ -5987,7 +5987,7 @@
 "c2d695233064": {
 "text": "Squat, otuz saniye. Başla!",
 "say": "Skuat, otuz saniye. Başla!",
-"ms": 4056,
+"ms": 2118,
 "measured": true
 },
 "c2fcdf9c97b1": {
@@ -6215,7 +6215,7 @@
 "ca242216ae2d": {
 "text": "Ritmi koru, nefesini düzenle.",
 "say": "Ritmi koru, nefesini düzenle.",
-"ms": 3857,
+"ms": 4157,
 "measured": true
 },
 "ca40c9f5005b": {
@@ -6407,7 +6407,7 @@
 "d225567d134b": {
 "text": "Her tekrarda yön değiştir.",
 "say": "Her tekrarda yön değiştir.",
-"ms": 3756,
+"ms": 3757,
 "measured": true
 },
 "d2a54634a6e7": {
@@ -6521,7 +6521,7 @@
 "d52c96a89bd6": {
 "text": "Savun!",
 "say": "Savun!",
-"ms": 658,
+"ms": 654,
 "measured": true
 },
 "d538d2be1a24": {
@@ -6869,7 +6869,7 @@
 "e1275d005e43": {
 "text": "Köprü!",
 "say": "Köprü!",
-"ms": 2220,
+"ms": 742,
 "measured": true
 },
 "e12e8c006cb6": {
