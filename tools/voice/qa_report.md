@@ -2,13 +2,12 @@
 
 Her klip faster-whisper (small) ile yazıya döküldü ve okunması istenen metinle karşılaştırıldı. Puan: boşluksuz karakter hata oranı (ASR rakamları okunuşa çevrilir); metinde olmayan bir tekrar ya da aykırı süre +1. ASR da yanılabilir: listedekiler kulakla kontrol edilmeli.
 
-1301 klip, ort. hata 0.049, yeniden kaydedilen 72, hâlâ eşiği (0.2) aşan 3 (tekrar: 1, süre: 0)
+1301 klip, ort. hata 0.048, yeniden kaydedilen 72, hâlâ eşiği (0.2) aşan 2 (tekrar: 0, süre: 0)
 
 ## Eşiği aşanlar
 
 | puan | neden | metin | duyulan |
 |---|---|---|---|
-| 1.02 | tekrar | Sol, Sağ Direk: sağ direğin bitişinde ağırlık ön ayakta olur: bu, arka bacak tekmesi için yük oluşturur. | Sol, sağ direk, sağ direk'in bitişinde ağırlık ön ayakta olur. Bu, arka bacak tekmesi için yıkoluşturur. |
 | 0.33 | - | Dal! | Dol. |
 | 0.21 | - | Dinlen, kırk beş saniye. | Dinlen, kutbe saniye. |
 

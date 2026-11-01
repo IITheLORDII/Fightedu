@@ -232,11 +232,17 @@ def norm(s, ordinal=False):
 def repeated(ref, hyp):
     """Seste metinde olmayan bir tekrar var mı ("Dinç gel. Dinç gel.")? Model bazen cümle sonunu yineler."""
     r, h = norm(ref).split(), norm(hyp).split()
-    rs = f" {' '.join(r)} "
+
+    def same(x, y):  # Türkçe ekler: "direk" ~ "direğin" (ilk 4 harf)
+        return x == y or (len(x) >= 4 and len(y) >= 4 and x[:4] == y[:4])
+
+    def in_ref(seq):
+        return any(all(same(x, y) for x, y in zip(seq, r[j:j + len(seq)])) for j in range(len(r) - len(seq) + 1))
+
     for n in range(1, 5):
         for i in range(len(h) - 2 * n + 1):
             a = h[i:i + n]
-            if a == h[i + n:i + 2 * n] and len("".join(a)) >= 3 and f" {' '.join(a + a)} " not in rs:
+            if a == h[i + n:i + 2 * n] and len("".join(a)) >= 3 and not in_ref(a + a):
                 return True
     return False
 
