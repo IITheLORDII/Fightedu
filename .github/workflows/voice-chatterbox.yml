@@ -23,6 +23,9 @@ on:
       seed:
         description: "audit: ilk deneme numarası (önceki turlarda denenen tohumları atlamak için büyüt)"
         default: "4"
+      only:
+        description: "audit: zorla yeniden kaydedilecek cümleler, '|' ile ayrılmış (ör. Eğil!|Sol kroşe!)"
+        default: ""
 
 permissions:
   contents: write
@@ -111,13 +114,16 @@ jobs:
           SHARD: ${{ matrix.shard }}/${{ inputs.shards }}
           MODE: ${{ inputs.mode }}
           SEED: ${{ inputs.seed }}
+          ONLY: ${{ inputs.only }}
         run: |
+          args=()
           case "$MODE" in
-            audit) extra="--audit --first $SEED --attempts 8" ;;
-            missing) extra=--missing ;;
-            *) extra= ;;
+            audit)
+              args=(--audit --first "$SEED" --attempts 8)
+              if [ -n "$ONLY" ]; then args+=(--only "$ONLY"); fi ;;
+            missing) args=(--missing) ;;
           esac
-          python3 tools/voice/synthesize.py --engine chatterbox --voice "$VOICE" --shard "$SHARD" --out shard_out $extra
+          python3 tools/voice/synthesize.py --engine chatterbox --voice "$VOICE" --shard "$SHARD" --out shard_out "${args[@]}"
       - uses: actions/upload-artifact@v4
         with:
           name: clips-${{ matrix.shard }}

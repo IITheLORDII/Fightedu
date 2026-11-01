@@ -289,10 +289,17 @@ class Judge:
         from faster_whisper import WhisperModel
         self.model = WhisperModel("small", device="cpu", compute_type="int8")
 
-    def hear(self, path):
+    def hear(self, path, prompt=True):
         segs, _ = self.model.transcribe(path, language="tr", beam_size=1, vad_filter=False,
-                                        condition_on_previous_text=False, initial_prompt=PROMPT)
+                                        condition_on_previous_text=False, initial_prompt=PROMPT if prompt else None)
         return " ".join(s.text for s in segs).strip()
+
+    def strict(self, text, path):
+        """Sözlüklü ve sözlüksüz dinlemenin ortalaması: sözlük kötü bir kaydı "doğru duyup" gizleyemesin."""
+        d = wav_seconds(path)
+        h1, h2 = self.hear(path), self.hear(path, prompt=False)
+        (s1, w1), (s2, w2) = judge_score(text, h1, d), judge_score(text, h2, d)
+        return (s1 + s2) / 2, h1 if h1 == h2 else f"{h1} / {h2}", w1 or w2
 
 
 def wav_seconds(path):
@@ -301,9 +308,10 @@ def wav_seconds(path):
     return float(out or 0)
 
 
-def record(eng, judge, text, raw, attempts=4, limit=LIMIT, first=0):
+def record(eng, judge, text, raw, attempts=4, limit=LIMIT, first=0, strict=False):
     """Klibi üretir; ASR varsa okunanla metni karşılaştırıp en iyi denemeyi tutar. Dönüş: (puan, duyulan, neden).
-    [first]: ilk denemenin numarası (tohum); yeniden kayıtta önceki denemelerden farklı ses çıksın diye."""
+    [first]: ilk denemenin numarası (tohum); yeniden kayıtta önceki denemelerden farklı ses çıksın diye.
+    [strict]: Judge.strict ile puanla (zorla yeniden kayıtta)."""
     tmp = raw[: -len(eng.ext)] + ".try{}" + eng.ext
     best = None
     for k in range(first, first + (attempts if judge else 1)):
@@ -315,8 +323,11 @@ def record(eng, judge, text, raw, attempts=4, limit=LIMIT, first=0):
         if not judge:
             best = (0.0, "", "", path)
             break
-        heard = judge.hear(path)
-        score, why = judge_score(text, heard, wav_seconds(path))
+        if strict:
+            score, heard, why = judge.strict(text, path)
+        else:
+            heard = judge.hear(path)
+            score, why = judge_score(text, heard, wav_seconds(path))
         if best is None or score < best[0]:
             if best:
                 os.remove(best[3])
@@ -438,20 +449,26 @@ def audit(manifest, args):
     out_dir = args.out or CLIPS
     os.makedirs(out_dir, exist_ok=True)
     judge = Judge()
-    qa, flagged = {}, []
+    only = {t.strip() for t in (args.only or "").split("|") if t.strip()}
+    qa, flagged, forced = {}, [], set()
     for k, cid in enumerate(ids, 1):
         p = os.path.join(CLIPS, f"{cid}.ogg")
-        text = manifest["clips"][cid]["say"]
+        c = manifest["clips"][cid]
+        text = c["say"]
         if not os.path.exists(p):  # metni yeni değişmiş: kaydı yok
             qa[cid] = dict(text=text, heard="", cer=99.0, why="yok")
             flagged.append(cid)
             continue
-        heard = judge.hear(p)
-        score, why = judge_score(text, heard, wav_seconds(p))
+        if text in only or c["text"] in only:  # zorla yeniden kayıt: eskisi de sıkı ölçüyle puanlanır
+            score, heard, why = judge.strict(text, p)
+            forced.add(cid)
+        else:
+            heard = judge.hear(p)
+            score, why = judge_score(text, heard, wav_seconds(p))
         qa[cid] = dict(text=text, heard=heard, cer=round(score, 3), why=why)
-        if score > AUDIT_LIMIT:
+        if score > AUDIT_LIMIT or cid in forced:
             flagged.append(cid)
-    print(f"dinlendi: {len(ids)} klip, yeniden kaydedilecek {len(flagged)}", flush=True)
+    print(f"dinlendi: {len(ids)} klip, yeniden kaydedilecek {len(flagged)} (zorla: {len(forced)})", flush=True)
     if flagged:
         eng = make_engine(args.engine, args.voice)
         if manifest.get("voice") != eng.name:
@@ -459,8 +476,12 @@ def audit(manifest, args):
         tmp = tempfile.mkdtemp()
         for cid in flagged:
             old, raw = qa[cid], os.path.join(tmp, cid + eng.ext)
-            score, heard, why = record(eng, judge, old["text"], raw, attempts=args.attempts, limit=AUDIT_LIMIT,
-                                       first=args.first)
+            if cid in forced:  # erken durmadan 12 deneme, sıkı ölçüyle en iyisi
+                score, heard, why = record(eng, judge, old["text"], raw, attempts=max(12, args.attempts), limit=-1,
+                                           first=args.first, strict=True)
+            else:
+                score, heard, why = record(eng, judge, old["text"], raw, attempts=args.attempts, limit=AUDIT_LIMIT,
+                                           first=args.first)
             better = score < old["cer"]
             if better:
                 post(raw, os.path.join(out_dir, f"{cid}.ogg"))
@@ -524,6 +545,8 @@ def main():
                     help="yalnız uygulamada dosyası olmayan klipleri kaydet (metin değişince; --shard ile de)")
     ap.add_argument("--first", type=int, default=4, help="audit: ilk deneme numarası (önceki turların tohumlarını atla)")
     ap.add_argument("--attempts", type=int, default=6, help="audit: klip başına en fazla deneme")
+    ap.add_argument("--only", default="", help="audit: '|' ile ayrılmış metinler; bunlar eşik altında olsa da "
+                                                "zorla yeniden kaydedilir (sıkı ölçü, 12 deneme)")
     ap.add_argument("--report", default=None, metavar="KLASÖR", help="parçaların qa_*.json dosyalarından rapor yaz")
     args = ap.parse_args()
     if args.samples:
