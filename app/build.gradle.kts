@@ -9,20 +9,23 @@ plugins {
 
 android {
     namespace = "com.fightedu"
-    compileSdk = 35
+    // Health Connect 1.1 derleme için SDK 36 istiyor; Google Play de hedef SDK 36 bekliyor.
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.fightedu"
         minSdk = 26
-        targetSdk = 35
-        versionCode = 2
-        versionName = "1.1.0"
+        targetSdk = 36
+        versionCode = 3
+        versionName = "1.2.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            // R8: kod küçültme ve karartma; kullanılmayan kaynaklar atılır.
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
@@ -34,6 +37,19 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
+    }
+
+    lint {
+        abortOnError = true
+        checkReleaseBuilds = true
+        // Bağımlılık sürümü uyarıları CI'ı kırmasın; güvenlik ve doğruluk denetimleri hata olarak kalır.
+        disable += setOf("GradleDependency", "NewerVersionAvailable", "AndroidGradlePluginVersion", "OldTargetApi")
+    }
+
+    testOptions {
+        // Robolectric: Room ve Android sınıfları JVM'de test edilir.
+        unitTests.isIncludeAndroidResources = true
     }
 }
 
@@ -41,6 +57,11 @@ kotlin {
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_17)
     }
+}
+
+ksp {
+    // Room şemaları depoda saklanır; geçişler bunlarla test edilir.
+    arg("room.schemaLocation", "$projectDir/schemas")
 }
 
 dependencies {
@@ -67,6 +88,12 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.health.connect)
 
     testImplementation(libs.junit)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.androidx.test.junit)
+    testImplementation(libs.androidx.room.testing)
+    testImplementation(libs.kotlinx.coroutines.test)
 }

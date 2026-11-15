@@ -25,10 +25,31 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
-      - name: Testler ve debug APK
-        run: ./gradlew --no-daemon :core:test :app:testDebugUnitTest :app:assembleDebug
+      - name: Birim testleri (çekirdek + uygulama, Robolectric)
+        run: ./gradlew --no-daemon :core:test :app:testDebugUnitTest
+
+      - name: Lint (güvenlik ve doğruluk denetimleri)
+        run: ./gradlew --no-daemon :app:lintDebug
+
+      - name: Debug ve release (R8) APK
+        run: ./gradlew --no-daemon :app:assembleDebug :app:assembleRelease
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-ve-lint-raporlari
+          path: |
+            app/build/reports/lint-results-debug.html
+            app/build/reports/tests/
+            core/build/reports/tests/
+          if-no-files-found: ignore
 
       - uses: actions/upload-artifact@v4
         with:
           name: fightedu-debug-apk
           path: app/build/outputs/apk/debug/*.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fightedu-release-unsigned-apk
+          path: app/build/outputs/apk/release/*.apk

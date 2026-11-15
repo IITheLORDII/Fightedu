@@ -1,5 +1,5 @@
 [versions]
-agp = "8.7.3"
+agp = "8.13.2"
 kotlin = "2.0.21"
 ksp = "2.0.21-1.0.28"
 coreKtx = "1.15.0"
@@ -13,6 +13,11 @@ media3 = "1.5.1"
 splashscreen = "1.0.1"
 serialization = "1.7.3"
 junit = "4.13.2"
+healthConnect = "1.1.0"
+robolectric = "4.15.1"
+androidxTestCore = "1.6.1"
+androidxTestJunit = "1.2.1"
+coroutinesTest = "1.9.0"
 
 [libraries]
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
@@ -36,6 +41,12 @@ androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", versi
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splashscreen" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 junit = { module = "junit:junit", version.ref = "junit" }
+androidx-health-connect = { module = "androidx.health.connect:connect-client", version.ref = "healthConnect" }
+androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+androidx-test-core = { module = "androidx.test:core-ktx", version.ref = "androidxTestCore" }
+androidx-test-junit = { module = "androidx.test.ext:junit-ktx", version.ref = "androidxTestJunit" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutinesTest" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
