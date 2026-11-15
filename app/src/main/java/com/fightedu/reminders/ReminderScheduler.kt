@@ -22,7 +22,9 @@ object ReminderScheduler {
             .setInitialDelay(delay.toMinutes(), TimeUnit.MINUTES)
             .build()
         WorkManager.getInstance(context)
-            .enqueueUniquePeriodicWork(WORK_NAME, ExistingPeriodicWorkPolicy.UPDATE, request)
+            // UPDATE periyodik işin ilk çalışma zamanını eski kayda göre koruyabiliyor; saat değişince yeni saatin
+            // hemen geçerli olması için iş iptal edilip yeniden kurulur.
+            .enqueueUniquePeriodicWork(WORK_NAME, ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE, request)
     }
 
     fun cancel(context: Context) {

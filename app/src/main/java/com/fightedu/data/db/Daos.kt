@@ -58,6 +58,9 @@ interface ProgressDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(entity: CompletedSessionEntity)
 
+    @Query("SELECT * FROM completed_sessions WHERE userId = :userId AND sportId = :sportId AND sessionKey = :key")
+    suspend fun get(userId: Long, sportId: String, key: String): CompletedSessionEntity?
+
     @Query("DELETE FROM completed_sessions WHERE userId = :userId AND sportId = :sportId AND sessionKey = :key")
     suspend fun delete(userId: Long, sportId: String, key: String)
 

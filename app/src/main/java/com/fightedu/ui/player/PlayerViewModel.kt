@@ -1,6 +1,7 @@
 package com.fightedu.ui.player
 
 import android.app.Application
+import android.os.SystemClock
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -10,6 +11,7 @@ import com.fightedu.core.domain.Callout
 import com.fightedu.core.domain.SessionRunner
 import com.fightedu.core.domain.SessionRunner.Event
 import com.fightedu.core.domain.Step
+import com.fightedu.core.health.WorkoutSummary
 import com.fightedu.data.CoachSettings
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -65,16 +67,40 @@ class PlayerViewModel(app: Application, private val saved: SavedStateHandle) : A
             )
         } else {
             saved[KEY_DAY] = day
+            saved[KEY_STARTED_AT] = System.currentTimeMillis()
+            saved.remove<Long>(KEY_FINISHED_AT)
             coach.onEvents(r.start(), r.index, r.elapsedInStep)
         }
         publish()
         ticker = viewModelScope.launch {
+            // Saniyeler gerçek saate (elapsedRealtime) göre sayılır: döngü gecikirse kaçan saniyeler telafi edilir,
+            // böylece uzun antrenmanda süre kaymaz. Uzun donmada (ör. cihaz uyudu) adımlar hızla atlanmasın diye
+            // en fazla MAX_CATCH_UP saniye telafi edilir.
+            var next = SystemClock.elapsedRealtime() + 1000
             while (true) {
-                delay(1000)
-                val events = r.tick()
-                if (events.isNotEmpty() || !r.paused) handle(events)
+                delay((next - SystemClock.elapsedRealtime()).coerceAtLeast(0))
+                val now = SystemClock.elapsedRealtime()
+                var ticks = 0
+                while (next <= now && ticks < MAX_CATCH_UP) {
+                    next += 1000
+                    ticks++
+                }
+                if (next <= now) next = now + 1000
+                repeat(ticks) {
+                    val events = r.tick()
+                    if (events.isNotEmpty() || !r.paused) handle(events)
+                }
             }
         }
+    }
+
+    /** Biten seansın özeti (sağlık uygulaması ve süre kaydı için); bitmediyse null. */
+    fun summary(): WorkoutSummary? {
+        val r = runner ?: return null
+        if (!r.finished) return null
+        val end = saved.get<Long>(KEY_FINISHED_AT) ?: System.currentTimeMillis().also { saved[KEY_FINISHED_AT] = it }
+        val start = saved.get<Long>(KEY_STARTED_AT) ?: (end - r.totalElapsed * 1000L)
+        return WorkoutSummary(start, maxOf(end, start), r.totalElapsed)
     }
 
     fun togglePause() = act { r ->
@@ -138,6 +164,9 @@ class PlayerViewModel(app: Application, private val saved: SavedStateHandle) : A
 
     companion object {
         private const val CALLOUT_VISIBLE = 4
+        private const val MAX_CATCH_UP = 5
+        private const val KEY_STARTED_AT = "startedAt"
+        private const val KEY_FINISHED_AT = "finishedAt"
         private const val KEY_DAY = "day"
         private const val KEY_INDEX = "index"
         private const val KEY_REMAINING = "remaining"

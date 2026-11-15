@@ -8,6 +8,8 @@ import com.fightedu.data.AuthRepository
 import com.fightedu.data.SessionStore
 import com.fightedu.data.TrainingRepository
 import com.fightedu.data.db.AppDatabase
+import com.fightedu.health.HealthConnectGateway
+import com.fightedu.core.health.HealthGateway
 
 /** Basit manuel bağımlılık kabı. */
 class AppContainer(context: Context) {
@@ -39,4 +41,7 @@ class AppContainer(context: Context) {
     val repository: TrainingRepository by lazy { TrainingRepository(database) }
 
     val auth: AuthRepository by lazy { AuthRepository(database, session) }
+
+    /** Sağlık uygulamaları (Android'de Health Connect; Samsung Health buradan okur). */
+    val health: HealthGateway by lazy { HealthConnectGateway(appContext) }
 }

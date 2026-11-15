@@ -137,6 +137,21 @@ class AuthRepository(
         return null
     }
 
+    /**
+     * Hesabı ve tüm verisini (ilerleme, seri, ayarlar) bu cihazdan kalıcı olarak siler ve oturumu kapatır.
+     * Google Play: hesap açılabilen uygulamalar hesabın uygulama içinden silinmesine izin vermeli.
+     */
+    suspend fun deleteAccount() {
+        val id = session.current ?: return
+        db.withTransaction {
+            db.progressDao().clearUser(id)
+            db.activityDao().clearUser(id)
+            db.planDao().delete(id)
+            users.delete(id)
+        }
+        session.clear()
+    }
+
     /** Çıkış; misafirin cihazdaki verisi silinir (geri dönüş yolu olmadığı için). */
     suspend fun logout() {
         dropGuest()

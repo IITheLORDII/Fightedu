@@ -55,11 +55,33 @@ class TrainingRepository(private val db: AppDatabase) {
         planDao.upsert(current.copy(voiceCoach = settings.voice, vibration = settings.vibration))
     }
 
-    suspend fun markCompleted(userId: Long, sportId: String, key: String) {
+    /**
+     * Günü tamamlandı işaretler. Oynatıcıdan geldiyse başlangıç anı, aktif süre ve tahmini kalori de saklanır
+     * (elle işaretlemede null). Seri için bugünün tarihi etkinlik günü olarak eklenir.
+     */
+    suspend fun markCompleted(
+        userId: Long,
+        sportId: String,
+        key: String,
+        startedAt: Long? = null,
+        durationSec: Int? = null,
+        kcal: Double? = null,
+    ) {
         db.withTransaction {
-            progressDao.insert(CompletedSessionEntity(userId, sportId, key, System.currentTimeMillis()))
+            progressDao.insert(
+                CompletedSessionEntity(userId, sportId, key, System.currentTimeMillis(), startedAt, durationSec, kcal),
+            )
             activityDao.insert(ActivityDayEntity(userId, LocalDate.now().toEpochDay()))
         }
+    }
+
+    suspend fun completedSession(userId: Long, sportId: String, key: String): CompletedSessionEntity? =
+        progressDao.get(userId, sportId, key)
+
+    /** Biten antrenmanların sağlık uygulamasına otomatik yazılması. */
+    suspend fun setHealthSync(userId: Long, enabled: Boolean) {
+        val current = planDao.get(userId) ?: return
+        planDao.upsert(current.copy(healthSync = enabled))
     }
 
     suspend fun unmarkCompleted(userId: Long, sportId: String, key: String) = progressDao.delete(userId, sportId, key)
