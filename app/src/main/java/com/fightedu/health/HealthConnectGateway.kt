@@ -90,7 +90,8 @@ class HealthConnectGateway(context: Context) : HealthGateway {
     }
 
     companion object {
-        const val PROVIDER = HealthConnectClient.DEFAULT_PROVIDER_PACKAGE_NAME
+        /** Health Connect sağlayıcı paketi (Android 13 ve öncesinde ayrı uygulama). */
+        const val PROVIDER = "com.google.android.apps.healthdata"
 
         /** Tek izin ekranında birlikte istenen izinler. */
         val PERMISSIONS: Set<String> = setOf(
