@@ -51,6 +51,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -70,6 +73,10 @@ import com.fightedu.ui.components.KindBadge
 import com.fightedu.ui.components.MoveAnimation
 import com.fightedu.ui.components.blockColor
 import com.fightedu.ui.formatClock
+import com.fightedu.core.health.WorkoutSummary
+import com.fightedu.ui.SyncState
+import com.fightedu.ui.WorkoutOutcome
+import kotlin.math.roundToInt
 
 /** Raunt raunt, hareket hareket ilerleyen koçlu antrenman oynatıcısı. */
 @Composable
@@ -82,8 +89,13 @@ fun PlayerScreen(
     label: String = "GÜN ${day.day}",
     /** Seansın rauntlara özel ses planı (yoksa kısa anonslar). */
     voice: CoachVoice? = null,
-    onCompleted: () -> Unit,
+    /** Seans bitti; oynatıcıdan gelen özetle (başlangıç/bitiş, aktif süre). */
+    onCompleted: (WorkoutSummary?) -> Unit,
     onDone: () -> Unit,
+    /** Biten seansın kalori, nabız ve sağlık uygulamasına kayıt durumu. */
+    outcome: WorkoutOutcome? = null,
+    /** Tek izinle sağlık uygulamasına bağlan (Health Connect / Samsung Health). */
+    onConnectHealth: (() -> Unit)? = null,
     vm: PlayerViewModel = viewModel(),
 ) {
     val steps = remember(day) { planner.steps(day) }
@@ -95,7 +107,7 @@ fun PlayerScreen(
         view.keepScreenOn = true
         onDispose { view.keepScreenOn = false }
     }
-    LaunchedEffect(ui.finished) { if (ui.finished) onCompleted() }
+    LaunchedEffect(ui.finished) { if (ui.finished) onCompleted(vm.summary()) }
     BackHandler(enabled = !ui.finished) { showExit = true }
 
     val step = steps.getOrNull(ui.index)
@@ -113,7 +125,7 @@ fun PlayerScreen(
             TopBar(label, day, steps, ui, fg) { if (ui.finished) onDone() else showExit = true }
             Box(Modifier.weight(1f).fillMaxWidth()) {
                 when {
-                    ui.finished -> FinishedContent(label, day, steps, ui.totalElapsed, onDone)
+                    ui.finished -> FinishedContent(label, day, steps, ui.totalElapsed, outcome, onConnectHealth, onDone)
                     step is Step.Work -> WorkContent(step, ui, vm::next)
                     step is Step.Rest -> RestContent(step, ui, fg, onAdd = { vm.addRest(15) })
                 }
@@ -246,21 +258,37 @@ private fun RestContent(step: Step.Rest, ui: PlayerUi, fg: Color, onAdd: () -> U
 }
 
 @Composable
-private fun FinishedContent(label: String, day: TrainingDay, steps: List<Step>, total: Int, onDone: () -> Unit) {
+private fun FinishedContent(
+    label: String,
+    day: TrainingDay,
+    steps: List<Step>,
+    total: Int,
+    outcome: WorkoutOutcome?,
+    onConnectHealth: (() -> Unit)?,
+    onDone: () -> Unit,
+) {
     val rounds = steps.count { it is Step.Work && it.block.mode == BlockMode.ROUND }
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Text("🏆", fontSize = 64.sp)
+        Text("🏆", fontSize = 64.sp, modifier = Modifier.clearAndSetSemantics {})
         Text("$label TAMAMLANDI", fontSize = 28.sp, fontWeight = FontWeight.Black, textAlign = TextAlign.Center)
         Text(day.title, style = MaterialTheme.typography.titleMedium)
         Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
             Stat(formatClock(total), "süre")
-            Stat("$rounds", "raunt")
+            if (outcome != null && outcome.kcal > 0) {
+                Stat("${outcome.kcal.roundToInt()}", "kcal")
+            } else {
+                Stat("$rounds", "raunt")
+            }
             Stat("${day.blocks.size}", "blok")
         }
+        outcome?.heartRate?.let { hr ->
+            Text("❤ Ortalama nabız ${hr.average} · en yüksek ${hr.max}", style = MaterialTheme.typography.bodyMedium)
+        }
+        if (outcome != null) HealthSyncRow(outcome.sync, onConnectHealth)
         day.blocks.forEach { b ->
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 Box(Modifier.size(10.dp).background(blockColor(b.kind), RoundedCornerShape(5.dp)))
@@ -270,6 +298,42 @@ private fun FinishedContent(label: String, day: TrainingDay, steps: List<Step>, 
         }
         Spacer(Modifier.height(8.dp))
         Button(onClick = onDone, modifier = Modifier.fillMaxWidth().height(56.dp)) { Text("Meydan okumaya dön") }
+    }
+}
+
+/** Sağlık uygulamasına kayıt durumu; bağlı değilse tek dokunuşla bağlanıp kaydetme. */
+@Composable
+private fun HealthSyncRow(sync: SyncState, onConnect: (() -> Unit)?) {
+    Surface(
+        color = MaterialTheme.colorScheme.surfaceVariant,
+        shape = RoundedCornerShape(14.dp),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            when (sync) {
+                SyncState.SAVING -> Text("Samsung Health'e kaydediliyor…", style = MaterialTheme.typography.bodyMedium)
+                SyncState.SAVED -> {
+                    Text("✓ Samsung Health'e kaydedildi", style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.primary)
+                    Text("Health Connect üzerinden; Google Fit gibi diğer sağlık uygulamaları da görebilir.",
+                        style = MaterialTheme.typography.bodySmall)
+                }
+                SyncState.NOT_CONNECTED, SyncState.FAILED -> {
+                    Text(
+                        if (sync == SyncState.FAILED) "Sağlık uygulamasına kaydedilemedi." else
+                            "Bu antrenmanı Samsung Health'e kaydetmek ister misin?",
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                    if (onConnect != null) {
+                        OutlinedButton(onClick = onConnect, modifier = Modifier.fillMaxWidth()) {
+                            Text(if (sync == SyncState.FAILED) "Tekrar dene" else "Samsung Health'e kaydet")
+                        }
+                        Text("Tek izinle bağlanır; sonraki antrenmanların otomatik kaydedilir.",
+                            style = MaterialTheme.typography.bodySmall)
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -312,13 +376,15 @@ private fun Controls(step: Step, paused: Boolean, fg: Color, onPrev: () -> Unit,
         if (timed) {
             FilledIconButton(
                 onClick = onPause,
-                modifier = Modifier.size(72.dp),
+                modifier = Modifier
+                    .size(72.dp)
+                    .semantics { contentDescription = if (paused) "Devam et" else "Duraklat" },
                 colors = IconButtonDefaults.filledIconButtonColors(),
             ) {
                 if (paused) {
-                    Icon(Icons.Filled.PlayArrow, contentDescription = "Devam", modifier = Modifier.size(40.dp))
+                    Icon(Icons.Filled.PlayArrow, contentDescription = null, modifier = Modifier.size(40.dp))
                 } else {
-                    Text("❚❚", fontSize = 26.sp, fontWeight = FontWeight.Black)
+                    Text("❚❚", fontSize = 26.sp, fontWeight = FontWeight.Black, modifier = Modifier.clearAndSetSemantics {})
                 }
             }
         }

@@ -46,7 +46,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
+import com.fightedu.BuildConfig
 import com.fightedu.core.domain.ChallengeCalendar
+import com.fightedu.core.health.HealthAvailability
+import com.fightedu.ui.HealthStatus
 import com.fightedu.data.CoachSettings
 import com.fightedu.reminders.ReminderNotifications
 import com.fightedu.ui.UiState
@@ -60,6 +65,13 @@ private val REMINDER_HOURS = listOf(7, 9, 12, 17, 18, 19, 20)
 @Composable
 fun ProfileScreen(
     state: UiState,
+    health: HealthStatus,
+    onRefreshHealth: () -> Unit,
+    onConnectHealth: () -> Unit,
+    onSetHealthSync: (Boolean) -> Unit,
+    onOpenHealthSettings: () -> Unit,
+    onOpenPrivacy: () -> Unit,
+    onDeleteAccount: () -> Unit,
     onChangeSport: () -> Unit,
     onCreateAccount: () -> Unit,
     onRename: (String, (String?) -> Unit) -> Unit,
@@ -76,6 +88,9 @@ fun ProfileScreen(
     var confirmRestart by rememberSaveable { mutableStateOf(false) }
     var editing by rememberSaveable { mutableStateOf(false) }
     var permissionDenied by rememberSaveable { mutableStateOf(false) }
+    var confirmDelete by rememberSaveable { mutableStateOf(false) }
+    // izinler Health Connect ayarlarından değiştirilmiş olabilir: ekran her öne geldiğinde durumu tazele
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { onRefreshHealth() }
 
     val permissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         permissionDenied = !granted
@@ -202,6 +217,10 @@ fun ProfileScreen(
             }
         }
 
+        // -- sağlık uygulamaları ------------------------------------------------------------------
+        SectionTitle("Sağlık uygulamaları")
+        HealthCard(health, state.healthSync, onConnectHealth, onSetHealthSync, onOpenHealthSettings)
+
         // -- güvenlik / hakkında ------------------------------------------------------------------
         SectionTitle("Güvenli antrenman")
         Card(Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)) {
@@ -216,13 +235,19 @@ fun ProfileScreen(
         }
         SectionTitle("Hakkında")
         Text(
-            "FightEdu 1.1 · Boks, Kick Boks, Güreş, Tekvando ve Genel Kondisyon için 30 günlük meydan okumalar. " +
-                "Tüm içerik çevrimdışı çalışır; hesabın ve ilerlemen yalnızca bu cihazda saklanır.",
+            "FightEdu ${BuildConfig.VERSION_NAME} · Boks, Kick Boks, Güreş, Tekvando ve Genel Kondisyon için 30 günlük " +
+                "meydan okumalar. Tüm içerik çevrimdışı çalışır; hesabın ve ilerlemen yalnızca bu cihazda saklanır.",
             style = MaterialTheme.typography.bodySmall,
         )
-        Spacer(Modifier.height(16.dp))
+        TextButton(onClick = onOpenPrivacy) { Text("Gizlilik politikası") }
+        Spacer(Modifier.height(8.dp))
         OutlinedButton(onClick = { confirmLogout = true }, modifier = Modifier.fillMaxWidth().height(50.dp)) {
             Text("Çıkış yap", color = MaterialTheme.colorScheme.error)
+        }
+        if (user != null && !user.isGuest) {
+            TextButton(onClick = { confirmDelete = true }, modifier = Modifier.fillMaxWidth()) {
+                Text("Hesabı sil", color = MaterialTheme.colorScheme.error)
+            }
         }
         Spacer(Modifier.height(24.dp))
     }
@@ -253,6 +278,25 @@ fun ProfileScreen(
             dismissButton = { TextButton(onClick = { confirmRestart = false }) { Text("Vazgeç") } },
         )
     }
+    if (confirmDelete) {
+        AlertDialog(
+            onDismissRequest = { confirmDelete = false },
+            title = { Text("Hesap silinsin mi?") },
+            text = {
+                Text(
+                    "Hesabın, tüm dallardaki ilerlemen, serin ve ayarların bu cihazdan kalıcı olarak silinir. " +
+                        "Bu işlem geri alınamaz. Sağlık uygulamasına yazılan antrenmanlar Health Connect'te kalır; " +
+                        "istersen oradan silebilirsin.",
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = { confirmDelete = false; onDeleteAccount() }) {
+                    Text("Kalıcı olarak sil", color = MaterialTheme.colorScheme.error)
+                }
+            },
+            dismissButton = { TextButton(onClick = { confirmDelete = false }) { Text("Vazgeç") } },
+        )
+    }
     if (confirmLogout) {
         AlertDialog(
             onDismissRequest = { confirmLogout = false },
@@ -269,6 +313,56 @@ fun ProfileScreen(
             confirmButton = { TextButton(onClick = { confirmLogout = false; onLogout() }) { Text("Çıkış yap") } },
             dismissButton = { TextButton(onClick = { confirmLogout = false }) { Text("Vazgeç") } },
         )
+    }
+}
+
+/** Health Connect durumu: kurulu değil / izin yok / bağlı. Samsung Health kayıtları Health Connect üzerinden alır. */
+@Composable
+private fun HealthCard(
+    health: HealthStatus,
+    syncEnabled: Boolean,
+    onConnect: () -> Unit,
+    onSetSync: (Boolean) -> Unit,
+    onOpenSettings: () -> Unit,
+) {
+    Card(Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            when {
+                health.availability == HealthAvailability.NOT_INSTALLED -> {
+                    Text("Samsung Health ile eşitle", style = MaterialTheme.typography.titleMedium)
+                    Text("Antrenmanlarının Samsung Health'te görünmesi için Google'ın ücretsiz Health Connect " +
+                        "uygulaması gerekiyor.", style = MaterialTheme.typography.bodySmall)
+                    Button(onClick = onConnect) { Text("Health Connect'i yükle") }
+                }
+                health.availability == HealthAvailability.UPDATE_REQUIRED -> {
+                    Text("Health Connect güncellenmeli", style = MaterialTheme.typography.titleMedium)
+                    Button(onClick = onConnect) { Text("Güncelle") }
+                }
+                !health.permitted -> {
+                    Text("Samsung Health'e bağlan", style = MaterialTheme.typography.titleMedium)
+                    Text(
+                        "Biten antrenmanların süresi ve kalorisiyle otomatik kaydedilsin. Kilon varsa kalori ona göre " +
+                            "hesaplanır; saatin varsa antrenman nabzın özette görünür. Tek izin yeterli.",
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                    Button(onClick = onConnect) { Text("Bağlan") }
+                }
+                else -> {
+                    SettingSwitch(
+                        title = "Otomatik kaydet",
+                        subtitle = "Bağlı ✓ Biten antrenmanlar Health Connect'e yazılır; Samsung Health ve Google Fit görür.",
+                        checked = syncEnabled,
+                        onChange = onSetSync,
+                    )
+                    Text(
+                        "Samsung Health'te görmüyorsan: Samsung Health › Ayarlar › Health Connect bölümünden " +
+                            "senkronizasyonu aç.",
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                    OutlinedButton(onClick = onOpenSettings) { Text("Health Connect ayarları") }
+                }
+            }
+        }
     }
 }
 

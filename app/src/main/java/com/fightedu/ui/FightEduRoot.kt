@@ -37,6 +37,12 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.fightedu.core.domain.ChallengeCalendar
 import com.fightedu.core.domain.ChallengeDay
+import com.fightedu.core.domain.ChallengeProgress
+import com.fightedu.core.domain.ProgressTracker
+import com.fightedu.ui.health.openHealthConnectSettings
+import com.fightedu.ui.health.rememberHealthConnect
+import com.fightedu.ui.privacy.PrivacyPolicyScreen
+import androidx.compose.ui.platform.LocalContext
 import com.fightedu.ui.auth.LoginScreen
 import com.fightedu.ui.auth.RegisterScreen
 import com.fightedu.ui.auth.WelcomeScreen
@@ -73,6 +79,7 @@ private object Routes {
     const val REST = "rest/{n}"
     const val REST_PLAYER = "restplayer/{n}"
     const val MOVE = "move/{id}"
+    const val PRIVACY = "privacy"
 
     fun sport(id: String) = "sport/$id"
     fun session(day: Int) = "day/$day"
@@ -128,6 +135,11 @@ private fun AppNavigation(state: UiState, vm: MainViewModel) {
     val currentRoute = backStack?.destination?.route
     val showBottomBar = TABS.any { it.route == currentRoute }
     val latest by rememberUpdatedState(state)
+    val context = LocalContext.current
+    val outcome by vm.lastWorkout.collectAsStateWithLifecycle()
+    val healthStatus by vm.healthStatus.collectAsStateWithLifecycle()
+    // tek dokunuş: Health Connect yoksa Play Store, varsa tek izin ekranı; dönüşte bekleyen antrenman yazılır
+    val connectHealth = rememberHealthConnect(healthStatus.availability, vm::onHealthPermissionsResult)
 
     /** Oturum ve dal durumuna göre gidilecek ilk ekran; geri yığını temizlenir. */
     fun goHome() {
@@ -287,6 +299,15 @@ private fun AppNavigation(state: UiState, vm: MainViewModel) {
             composable(Routes.PROFILE) {
                 ProfileScreen(
                     state = state,
+                    health = healthStatus,
+                    onRefreshHealth = vm::refreshHealth,
+                    onConnectHealth = connectHealth,
+                    onSetHealthSync = vm::setHealthSync,
+                    onOpenHealthSettings = { openHealthConnectSettings(context) },
+                    onOpenPrivacy = { nav.navigate(Routes.PRIVACY) },
+                    onDeleteAccount = {
+                        vm.deleteAccount { nav.navigate(Routes.WELCOME) { popUpTo(nav.graph.id) { inclusive = true } } }
+                    },
                     onChangeSport = { nav.navigate(Routes.SPORTS) },
                     onCreateAccount = { nav.navigate(Routes.REGISTER) },
                     onRename = vm::rename,
@@ -330,8 +351,13 @@ private fun AppNavigation(state: UiState, vm: MainViewModel) {
                         label = "GÜN ${ChallengeCalendar.challengeDayOf(day.day)} / ${ChallengeCalendar.LENGTH}",
                         voice = state.workoutVoice(day.day),
                         onExit = { nav.popBackStack() },
-                        onCompleted = { vm.setDayCompleted(day.day, true) },
-                        onDone = { if (!nav.popBackStack(Routes.CHALLENGE, inclusive = false)) nav.popBackStack() },
+                        onCompleted = { summary -> vm.completeWorkout(day.day, day.title, summary) },
+                        outcome = outcome?.takeIf { it.key == ProgressTracker.keyOf(day.day) },
+                        onConnectHealth = connectHealth,
+                        onDone = {
+                            vm.clearLastWorkout()
+                            if (!nav.popBackStack(Routes.CHALLENGE, inclusive = false)) nav.popBackStack()
+                        },
                     )
                 }
             }
@@ -368,10 +394,18 @@ private fun AppNavigation(state: UiState, vm: MainViewModel) {
                         label = "GÜN $n · DİNLENME",
                         voice = state.restVoice(n),
                         onExit = { nav.popBackStack() },
-                        onCompleted = { vm.setRestCompleted(n, true) },
-                        onDone = { if (!nav.popBackStack(Routes.CHALLENGE, inclusive = false)) nav.popBackStack() },
+                        onCompleted = { summary -> vm.completeRest(n, "Gün $n · Aktif dinlenme", summary) },
+                        outcome = outcome?.takeIf { it.key == ChallengeProgress.restKey(n) },
+                        onConnectHealth = connectHealth,
+                        onDone = {
+                            vm.clearLastWorkout()
+                            if (!nav.popBackStack(Routes.CHALLENGE, inclusive = false)) nav.popBackStack()
+                        },
                     )
                 }
+            }
+            composable(Routes.PRIVACY) {
+                PrivacyPolicyScreen(onBack = { nav.popBackStack() })
             }
             composable(Routes.MOVE, arguments = listOf(navArgument("id") { type = NavType.StringType })) { entry ->
                 val move = entry.arguments?.getString("id")?.let { content.move(it) }
