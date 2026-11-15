@@ -214,8 +214,14 @@ fun SportConfirmScreen(
     var remind by rememberSaveable { mutableStateOf(reminder?.enabled ?: true) }
     var hour by rememberSaveable { mutableIntStateOf(reminder?.hour ?: TrainingRepository.DEFAULT_REMINDER_HOUR) }
     var accepted by rememberSaveable { mutableStateOf(false) }
+    // "Başla"ya basıldığında bildirim izni eksikse önce izin istenir; sonuca göre başlanır
+    var startAfterPermission by rememberSaveable { mutableStateOf(false) }
     val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         if (!granted) remind = false
+        if (startAfterPermission) {
+            startAfterPermission = false
+            onStart(ReminderSettings(remind && granted, hour))
+        }
     }
 
     BrandBackground {
@@ -302,9 +308,12 @@ fun SportConfirmScreen(
                         if (remind && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
                             !ReminderNotifications.canNotify(context)
                         ) {
-                            remind = false
+                            // hatırlatıcı açık ama bildirim izni yok: sessizce kapatmak yerine izni iste
+                            startAfterPermission = true
+                            permission.launch(Manifest.permission.POST_NOTIFICATIONS)
+                        } else {
+                            onStart(ReminderSettings(remind, hour))
                         }
-                        onStart(ReminderSettings(remind, hour))
                     },
                     enabled = accepted,
                     modifier = Modifier.fillMaxWidth().height(58.dp),

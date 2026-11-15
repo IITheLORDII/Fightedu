@@ -145,6 +145,7 @@ fun ChallengeScreen(
                 Text("EVRELER", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(top = 6.dp))
                 challenge.program.phases.forEachIndexed { i, phase ->
                     val days = challenge.daysOfPhase(phase)
+                    if (days.isEmpty()) return@forEachIndexed // içerikte günü olmayan evre: kart gösterilmez
                     val done = days.count { challenge.isDone(it) }
                     val active = challenge.current?.let { challenge.phaseOf(it.number) } == phase
                     Card(
@@ -277,7 +278,9 @@ private fun Header(
 fun ProgressRing(done: Int, total: Int, size: Dp, stroke: Dp = 10.dp) {
     val accent = MaterialTheme.colorScheme.primary
     val track = MaterialTheme.colorScheme.surfaceVariant
-    val sweep by animateFloatAsState(done.toFloat() / total, tween(900), label = "ring")
+    val sweep by animateFloatAsState(
+        if (total > 0) (done.toFloat() / total).coerceIn(0f, 1f) else 0f, tween(900), label = "ring",
+    )
     Box(Modifier.size(size), contentAlignment = Alignment.Center) {
         Canvas(Modifier.fillMaxSize()) {
             val w = stroke.toPx()
