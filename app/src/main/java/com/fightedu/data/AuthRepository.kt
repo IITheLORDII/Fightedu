@@ -3,6 +3,7 @@ package com.fightedu.data
 import android.database.sqlite.SQLiteConstraintException
 import androidx.room.withTransaction
 import com.fightedu.core.auth.AccountRules
+import com.fightedu.core.auth.LoginThrottle
 import com.fightedu.core.auth.PasswordHasher
 import com.fightedu.core.auth.StoredPassword
 import com.fightedu.data.db.AppDatabase
@@ -32,9 +33,18 @@ sealed interface AuthResult {
 /**
  * Cihazdaki yerel hesaplar: kayıt, giriş, misafir, misafiri hesaba çevirme ve çıkış.
  * Hesaplar yalnızca bu telefonda tutulur (sunucu yok); şifreler PBKDF2 ile özetlenir.
+ * Güvenlik: yanlış şifre denemeleri [throttle] ile sınırlanır; e-posta kayıtlı olmasa da aynı süren bir doğrulama
+ * yapılır (yanıt süresinden hesabın varlığı anlaşılmasın); eski tekrar sayısıyla özetlenmiş şifreler girişte yükseltilir.
  */
-class AuthRepository(private val db: AppDatabase, private val session: SessionStore) {
+class AuthRepository(
+    private val db: AppDatabase,
+    private val session: SessionStore,
+    private val throttle: LoginThrottle = LoginThrottle(),
+) {
     private val users = db.userDao()
+
+    /** Kayıtlı olmayan e-postalarda karşılaştırılan sahte özet (bir kez üretilir). */
+    private val decoy: StoredPassword by lazy { PasswordHasher.create("fightedu-decoy-password") }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val currentUser: Flow<User?> = session.userId.flatMapLatest { id ->
@@ -56,10 +66,12 @@ class AuthRepository(private val db: AppDatabase, private val session: SessionSt
             val user = if (guest != null) {
                 // misafir hesaba dönüşür: ilerlemesi ve dal seçimi korunur
                 guest.copy(name = cleanName, email = cleanEmail, passwordHash = stored.hash,
-                    passwordSalt = stored.salt, isGuest = false).also { users.update(it) }
+                    passwordSalt = stored.salt, passwordIterations = PasswordHasher.ITERATIONS, isGuest = false)
+                    .also { users.update(it) }
             } else {
                 val entity = UserEntity(name = cleanName, email = cleanEmail, passwordHash = stored.hash,
-                    passwordSalt = stored.salt, isGuest = false, createdAt = System.currentTimeMillis())
+                    passwordSalt = stored.salt, isGuest = false, createdAt = System.currentTimeMillis(),
+                    passwordIterations = PasswordHasher.ITERATIONS)
                 entity.copy(id = users.insert(entity))
             }
             session.set(user.id)
@@ -73,14 +85,35 @@ class AuthRepository(private val db: AppDatabase, private val session: SessionSt
         val cleanEmail = AccountRules.normalizeEmail(email)
         AccountRules.emailError(cleanEmail)?.let { return AuthResult.Failure(AuthResult.Field.EMAIL, it) }
         if (password.isEmpty()) return AuthResult.Failure(AuthResult.Field.PASSWORD, "Şifreni yaz.")
+        if (password.length > AccountRules.MAX_PASSWORD) {
+            return AuthResult.Failure(AuthResult.Field.GENERAL, "E-posta ya da şifre hatalı.")
+        }
+        val wait = throttle.remainingLockMs(cleanEmail)
+        if (wait > 0) {
+            return AuthResult.Failure(AuthResult.Field.GENERAL,
+                "Çok fazla hatalı deneme. ${LoginThrottle.describe(wait)} sonra tekrar dene.")
+        }
         val user = users.findByEmail(cleanEmail)
         val hash = user?.passwordHash
         val salt = user?.passwordSalt
-        val ok = hash != null && salt != null && withContext(Dispatchers.Default) {
-            PasswordHasher.verify(password, StoredPassword(hash, salt))
+        val ok = withContext(Dispatchers.Default) {
+            if (user != null && hash != null && salt != null) {
+                PasswordHasher.verify(password, StoredPassword(hash, salt), user.passwordIterations)
+            } else {
+                PasswordHasher.verify(password, decoy) // aynı süre; sonuç kullanılmaz
+                false
+            }
         }
         if (user == null || !ok) {
+            throttle.onFailure(cleanEmail)
             return AuthResult.Failure(AuthResult.Field.GENERAL, "E-posta ya da şifre hatalı.")
+        }
+        throttle.onSuccess(cleanEmail)
+        if (PasswordHasher.needsRehash(user.passwordIterations)) {
+            // eski (düşük tekrarlı) özet: doğru şifre elimizdeyken güncel sayıyla yeniden özetle
+            val upgraded = withContext(Dispatchers.Default) { PasswordHasher.create(password) }
+            users.update(user.copy(passwordHash = upgraded.hash, passwordSalt = upgraded.salt,
+                passwordIterations = PasswordHasher.ITERATIONS))
         }
         dropGuest()
         session.set(user.id)

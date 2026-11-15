@@ -9,9 +9,17 @@ import javax.crypto.spec.PBEKeySpec
 /** Cihazda saklanan şifre: PBKDF2 özeti ve tuzu (Base64). Şifrenin kendisi hiçbir yerde tutulmaz. */
 data class StoredPassword(val hash: String, val salt: String)
 
-/** PBKDF2-HMAC-SHA256 ile şifre özeti; doğrulama sabit zamanlı karşılaştırmayla yapılır. */
+/**
+ * PBKDF2-HMAC-SHA256 ile şifre özeti; doğrulama sabit zamanlı karşılaştırmayla yapılır.
+ * Tekrar sayısı kullanıcı başına saklanır: eski (düşük) sayıyla özetlenmiş şifreler girişte [ITERATIONS] ile
+ * yeniden özetlenir (bkz. [needsRehash]).
+ */
 object PasswordHasher {
-    const val ITERATIONS = 60_000
+    /** OWASP'ın PBKDF2-HMAC-SHA256 önerisine yakın; orta seviye bir telefonda ~0,5-1 sn. */
+    const val ITERATIONS = 310_000
+
+    /** 1.1 ve öncesinde kullanılan tekrar sayısı (veritabanı geçişinde mevcut hesaplara yazılır). */
+    const val LEGACY_ITERATIONS = 60_000
     private const val KEY_BITS = 256
     private const val SALT_BYTES = 16
     private const val ALGORITHM = "PBKDF2WithHmacSHA256"
@@ -29,6 +37,9 @@ object PasswordHasher {
         if (salt.isEmpty() || expected.isEmpty()) return false
         return MessageDigest.isEqual(derive(password, salt, iterations), expected)
     }
+
+    /** Hesabın özeti güncel tekrar sayısından düşükse girişte yeniden özetlenmeli. */
+    fun needsRehash(iterations: Int): Boolean = iterations < ITERATIONS
 
     private fun derive(password: String, salt: ByteArray, iterations: Int): ByteArray {
         val spec = PBEKeySpec(password.toCharArray(), salt, iterations, KEY_BITS)

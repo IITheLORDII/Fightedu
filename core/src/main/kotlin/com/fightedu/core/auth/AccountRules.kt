@@ -13,7 +13,9 @@ data class RegisterErrors(
 }
 
 object AccountRules {
-    const val MIN_PASSWORD = 6
+    /** NIST SP 800-63B: en az 8 karakter; üst sınır yalnızca aşırı uzun girdileri engellemek için. */
+    const val MIN_PASSWORD = 8
+    const val MAX_PASSWORD = 128
     const val MAX_NAME = 40
     private val EMAIL = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}$")
 
@@ -42,6 +44,7 @@ object AccountRules {
     fun passwordError(password: String): String? = when {
         password.isEmpty() -> "Şifre belirle."
         password.length < MIN_PASSWORD -> "Şifre en az $MIN_PASSWORD karakter olmalı."
+        password.length > MAX_PASSWORD -> "Şifre en fazla $MAX_PASSWORD karakter olabilir."
         password.isBlank() -> "Şifre yalnızca boşluktan oluşamaz."
         else -> null
     }

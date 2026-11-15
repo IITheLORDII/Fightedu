@@ -1,8 +1,10 @@
 package com.fightedu.data.db
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.fightedu.core.auth.PasswordHasher
 
 /** Cihazdaki yerel hesap. Misafirde e-posta ve şifre yok. Şifre yalnızca PBKDF2 özeti + tuz olarak saklanır. */
 @Entity(tableName = "users", indices = [Index(value = ["email"], unique = true)])
@@ -14,6 +16,8 @@ data class UserEntity(
     val passwordSalt: String?,
     val isGuest: Boolean,
     val createdAt: Long,
+    /** PBKDF2 tekrar sayısı (özet bu sayıyla üretildi); eski hesaplar girişte güncel sayıya yükseltilir. */
+    @ColumnInfo(defaultValue = "60000") val passwordIterations: Int = PasswordHasher.ITERATIONS,
 )
 
 /** Kullanıcının seçtiği dal ve ayarları (kullanıcı başına bir satır; satır yoksa dal seçilmemiş). */
@@ -28,6 +32,8 @@ data class UserPlanEntity(
     /** Antrenmanda Türkçe sesli koç. */
     val voiceCoach: Boolean = true,
     val vibration: Boolean = true,
+    /** Biten antrenmanlar Health Connect'e (Samsung Health vb.) otomatik yazılsın. */
+    @ColumnInfo(defaultValue = "0") val healthSync: Boolean = false,
 ) {
     companion object {
         const val ALL_DAYS = 0b1111111
@@ -44,6 +50,12 @@ data class CompletedSessionEntity(
     val sportId: String,
     val sessionKey: String,
     val completedAt: Long,
+    /** Oynatıcıyla yapıldıysa başlangıç anı (epoch ms); elle işaretlenen günlerde null. */
+    val startedAt: Long? = null,
+    /** Oynatıcıda geçen aktif süre (sn). */
+    val durationSec: Int? = null,
+    /** Tahmini aktif kalori (kcal). */
+    val kcal: Double? = null,
 )
 
 /** Kullanıcının bir şey tamamladığı günler (epoch günü) — seri (streak) hesabı için. */
